@@ -1,0 +1,20 @@
+{
+ "video_al_giorno": 3,
+ "voce": "en-US-GuyNeural",
+ "durata_max": 45,
+ "modello_gemini": "gemini-2.5-flash",
+ "temi": [
+  "solar storms and auroras",
+  "volcano eruptions",
+  "tornadoes and supercell storms",
+  "lightning and rare electrical phenomena",
+  "deep sea creatures",
+  "bioluminescent animals and seas",
+  "giant ocean waves",
+  "the most extreme places on Earth",
+  "record-breaking weather",
+  "glaciers and ice collapses",
+  "space phenomena seen from the ISS",
+  "the deadliest animals in the wild"
+ ]
+}
