@@ -5,6 +5,7 @@ import datetime, json, os, random, shutil, sys, traceback
 sys.path.insert(0, os.path.dirname(__file__))
 import editor, fonti, scrittore, telegram, tendenze
 
+BOTTONI = [[{"text": "✅ Pubblica", "callback_data": "ok"}, {"text": "❌ Scarta", "callback_data": "no"}]]
 RADICE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ARCHIVIO = os.path.join(RADICE, "archivio.json")
 CONFIG = os.path.join(RADICE, "config.json")
@@ -32,27 +33,48 @@ def segmenti(s):
     return out
 
 
+def lingue(cfg):
+    return cfg.get("lingue") or {"en": {"nome": "English", "voce": cfg.get("voce", "en-US-GuyNeural")}}
+
+
+def didascalia(t, cod, credito, extra=""):
+    """Formato letto dal Pubblicatore: titolo / descrizione / hashtag / riga 🔥."""
+    return (f"{t['titolo']}\n\n{t.get('descrizione', '')}\n\n{' '.join(t.get('hashtags') or ['#gta6'])}\n\n"
+            f"🔥 {extra} · {cod.upper()} · Credit: {credito}")[:1000]
+
+
 def produci(s, cfg, usati, chiavi, cartella, nome):
-    """Ritorna (percorso video, lista fonti, esito critic)."""
+    """Clip trovate una volta, poi voce + montaggio per ogni lingua. Ritorna ([(cod, testi, video, ok)], crediti)."""
     os.makedirs(cartella, exist_ok=True)
     editor.WORK = cartella
-    pezzi, crediti = [], []
-    for n, seg in enumerate(segmenti(s)):
+    segs, clip, crediti = segmenti(s), [], []
+    for n, seg in enumerate(segs):
         print(f"  [{n + 1}/7] {seg['label'] or 'gancio/finale'}: {seg['query']}")
-        clip, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n, riserva=s.get("hook_query"))
+        c, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n, riserva=s.get("hook_query"))
         usati.add(info["id"])
+        clip.append(c)
         crediti.append(info)
-        mp3 = os.path.join(cartella, f"voce{n}.mp3")
-        parole = editor.voce_ai(seg["testo"], cfg["voce"], mp3)
-        out = os.path.join(cartella, f"seg{n}.mp4")
-        editor.monta_segmento(clip, mp3, parole, seg["testo"], seg["label"], "Footage: " + info["credito"],
-                              out, n, hook=s["titolo"] if n == 0 else "")
-        pezzi.append(out)
-    video = os.path.join(RADICE, "output", nome)
-    os.makedirs(os.path.dirname(video), exist_ok=True)
-    editor.unisci(pezzi, video)
-    ok = editor.critic(video, max_sec=cfg.get("durata_max", 45))
-    return video, crediti, ok
+    base = {"titolo": s["titolo"], "descrizione": s.get("descrizione", ""), "hashtags": s.get("hashtags") or ["#gta6"],
+            "frasi": [seg["testo"] for seg in segs]}
+    L = lingue(cfg)
+    trad = scrittore.traduci(chiavi["gemini"], base, {k: v["nome"] for k, v in L.items() if k != "en"})
+    trad["en"] = base
+    out = []
+    for cod, lg in L.items():
+        t, pezzi = trad[cod], []
+        print(f"  Lingua {cod}")
+        for n, (seg, c, info) in enumerate(zip(segs, clip, crediti)):
+            mp3 = os.path.join(cartella, f"voce{n}.mp3")
+            parole = editor.voce_ai(t["frasi"][n], lg["voce"], mp3)
+            pz = os.path.join(cartella, f"seg{n}.mp4")
+            editor.monta_segmento(c, mp3, parole, t["frasi"][n], seg["label"], "Footage: " + info["credito"],
+                                  pz, n, hook=t["titolo"] if n == 0 else "", font=lg.get("font"))
+            pezzi.append(pz)
+        video = os.path.join(RADICE, "output", nome.replace(".mp4", f"_{cod}.mp4"))
+        os.makedirs(os.path.dirname(video), exist_ok=True)
+        editor.unisci(pezzi, video)
+        out.append((cod, t, video, editor.critic(video, max_sec=cfg.get("durata_max", 45))))
+    return out, crediti
 
 
 def descrizione(s, crediti):
@@ -108,14 +130,14 @@ def main():
                                 spunti=spunti.get(tema))
             print("  Titolo:", s["titolo"])
             nome = f"{oggi}_{i + 1}.mp4"
-            video, crediti, ok = produci(s, cfg, usati, chiavi, os.path.join(RADICE, "lavoro", str(i)), nome)
-            desc = descrizione(s, crediti)
+            versioni, crediti = produci(s, cfg, usati, chiavi, os.path.join(RADICE, "lavoro", str(i)), nome)
+            credito = ", ".join(dict.fromkeys(c["credito"] for c in crediti))[:200]
+            for cod, t, video, ok in versioni:
+                telegram.video(chiavi["telegram"], chat_id, video,
+                               didascalia(t, cod, credito, "news" if ok else "news · critic ⚠️"), bottoni=BOTTONI)
             controlli = "\n".join(f"{it.get('label')}: {it.get('verifica', '-')}" for it in s["items"])
-            telegram.video(chiavi["telegram"], chat_id, video,
-                           f"{'✅' if ok else '⚠️ Critic: da controllare'} {s['titolo']}")
-            telegram.messaggio(chiavi["telegram"], chat_id,
-                               "📋 TITOLO E DESCRIZIONE (copia in Buffer):\n\n" + desc +
-                               "\n\n🔎 Fonti dei fatti da controllare prima di pubblicare:\n" + controlli)
+            telegram.messaggio(chiavi["telegram"], chat_id, f"🔎 Fonti da controllare per «{s['titolo']}»:\n" + controlli)
+            ok = all(v[3] for v in versioni)
             arch["titoli"].append(s["titolo"])
             arch["temi_recenti"].append(tema)
             arch["clip_usate"] = sorted(usati)
@@ -133,7 +155,7 @@ def main():
         salva(ARCHIVIO, arch)
 
     telegram.messaggio(chiavi["telegram"], chat_id,
-                       f"🎬 Regista: {fatti}/{quanti} video pronti oggi. Guardali, controlla i fatti e programmali su Buffer.")
+                       f"🎬 News GTA 6: {fatti}/{quanti} video pronti in {len(lingue(cfg))} lingue. Approva con ✅.")
     if fatti == 0:
         sys.exit(1)
 

@@ -65,7 +65,8 @@ def gruppi_parole(parole, testo, dur, n=3):
     return [tempi[i:i + n] for i in range(0, len(tempi), n)]
 
 
-def scrivi_ass(path, gruppi, etichetta, dur, credito, hook=""):
+def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84):
+    font = font or "DejaVu Sans"
     pulisci = lambda s: s.replace("{", "(").replace("}", ")").replace("\n", " ")
     righe = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}", "",
@@ -74,10 +75,10 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook=""):
         "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, "
         "Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         # zone sicure: niente testo nel 10% alto, 15% basso, 12% destro (pulsanti di YouTube)
-        "Style: Cap,DejaVu Sans,84,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
-        "Style: Rank,DejaVu Sans,190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,260,1",
-        "Style: Hook,DejaVu Sans,70,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,230,1",
-        "Style: Cred,DejaVu Sans,34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
+        f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
+        f"Style: Rank,{font},190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,260,1",
+        f"Style: Hook,{font},70,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,230,1",
+        f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     if etichetta:
@@ -95,10 +96,10 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook=""):
         f.write("\n".join(righe) + "\n")
 
 
-def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook=""):
+def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None):
     dur = durata(audio) + 0.25
     ass = os.path.join(WORK, f"seg{n}.ass")
-    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook)
+    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font)
     z = f"(1+0.08*t/{dur:.2f})"  # zoom lento da 1.00 a 1.08
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
           f"scale=w='trunc({W}*{z}/2)*2':h='trunc({H}*{z}/2)*2':eval=frame,crop={W}:{H},"

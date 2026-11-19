@@ -93,6 +93,27 @@ def nasa(query, usati):
     return None
 
 
+def gameplay(query, usati, cartella, n):
+    """Spezzone di 8 s da un video di gameplay GTA 6 su YouTube (cercato con yt-dlp)."""
+    import sorgenti
+    righe = sorgenti._yt(["--flat-playlist", "--yes-playlist", "--print", "%(id)s\t%(duration)s\t%(channel)s",
+                          f"ytsearch8:GTA 6 {query} gameplay"]).splitlines()
+    for r in righe:
+        vid, dur, canale = (r.split("\t") + ["", ""])[:3]
+        try:
+            dur = float(dur)
+        except ValueError:
+            continue
+        if "yt:" + vid in usati or not 40 < dur < 4 * 3600:
+            continue
+        url = "https://www.youtube.com/watch?v=" + vid
+        dest = os.path.join(cartella, f"clip{n}.mp4")
+        inizio = dur * 0.35
+        sorgenti.scarica_pezzo(url, inizio, inizio + 8, dest)
+        return dest, {"id": "yt:" + vid, "credito": canale or "YouTube", "fonte": f"{canale}: {url}"}
+    raise RuntimeError(f"nessun gameplay per '{query}'")
+
+
 def varianti(query, riserva=None):
     """La query originale, poi versioni piu' semplici, poi una ricerca generica di riserva."""
     parole = [p for p in query.replace("'", "").split() if len(p) > 2]
@@ -117,7 +138,9 @@ def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None)
 
 
 def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
-    """fonte_preferita 'nasa' = spazio/Terra dall'orbita, altrimenti video stock (Pexels/Pixabay)."""
+    """'gameplay' = YouTube (GTA 6); 'nasa' = spazio; altrimenti stock (Pexels/Pixabay)."""
+    if fonte_preferita == "gameplay":
+        return gameplay(query, usati, cartella, n)
     stock = ["pexels", "pixabay"]
     ordine = ["nasa"] + stock if fonte_preferita == "nasa" else stock + ["nasa"]
     for f in ordine:

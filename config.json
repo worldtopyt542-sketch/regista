@@ -1,21 +1,21 @@
 {
- "video_al_giorno": 3,
+ "video_al_giorno": 1,
  "voce": "en-US-GuyNeural",
  "durata_max": 45,
  "modello_gemini": "auto",
  "temi": [
-  "solar storms and auroras",
-  "volcano eruptions",
-  "tornadoes and supercell storms",
-  "lightning and rare electrical phenomena",
-  "deep sea creatures",
-  "bioluminescent animals and seas",
-  "giant ocean waves",
-  "the most extreme places on Earth",
-  "record-breaking weather",
-  "glaciers and ice collapses",
-  "space phenomena seen from the ISS",
-  "the deadliest animals in the wild"
+  "GTA 6 latest news today",
+  "GTA 6 hidden secrets and easter eggs",
+  "GTA 6 fastest ways to make money",
+  "GTA 6 Leonida map secrets",
+  "GTA 6 best cars and vehicles",
+  "GTA 6 sales and records",
+  "GTA 6 vs GTA 5 differences",
+  "GTA 6 funniest NPC details",
+  "GTA 6 best weapons",
+  "GTA 6 Online multiplayer news",
+  "GTA 6 tips for beginners",
+  "GTA 6 Vice City locations"
  ],
  "clipper": {
   "canali": [
@@ -29,7 +29,7 @@
    "gta",
    "grand theft auto"
   ],
-  "video_per_giro": 3,
+  "video_per_giro": 2,
   "clip_per_video": 6,
   "momenti_candidati": 14,
   "whisper": "small",
@@ -40,6 +40,36 @@
    "tiktok",
    "instagram",
    "youtube"
-  ]
+  ],
+  "profili": {
+   "en": "",
+   "it": "",
+   "es": "",
+   "hi": "",
+   "pcm": ""
+  }
+ },
+ "lingue": {
+  "en": {
+   "nome": "English",
+   "voce": "en-US-GuyNeural"
+  },
+  "it": {
+   "nome": "Italian",
+   "voce": "it-IT-DiegoNeural"
+  },
+  "es": {
+   "nome": "Spanish (Latin American)",
+   "voce": "es-MX-JorgeNeural"
+  },
+  "hi": {
+   "nome": "Hindi",
+   "voce": "hi-IN-MadhurNeural",
+   "font": "Noto Sans Devanagari"
+  },
+  "pcm": {
+   "nome": "Nigerian Pidgin English",
+   "voce": "en-NG-AbeoNeural"
+  }
  }
 }

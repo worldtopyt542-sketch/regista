@@ -3,29 +3,29 @@ import json, re, urllib.parse, urllib.request
 
 BASE = "https://generativelanguage.googleapis.com/v1beta/"
 
-PROMPT = """You write scripts for a YouTube Shorts channel called "Planet Off Scale":
-Top 5 rankings of the most extreme, real phenomena on Earth and in space.
+PROMPT = """You write scripts for a viral YouTube Shorts / TikTok channel about GTA 6 (Grand Theft Auto VI,
+released November 19, 2026). Format: Top 5 news, secrets, tips or facts. Use Google Search for the LATEST facts.
 
 Theme for today: {tema}
 Do NOT repeat any of these already-published titles: {gia_fatti}
 {spunti}
 
 Rules:
-- Only well-documented, verifiable facts. If unsure of a number or date, leave it out.
-- Total spoken text 55-65 words, NEVER more than 70 (the video must last 25-30 seconds). Short, punchy sentences.
+- Only verifiable facts (official Rockstar info, reliable gaming press). No story spoilers. No invented leaks.
+- Total spoken text 55-65 words, NEVER more than 70 (25-30 seconds). Short, punchy sentences, gamer tone.
 - Hook: max 14 words, a surprising statement or question.
-- Each item: max 10 words, starts with the place or year when it helps.
-- For each item give one English search query (2-4 words) describing footage that a
-  stock or NASA archive would have (e.g. "volcano lava flow", "aurora from space").
-- "fonte": "nasa" for space/Earth-from-orbit footage, otherwise "stock".
-- "verifica": one public URL (Wikipedia or an official agency) that supports the fact.
+- Each item: max 10 words.
+- For each item one YouTube search query (2-5 words) for matching GTA 6 gameplay footage, e.g. "Vice City beach", "police chase". Do not include "GTA 6" in it.
+- "fonte": always "gameplay".
+- "verifica": one public URL that supports the fact.
+- "descrizione": one catchy sentence for the post.
 
 Reply with JSON only, no markdown:
-{{"titolo": "...", "hook": "...", "hook_query": "...", "hook_fonte": "nasa|pexels",
- "items": [{{"label": "#5", "testo": "...", "query": "...", "fonte": "...", "verifica": "..."}},
+{{"titolo": "...", "descrizione": "...", "hook": "...", "hook_query": "...", "hook_fonte": "gameplay",
+ "items": [{{"label": "#5", "testo": "...", "query": "...", "fonte": "gameplay", "verifica": "..."}},
            ... down to "#1"],
- "finale": "...", "finale_query": "...", "finale_fonte": "...",
- "hashtags": ["#shorts", "..."]}}
+ "finale": "...", "finale_query": "...", "finale_fonte": "gameplay",
+ "hashtags": ["#gta6", "..."]}}
 """
 
 
@@ -97,8 +97,8 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
         testo_spunti = ("Trending on YouTube right now for this theme (use ONLY as inspiration for the angle; "
                         "never copy titles, never mention channels): " + " | ".join(spunti[:3]))
     prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
-    body = {"contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.9, "responseMimeType": "application/json"}}
+    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.9},
+            "tools": [{"google_search": {}}]}
     global ULTIMO_BUONO
     candidati = modelli_candidati(chiave, ULTIMO_BUONO or (None if modello == "auto" else modello))
     if not candidati:
@@ -117,7 +117,7 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
                     break
                 raise
             try:
-                testo = r["candidates"][0]["content"]["parts"][0]["text"]
+                testo = "".join(p.get("text", "") for p in r["candidates"][0]["content"]["parts"])
                 s = estrai_json(testo)
             except Exception as e:
                 problemi.append(f"{m}: risposta non leggibile")
@@ -133,3 +133,43 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
             problemi.append(f"{m}: " + "; ".join(errori))
             print(f"   Sceneggiatore: tentativo {t + 1} con {m} scartato ({'; '.join(errori)})")
     raise RuntimeError("Sceneggiatore: nessun modello ha funzionato. " + " | ".join(problemi[-6:]))
+
+
+def gemini(chiave, prompt, temp=0.5):
+    """Chiamata JSON generica: prova i modelli flash finche' uno risponde."""
+    global ULTIMO_BUONO
+    body = {"contents": [{"parts": [{"text": prompt}]}],
+            "generationConfig": {"temperature": temp, "responseMimeType": "application/json"}}
+    errori = []
+    for m in modelli_candidati(chiave, ULTIMO_BUONO):
+        try:
+            r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
+            out = estrai_json("".join(p.get("text", "") for p in r["candidates"][0]["content"]["parts"]))
+            ULTIMO_BUONO = m
+            return out
+        except Exception as e:
+            errori.append(f"{m}: {str(e)[:80]}")
+    raise RuntimeError("Gemini non risponde: " + " | ".join(errori[-3:]))
+
+
+def traduci(chiave, dati, lingue):
+    """dati: dict in inglese. lingue: {codice: nome}. Ritorna {codice: dict tradotto} (inglese se fallisce)."""
+    prompt = ("Translate every string value of this JSON into each target language. Keep keys and list lengths "
+              "IDENTICAL. Sound native and viral for young gamers (slang ok), not literal. Keep names (GTA 6, "
+              "Vice City, streamer names). Localize hashtags but keep #gta6. Keep each string about as short as the original.\n"
+              "Target languages: " + ", ".join(f'"{k}" = {v}' for k, v in lingue.items()) +
+              '\nReply JSON only: {"<code>": <translated JSON>, ...}\n\n' + json.dumps(dati, ensure_ascii=False))
+    try:
+        t = gemini(chiave, prompt, 0.4)
+    except Exception as e:
+        print("   Traduttore:", e)
+        t = {}
+    out = {}
+    for k in lingue:
+        v = t.get(k)
+        ok = isinstance(v, dict) and all(
+            (len(v.get(c) or []) == len(dati[c])) if isinstance(dati[c], list) else bool(v.get(c)) for c in dati)
+        out[k] = v if ok else dati
+        if not ok:
+            print(f"   Traduttore: {k} non valido, uso l'inglese")
+    return out

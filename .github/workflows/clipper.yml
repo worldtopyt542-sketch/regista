@@ -27,7 +27,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Installa ffmpeg e font
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core fonts-noto-core
       - name: Installa librerie
         run: pip install -q -U -r requirements.txt
       - name: Cookie per YouTube (facoltativo)
@@ -47,7 +47,7 @@ jobs:
           rm -f cookies.txt
           git config user.name "regista-bot"
           git config user.email "regista-bot@users.noreply.github.com"
-          git add archivio.json
+          git add clipper.json
           git diff --cached --quiet || git commit -m "Archivio clip $(date -u +%F-%H)"
           git pull --rebase -q || true
           git push || true

@@ -4,8 +4,10 @@ import json, os, shutil, subprocess, sys, traceback, wave
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(__file__))
-import editor, pubblica, scrittore, sorgenti, telegram
-from regista import ARCHIVIO, CONFIG, RADICE, carica, salva
+import editor, scrittore, sorgenti, telegram
+from regista import ARCHIVIO, BOTTONI, CONFIG, RADICE, carica, didascalia, lingue, salva
+
+STATO = os.path.join(RADICE, "clipper.json")
 
 FINESTRA = 70  # secondi di contesto attorno a ogni picco
 
@@ -91,20 +93,29 @@ def scegli(chiave, src, momenti, k):
     raise RuntimeError("Talent Scout: nessun modello ha risposto. " + " | ".join(errori[-3:]))
 
 
-def monta(pezzo, c, parole, credito, out, lavoro):
-    """Agent EDITOR: 9:16 con sfondo sfocato, sottotitoli parola per parola, gancio in alto."""
-    dur = float(c["fine"]) - float(c["inizio"])
-    rel = [(a - c["inizio"], b - c["inizio"], w) for a, b, w in parole if c["inizio"] <= a < c["fine"]]
+def frasi(rel, dur):
+    """Parole -> frasi brevi (pausa > 0.6 s o 7 parole); ogni frase resta fino all'inizio della successiva."""
+    gr, cur = [], []
+    for a, b, w in rel:
+        if cur and (len(cur) >= 7 or a - cur[-1][1] > 0.6):
+            gr.append(cur); cur = []
+        cur.append((a, b, w))
+    if cur:
+        gr.append(cur)
+    return [(g[0][0], gr[i + 1][0][0] if i + 1 < len(gr) else dur, " ".join(x[2] for x in g)) for i, g in enumerate(gr)]
+
+
+def monta(pezzo, dur, gruppi, hook, credito, out, lavoro, font=None, cap=84):
+    """Agent EDITOR: 9:16 con sfondo sfocato, sottotitoli, gancio in alto."""
     ass = os.path.join(lavoro, "sub.ass")
-    editor.scrivi_ass(ass, editor.gruppi_parole(rel, " ".join(w for *_, w in rel) or " ", dur),
-                      "", dur, credito, c.get("hook", ""))
+    editor.scrivi_ass(ass, gruppi, "", dur, credito, hook, font, cap)
     fc = ("[0:v]split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
           "boxblur=25:3,eq=brightness=-0.2[bg];[b]scale=1080:-2[fg];"
           f"[bg][fg]overlay=(W-w)/2:(H-h)/2-120,fps=30,setsar=1,ass={ass}[v]")
     editor.run(["ffmpeg", "-y", "-i", pezzo, "-t", f"{dur:.2f}", "-filter_complex", fc, "-map", "[v]",
                 "-map", "0:a:0", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:v", "libx264", "-preset",
-                "veryfast", "-crf", "21", "-maxrate", "3M", "-bufsize", "6M", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
-                "-movflags", "+faststart", out])
+                "veryfast", "-crf", "21", "-maxrate", "3M", "-bufsize", "6M", "-pix_fmt", "yuv420p",
+                "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out])
 
 
 def lavora(url, cfg, chiavi, chat_id, arch):
@@ -120,25 +131,32 @@ def lavora(url, cfg, chiavi, chat_id, arch):
     momenti = trascrivi(wav, finestre, cfg.get("whisper", "small"))
     clip = scegli(chiavi["gemini"], src, momenti, cfg.get("clip_per_video", 6))
     tutte = [p for m in momenti for p in m["parole"]]
+    L = lingue(carica(CONFIG, {}))
     fatte = 0
     for n, c in enumerate(clip):
         c["inizio"], c["fine"] = float(c["inizio"]), float(c["fine"])
+        dur = c["fine"] - c["inizio"]
         try:
             pezzo = sorgenti.scarica_pezzo(url, c["inizio"], c["fine"], os.path.join(lavoro, f"raw{n}.mp4"))
-            out = os.path.join(RADICE, "output", f"{src['id'].replace(':', '_')}_{n + 1}.mp4")
-            os.makedirs(os.path.dirname(out), exist_ok=True)
-            monta(pezzo, c, tutte, "Clip: " + src["canale"], out, lavoro)
-            ok = editor.critic(out, max_sec=60)
-            cap = (f"{c['titolo']}\n\n{c.get('descrizione', '')}\n\n{' '.join(c.get('hashtags', []))}\n\n"
-                   f"🔥 {c['punteggio']}/100 · Credit: {src['canale']} · {'ok' if ok else 'critic ⚠️'} · {url}")
-            soglia = cfg.get("auto_pubblica_sopra")
-            if ok and soglia is not None and c["punteggio"] >= soglia:
-                pubblica.pubblica(out, *pubblica.leggi_didascalia(cap), carica(CONFIG, {}).get("pubblica", {}))
-                telegram.video(chiavi["telegram"], chat_id, out, "✅ PUBBLICATA IN AUTOMATICO\n" + cap)
-            else:
-                telegram.video(chiavi["telegram"], chat_id, out, cap,
-                               bottoni=[[{"text": "✅ Pubblica", "callback_data": "ok"},
-                                         {"text": "❌ Scarta", "callback_data": "no"}]])
+            rel = [(a - c["inizio"], b - c["inizio"], w) for a, b, w in tutte if c["inizio"] <= a < c["fine"]]
+            fr = frasi(rel, dur)
+            base = {"titolo": c["titolo"], "hook": c.get("hook", ""), "descrizione": c.get("descrizione", ""),
+                    "hashtags": c.get("hashtags") or ["#gta6"], "frasi": [f[2] for f in fr]}
+            trad = scrittore.traduci(chiavi["gemini"], base, {k: v["nome"] for k, v in L.items() if k != "en"})
+            trad["en"] = base
+            for cod, lg in L.items():
+                t = trad[cod]
+                if cod == "en":  # originale: karaoke parola per parola
+                    gruppi, cap = editor.gruppi_parole(rel, " ".join(w for *_, w in rel) or " ", dur), 84
+                else:  # tradotto: frase intera sincronizzata
+                    gruppi, cap = [[(a, b, t["frasi"][i])] for i, (a, b, _) in enumerate(fr)], 64
+                out = os.path.join(RADICE, "output", f"{src['id'].replace(':', '_')}_{n + 1}_{cod}.mp4")
+                os.makedirs(os.path.dirname(out), exist_ok=True)
+                monta(pezzo, dur, gruppi, t["hook"], "Clip: " + src["canale"], out, lavoro, lg.get("font"), cap)
+                ok = editor.critic(out, max_sec=60)
+                cap_txt = didascalia(t, cod, src["canale"], f"{c['punteggio']}/100" + ("" if ok else " · critic ⚠️"))
+                telegram.video(chiavi["telegram"], chat_id, out, cap_txt + f"\n{url}", bottoni=BOTTONI)
+                os.remove(out)
             fatte += 1
         except Exception as e:
             traceback.print_exc()
@@ -151,29 +169,29 @@ def lavora(url, cfg, chiavi, chat_id, arch):
 
 def main():
     cfg = carica(CONFIG, {}).get("clipper", {})
-    arch = carica(ARCHIVIO, {})
+    arch = carica(STATO, {"sorgenti_fatte": [], "url_fatti": []})
     chiavi = {"gemini": os.environ.get("GEMINI_API_KEY"), "telegram": os.environ.get("TELEGRAM_BOT_TOKEN")}
     if not all(chiavi.values()):
         sys.exit("Mancano i secret GEMINI_API_KEY / TELEGRAM_BOT_TOKEN")
-    chat_id = arch.get("chat_id") or telegram.trova_chat_id(chiavi["telegram"])
-    arch["chat_id"] = chat_id
+    chat_id = carica(ARCHIVIO, {}).get("chat_id") or telegram.trova_chat_id(chiavi["telegram"])
     coda = [u for u in (os.environ.get("URL") or "").split() if u]
     coda += carica(os.path.join(RADICE, "pubblica.json"), {}).get("coda_link", [])
     if cfg.get("canali"):
-        coda += sorgenti.da_canali(cfg["canali"], cfg.get("parole_chiave", ["gta"]), arch.get("sorgenti_fatte", []))
-    coda = list(dict.fromkeys(coda))[:cfg.get("video_per_giro", 3)]
-    salva(ARCHIVIO, arch)
+        coda += sorgenti.da_canali(cfg["canali"], cfg.get("parole_chiave", ["gta"]), arch["url_fatti"])
+    coda = [u for u in dict.fromkeys(coda) if u not in arch["url_fatti"]][:cfg.get("video_per_giro", 2)]
     if not coda:
         print("Niente di nuovo da clippare."); return
     totale = 0
     for url in coda:
+        arch["url_fatti"].append(url)
         try:
             totale += lavora(url, cfg, chiavi, chat_id, arch)
         except Exception as e:
             traceback.print_exc()
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Non riesco a clippare {url}: {str(e)[:300]}")
-        salva(ARCHIVIO, arch)
-    telegram.messaggio(chiavi["telegram"], chat_id, f"🎬 Autoclipper: {totale} clip pronte da {len(coda)} video.")
+        arch["url_fatti"] = arch["url_fatti"][-500:]
+        salva(STATO, arch)
+    telegram.messaggio(chiavi["telegram"], chat_id, f"🎬 Autoclipper: {totale} clip x {len(lingue(carica(CONFIG, {})))} lingue da {len(coda)} video. Approva con ✅.")
 
 
 if __name__ == "__main__":
