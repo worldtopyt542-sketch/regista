@@ -39,7 +39,7 @@ def produci(s, cfg, usati, chiavi, cartella, nome):
     pezzi, crediti = [], []
     for n, seg in enumerate(segmenti(s)):
         print(f"  [{n + 1}/7] {seg['label'] or 'gancio/finale'}: {seg['query']}")
-        clip, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n)
+        clip, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n, riserva=s.get("hook_query"))
         usati.add(info["id"])
         crediti.append(info)
         mp3 = os.path.join(cartella, f"voce{n}.mp3")

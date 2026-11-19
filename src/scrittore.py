@@ -41,6 +41,7 @@ def _post(url, body):
         raise RuntimeError(f"Gemini HTTP 408: nessuna risposta ({e})")
 
 
+ULTIMO_BUONO = None  # il modello che ha funzionato, provato per primo al video successivo
 ESCLUSI = ("image", "tts", "live", "omni", "audio", "embedding", "vision", "learnlm")
 
 
@@ -98,7 +99,8 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
     prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
     body = {"contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.9, "responseMimeType": "application/json"}}
-    candidati = modelli_candidati(chiave, None if modello == "auto" else modello)
+    global ULTIMO_BUONO
+    candidati = modelli_candidati(chiave, ULTIMO_BUONO or (None if modello == "auto" else modello))
     if not candidati:
         raise RuntimeError("Nessun modello Gemini 'flash' disponibile per questa chiave")
     problemi = []
@@ -125,6 +127,7 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
                 errori.append("titolo gia' pubblicato")
             if not errori:
                 print(f"   Sceneggiatore: script scritto con {m}")
+                ULTIMO_BUONO = m
                 s["items"] = sorted(s["items"], key=lambda it: -int(re.sub(r"\D", "", it.get("label", "0")) or 0))
                 return s
             problemi.append(f"{m}: " + "; ".join(errori))

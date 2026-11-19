@@ -7,8 +7,12 @@ SOSPETTI = ("©", "copyright", "courtesy of", "used with permission", "all right
 
 def _get_json(url, headers=None):
     req = urllib.request.Request(url, headers={**UA, **(headers or {})})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.loads(r.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.loads(r.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        dettaglio = e.read().decode("utf-8", "ignore")[:150].replace("\n", " ")
+        raise RuntimeError(f"HTTP {e.code}: {dettaglio}")
 
 
 def scarica(url, dest, max_mb=200):
@@ -89,7 +93,30 @@ def nasa(query, usati):
     return None
 
 
-def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
+def varianti(query, riserva=None):
+    """La query originale, poi versioni piu' semplici, poi una ricerca generica di riserva."""
+    parole = [p for p in query.replace("'", "").split() if len(p) > 2]
+    out = [query]
+    if len(parole) > 2:
+        out.append(" ".join(parole[-2:]))
+    if len(parole) > 1:
+        out.append(parole[-1])
+    if riserva:
+        out.append(riserva)
+    return list(dict.fromkeys(q for q in out if q))
+
+
+def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None):
+    """Prova la query e le sue varianti piu' semplici su tutte le fonti."""
+    for q in varianti(query, riserva):
+        try:
+            return _trova_clip(q, fonte_preferita, usati, chiavi, cartella, n)
+        except RuntimeError:
+            print(f"   nessuna clip per '{q}', provo una ricerca piu' semplice")
+    raise RuntimeError(f"Nessuna clip trovata per '{query}' (anche con ricerche semplificate)")
+
+
+def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
     """fonte_preferita 'nasa' = spazio/Terra dall'orbita, altrimenti video stock (Pexels/Pixabay)."""
     stock = ["pexels", "pixabay"]
     ordine = ["nasa"] + stock if fonte_preferita == "nasa" else stock + ["nasa"]
