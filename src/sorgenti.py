@@ -1,9 +1,6 @@
 # ==== AGENT SORGENTI: raccoglie i video lunghi da clippare ====
 # 1) link mandati al bot Telegram  2) nuovi video dai canali in config.json  3) URL passato a mano
-import json, os, re, subprocess
-import requests
-
-URL_RE = re.compile(r"https?://\S+")
+import json, os, subprocess
 
 
 def _yt(args):
@@ -14,19 +11,6 @@ def _yt(args):
     if r.returncode != 0:
         raise RuntimeError("yt-dlp: " + r.stderr.strip()[-400:])
     return r.stdout
-
-
-def da_telegram(token, chat_id, arch):
-    """Link inviati al bot dopo l'ultimo controllo."""
-    r = requests.get(f"https://api.telegram.org/bot{token}/getUpdates",
-                     params={"offset": arch.get("ultimo_update", 0) + 1}, timeout=60).json()
-    link = []
-    for u in r.get("result", []):
-        arch["ultimo_update"] = u["update_id"]
-        m = u.get("message") or {}
-        if (m.get("chat") or {}).get("id") == chat_id:
-            link += URL_RE.findall(m.get("text") or m.get("caption") or "")
-    return link
 
 
 def da_canali(canali, parole, fatti, quanti=2):

@@ -18,7 +18,13 @@
   "the deadliest animals in the wild"
  ],
  "clipper": {
-  "canali": [],
+  "canali": [
+   "https://www.twitch.tv/kaicenat/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/xqc/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/summit1g/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/caseoh_/videos?filter=archives&sort=time",
+   "https://www.youtube.com/@IShowSpeed/streams"
+  ],
   "parole_chiave": [
    "gta",
    "grand theft auto"
@@ -26,6 +32,14 @@
   "video_per_giro": 3,
   "clip_per_video": 6,
   "momenti_candidati": 14,
-  "whisper": "small"
+  "whisper": "small",
+  "auto_pubblica_sopra": null
+ },
+ "pubblica": {
+  "piattaforme": [
+   "tiktok",
+   "instagram",
+   "youtube"
+  ]
  }
 }

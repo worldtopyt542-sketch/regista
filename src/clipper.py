@@ -4,7 +4,7 @@ import json, os, shutil, subprocess, sys, traceback, wave
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(__file__))
-import editor, scrittore, sorgenti, telegram
+import editor, pubblica, scrittore, sorgenti, telegram
 from regista import ARCHIVIO, CONFIG, RADICE, carica, salva
 
 FINESTRA = 70  # secondi di contesto attorno a ogni picco
@@ -103,7 +103,7 @@ def monta(pezzo, c, parole, credito, out, lavoro):
           f"[bg][fg]overlay=(W-w)/2:(H-h)/2-120,fps=30,setsar=1,ass={ass}[v]")
     editor.run(["ffmpeg", "-y", "-i", pezzo, "-t", f"{dur:.2f}", "-filter_complex", fc, "-map", "[v]",
                 "-map", "0:a:0", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:v", "libx264", "-preset",
-                "veryfast", "-crf", "21", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
+                "veryfast", "-crf", "21", "-maxrate", "3M", "-bufsize", "6M", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
                 "-movflags", "+faststart", out])
 
 
@@ -129,11 +129,16 @@ def lavora(url, cfg, chiavi, chat_id, arch):
             os.makedirs(os.path.dirname(out), exist_ok=True)
             monta(pezzo, c, tutte, "Clip: " + src["canale"], out, lavoro)
             ok = editor.critic(out, max_sec=60)
-            telegram.video(chiavi["telegram"], chat_id, out,
-                           f"{'✅' if ok else '⚠️'} {c['punteggio']}/100 · {c['titolo']}")
-            telegram.messaggio(chiavi["telegram"], chat_id,
-                               f"{c['titolo']}\n\n{c.get('descrizione', '')}\n\n{' '.join(c.get('hashtags', []))}"
-                               f"\n\nSource: {src['canale']} — {url}")
+            cap = (f"{c['titolo']}\n\n{c.get('descrizione', '')}\n\n{' '.join(c.get('hashtags', []))}\n\n"
+                   f"🔥 {c['punteggio']}/100 · Credit: {src['canale']} · {'ok' if ok else 'critic ⚠️'} · {url}")
+            soglia = cfg.get("auto_pubblica_sopra")
+            if ok and soglia is not None and c["punteggio"] >= soglia:
+                pubblica.pubblica(out, *pubblica.leggi_didascalia(cap), carica(CONFIG, {}).get("pubblica", {}))
+                telegram.video(chiavi["telegram"], chat_id, out, "✅ PUBBLICATA IN AUTOMATICO\n" + cap)
+            else:
+                telegram.video(chiavi["telegram"], chat_id, out, cap,
+                               bottoni=[[{"text": "✅ Pubblica", "callback_data": "ok"},
+                                         {"text": "❌ Scarta", "callback_data": "no"}]])
             fatte += 1
         except Exception as e:
             traceback.print_exc()
@@ -153,7 +158,7 @@ def main():
     chat_id = arch.get("chat_id") or telegram.trova_chat_id(chiavi["telegram"])
     arch["chat_id"] = chat_id
     coda = [u for u in (os.environ.get("URL") or "").split() if u]
-    coda += sorgenti.da_telegram(chiavi["telegram"], chat_id, arch)
+    coda += carica(os.path.join(RADICE, "pubblica.json"), {}).get("coda_link", [])
     if cfg.get("canali"):
         coda += sorgenti.da_canali(cfg["canali"], cfg.get("parole_chiave", ["gta"]), arch.get("sorgenti_fatte", []))
     coda = list(dict.fromkeys(coda))[:cfg.get("video_per_giro", 3)]
