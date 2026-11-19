@@ -33,10 +33,12 @@ def _post(url, body):
     req = urllib.request.Request(url, data=json.dumps(body).encode(), method="POST",
                                  headers={"Content-Type": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=120) as r:
+        with urllib.request.urlopen(req, timeout=150) as r:
             return json.loads(r.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         raise RuntimeError(f"Gemini HTTP {e.code}: {e.read().decode('utf-8', 'ignore')[:300]}")
+    except (TimeoutError, OSError) as e:  # nessuna risposta in tempo o rete interrotta
+        raise RuntimeError(f"Gemini HTTP 408: nessuna risposta ({e})")
 
 
 ESCLUSI = ("image", "tts", "live", "omni", "audio", "embedding", "vision", "learnlm")
@@ -102,11 +104,12 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
     problemi = []
     for m in candidati:
         for t in range(tentativi):
+            print(f"   Sceneggiatore: provo {m}")
             try:
                 r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
             except RuntimeError as e:
                 codice = str(e)[12:15]
-                if codice in ("429", "404", "403", "400"):
+                if codice in ("429", "404", "403", "400", "408", "500", "503"):
                     problemi.append(f"{m}: HTTP {codice}")
                     print(f"   Sceneggiatore: {m} non utilizzabile (HTTP {codice}), provo il successivo")
                     break
