@@ -1,2 +1,5 @@
 edge-tts
 requests
+yt-dlp
+faster-whisper
+numpy

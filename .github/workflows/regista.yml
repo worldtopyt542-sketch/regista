@@ -1,8 +1,8 @@
 name: Regista - video del giorno
 
 on:
-  schedule:
-    - cron: "15 5 * * *"   # ogni giorno alle 06:15 ora italiana (05:15 UTC, ora solare)
+  # schedule: (spento: ora lavora l autoclipper GTA 6)
+  #  - cron: "15 5 * * *"
   workflow_dispatch:         # pulsante "Run workflow" per avviarlo a mano
     inputs:
       quanti:
