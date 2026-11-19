@@ -1,7 +1,36 @@
 {
  "chat_id": 5193260023,
- "titoli": [],
- "clip_usate": [],
- "temi_recenti": [],
- "storico": []
+ "titoli": [
+  "5 Most Extreme Electrical Phenomena in the Universe"
+ ],
+ "clip_usate": [
+  "nasa:311_ScienceCasts-observing-lightning-ISS",
+  "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
+  "nasa:GSFC_20170811_Solar_m11797_Eruption",
+  "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944",
+  "nasa:Space-247365",
+  "nasa:iss068m262721811_Expedition_68_Tropical_Storm_Ian_Flyover_220929",
+  "nasa:ksc_081105_mro_intro",
+  "nasa:ksc_121304_comet_history"
+ ],
+ "temi_recenti": [
+  "lightning and rare electrical phenomena"
+ ],
+ "storico": [
+  {
+   "data": "2026-11-19",
+   "titolo": "5 Most Extreme Electrical Phenomena in the Universe",
+   "tema": "lightning and rare electrical phenomena",
+   "critic_ok": true,
+   "clip": [
+    "nasa:ksc_081105_mro_intro",
+    "nasa:ksc_121304_comet_history",
+    "nasa:311_ScienceCasts-observing-lightning-ISS",
+    "nasa:GSFC_20170811_Solar_m11797_Eruption",
+    "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
+    "nasa:Space-247365",
+    "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944"
+   ]
+  }
+ ]
 }
