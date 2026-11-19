@@ -16,5 +16,16 @@
   "glaciers and ice collapses",
   "space phenomena seen from the ISS",
   "the deadliest animals in the wild"
- ]
+ ],
+ "clipper": {
+  "canali": [],
+  "parole_chiave": [
+   "gta",
+   "grand theft auto"
+  ],
+  "video_per_giro": 3,
+  "clip_per_video": 6,
+  "momenti_candidati": 14,
+  "whisper": "small"
+ }
 }
