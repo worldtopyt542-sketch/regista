@@ -12,9 +12,9 @@ Do NOT repeat any of these already-published titles: {gia_fatti}
 
 Rules:
 - Only well-documented, verifiable facts. If unsure of a number or date, leave it out.
-- Total spoken text 60-75 words (about 25-30 seconds). Short, punchy sentences.
+- Total spoken text 55-65 words, NEVER more than 70 (the video must last 25-30 seconds). Short, punchy sentences.
 - Hook: max 14 words, a surprising statement or question.
-- Each item: max 12 words, starts with the place or year when it helps.
+- Each item: max 10 words, starts with the place or year when it helps.
 - For each item give one English search query (2-4 words) describing footage that a
   stock or NASA archive would have (e.g. "volcano lava flow", "aurora from space").
 - "fonte": "nasa" for space/Earth-from-orbit footage, otherwise "stock".
@@ -86,8 +86,8 @@ def valida(s):
             errori.append("voce senza testo o query")
     parole = len(s.get("hook", "").split()) + len(s.get("finale", "").split()) + \
         sum(len(it.get("testo", "").split()) for it in items)
-    if not 45 <= parole <= 95:
-        errori.append(f"{parole} parole (obiettivo 60-75)")
+    if not 45 <= parole <= 72:
+        errori.append(f"{parole} parole (obiettivo 55-65)")
     return errori
 
 
