@@ -8,6 +8,7 @@ Top 5 rankings of the most extreme, real phenomena on Earth and in space.
 
 Theme for today: {tema}
 Do NOT repeat any of these already-published titles: {gia_fatti}
+{spunti}
 
 Rules:
 - Only well-documented, verifiable facts. If unsure of a number or date, leave it out.
@@ -38,16 +39,28 @@ def _post(url, body):
         raise RuntimeError(f"Gemini HTTP {e.code}: {e.read().decode('utf-8', 'ignore')[:300]}")
 
 
-def _modello_flash(chiave):
-    """Se il modello indicato non esiste piu', sceglie un modello 'flash' disponibile."""
-    with urllib.request.urlopen(BASE + "models?key=" + urllib.parse.quote(chiave), timeout=60) as r:
+ESCLUSI = ("image", "tts", "live", "omni", "audio", "embedding", "vision", "learnlm")
+
+
+def modelli_candidati(chiave, preferito=None):
+    """Tutti i modelli Gemini 'flash' utilizzabili: prima gli stabili, versione piu' recente prima."""
+    with urllib.request.urlopen(BASE + "models?pageSize=200&key=" + urllib.parse.quote(chiave), timeout=60) as r:
         modelli = json.loads(r.read().decode()).get("models", [])
-    flash = [m["name"].split("/")[-1] for m in modelli
-             if "flash" in m["name"] and "generateContent" in m.get("supportedGenerationMethods", [])
-             and "image" not in m["name"] and "tts" not in m["name"] and "live" not in m["name"]]
-    if not flash:
-        raise RuntimeError("Nessun modello Gemini 'flash' disponibile per questa chiave")
-    return sorted(flash)[-1]
+    nomi = [m["name"].split("/")[-1] for m in modelli
+            if "generateContent" in m.get("supportedGenerationMethods", [])]
+    flash = [n for n in nomi if n.startswith("gemini") and "flash" in n and not any(x in n for x in ESCLUSI)]
+
+    def chiave_ordine(n):
+        v = re.search(r"gemini-(\d+(?:\.\d+)?)", n)
+        versione = float(v.group(1)) if v else 0
+        instabile = any(x in n for x in ("preview", "exp", "thinking"))
+        return (instabile, -versione, "lite" in n, n)
+
+    flash.sort(key=chiave_ordine)
+    if preferito and preferito in flash:
+        flash.remove(preferito)
+        flash.insert(0, preferito)
+    return flash
 
 
 def estrai_json(testo):
@@ -75,32 +88,42 @@ def valida(s):
     return errori
 
 
-def scrivi(chiave, tema, gia_fatti, modello="gemini-2.5-flash", tentativi=3):
-    prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none")
+def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
+    testo_spunti = ""
+    if spunti:
+        testo_spunti = ("Trending on YouTube right now for this theme (use ONLY as inspiration for the angle; "
+                        "never copy titles, never mention channels): " + " | ".join(spunti[:3]))
+    prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
     body = {"contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.9, "responseMimeType": "application/json"}}
-    ultimo = None
-    for t in range(tentativi):
-        try:
-            r = _post(f"{BASE}models/{modello}:generateContent?key={urllib.parse.quote(chiave)}", body)
-        except RuntimeError as e:
-            if "404" in str(e) or "not found" in str(e).lower():
-                modello = _modello_flash(chiave)
-                print(f"   Sceneggiatore: uso il modello {modello}")
+    candidati = modelli_candidati(chiave, None if modello == "auto" else modello)
+    if not candidati:
+        raise RuntimeError("Nessun modello Gemini 'flash' disponibile per questa chiave")
+    problemi = []
+    for m in candidati:
+        for t in range(tentativi):
+            try:
+                r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
+            except RuntimeError as e:
+                codice = str(e)[12:15]
+                if codice in ("429", "404", "403", "400"):
+                    problemi.append(f"{m}: HTTP {codice}")
+                    print(f"   Sceneggiatore: {m} non utilizzabile (HTTP {codice}), provo il successivo")
+                    break
+                raise
+            try:
+                testo = r["candidates"][0]["content"]["parts"][0]["text"]
+                s = estrai_json(testo)
+            except Exception as e:
+                problemi.append(f"{m}: risposta non leggibile")
                 continue
-            raise
-        try:
-            testo = r["candidates"][0]["content"]["parts"][0]["text"]
-            s = estrai_json(testo)
-        except Exception as e:
-            ultimo = f"risposta non leggibile ({e})"
-            continue
-        errori = valida(s)
-        if s.get("titolo", "").strip().lower() in {g.strip().lower() for g in gia_fatti}:
-            errori.append("titolo gia' pubblicato")
-        if not errori:
-            s["items"] = sorted(s["items"], key=lambda it: -int(re.sub(r"\D", "", it.get("label", "0")) or 0))
-            return s
-        ultimo = "; ".join(errori)
-        print(f"   Sceneggiatore: tentativo {t + 1} scartato ({ultimo})")
-    raise RuntimeError(f"Sceneggiatore: nessuno script valido ({ultimo})")
+            errori = valida(s)
+            if s.get("titolo", "").strip().lower() in {g.strip().lower() for g in gia_fatti}:
+                errori.append("titolo gia' pubblicato")
+            if not errori:
+                print(f"   Sceneggiatore: script scritto con {m}")
+                s["items"] = sorted(s["items"], key=lambda it: -int(re.sub(r"\D", "", it.get("label", "0")) or 0))
+                return s
+            problemi.append(f"{m}: " + "; ".join(errori))
+            print(f"   Sceneggiatore: tentativo {t + 1} con {m} scartato ({'; '.join(errori)})")
+    raise RuntimeError("Sceneggiatore: nessun modello ha funzionato. " + " | ".join(problemi[-6:]))

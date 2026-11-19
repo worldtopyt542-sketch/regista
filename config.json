@@ -2,7 +2,7 @@
  "video_al_giorno": 3,
  "voce": "en-US-GuyNeural",
  "durata_max": 45,
- "modello_gemini": "gemini-2.5-flash",
+ "modello_gemini": "auto",
  "temi": [
   "solar storms and auroras",
   "volcano eruptions",
