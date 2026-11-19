@@ -155,7 +155,7 @@ def main():
         salva(ARCHIVIO, arch)
 
     telegram.messaggio(chiavi["telegram"], chat_id,
-                       f"🎬 News GTA 6: {fatti}/{quanti} video pronti in {len(lingue(cfg))} lingue. Approva con ✅.")
+                       f"📰 {fatti}/{quanti} video di news GTA 6 pronti qui sopra. Premi ✅ per pubblicarli.")
     if fatti == 0:
         sys.exit(1)
 

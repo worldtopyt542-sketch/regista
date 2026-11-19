@@ -30,11 +30,12 @@ def messaggio(token, chat_id, testo):
                 disable_web_page_preview="true")
 
 
-def video(token, chat_id, percorso, didascalia, bottoni=None):
+def video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True):
     with open(percorso, "rb") as f:
         r = requests.post(API.format(token=token, metodo="sendVideo"),
                           data={"chat_id": chat_id, "caption": didascalia[:1000],
                                 "supports_streaming": "true", "width": 1080, "height": 1920,
+                                "disable_notification": "true" if silenzioso else "false",
                                 **({"reply_markup": json.dumps({"inline_keyboard": bottoni})} if bottoni else {})},
                           files={"video": f}, timeout=300)
     j = r.json()

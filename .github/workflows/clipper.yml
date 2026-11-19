@@ -2,7 +2,7 @@ name: Autoclipper GTA 6
 
 on:
   schedule:
-    - cron: "17 */3 * * *"   # ogni 3 ore controlla Telegram e i canali
+    - cron: "7 2 * * *"   # di notte (03:07 in Italia): le clip arrivano entro la mattina
   workflow_dispatch:
     inputs:
       url:

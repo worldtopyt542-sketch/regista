@@ -118,7 +118,7 @@ def monta(pezzo, dur, gruppi, hook, credito, out, lavoro, font=None, cap=84):
                 "-c:a", "aac", "-b:a", "160k", "-movflags", "+faststart", out])
 
 
-def lavora(url, cfg, chiavi, chat_id, arch):
+def lavora(url, cfg, chiavi, chat_id, arch, k):
     src = sorgenti.info(url)
     if src["id"] in arch.setdefault("sorgenti_fatte", []):
         print("   gia' clippato, salto"); return 0
@@ -129,7 +129,7 @@ def lavora(url, cfg, chiavi, chat_id, arch):
     wav = sorgenti.scarica_audio(url, os.path.join(lavoro, "audio"))
     finestre, _ = picchi(wav, cfg.get("momenti_candidati", 14))
     momenti = trascrivi(wav, finestre, cfg.get("whisper", "small"))
-    clip = scegli(chiavi["gemini"], src, momenti, cfg.get("clip_per_video", 6))
+    clip = scegli(chiavi["gemini"], src, momenti, k)
     tutte = [p for m in momenti for p in m["parole"]]
     L = lingue(carica(CONFIG, {}))
     fatte = 0
@@ -182,16 +182,19 @@ def main():
     if not coda:
         print("Niente di nuovo da clippare."); return
     totale = 0
+    obiettivo = cfg.get("clip_al_giorno", 8)
     for url in coda:
+        if totale >= obiettivo:
+            break
         arch["url_fatti"].append(url)
         try:
-            totale += lavora(url, cfg, chiavi, chat_id, arch)
+            totale += lavora(url, cfg, chiavi, chat_id, arch, min(cfg.get("clip_per_video", 4), obiettivo - totale))
         except Exception as e:
             traceback.print_exc()
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Non riesco a clippare {url}: {str(e)[:300]}")
         arch["url_fatti"] = arch["url_fatti"][-500:]
         salva(STATO, arch)
-    telegram.messaggio(chiavi["telegram"], chat_id, f"🎬 Autoclipper: {totale} clip x {len(lingue(carica(CONFIG, {})))} lingue da {len(coda)} video. Approva con ✅.")
+    telegram.messaggio(chiavi["telegram"], chat_id, f"☀️ Buongiorno! {totale} clip degli streamer pronte qui sopra. Premi ✅ per pubblicarle su TikTok, Instagram e YouTube Shorts.")
 
 
 if __name__ == "__main__":

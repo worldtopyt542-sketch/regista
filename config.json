@@ -1,5 +1,5 @@
 {
- "video_al_giorno": 1,
+ "video_al_giorno": 2,
  "voce": "en-US-GuyNeural",
  "durata_max": 45,
  "modello_gemini": "auto",
@@ -29,11 +29,12 @@
    "gta",
    "grand theft auto"
   ],
-  "video_per_giro": 2,
-  "clip_per_video": 6,
+  "video_per_giro": 4,
+  "clip_per_video": 4,
   "momenti_candidati": 14,
   "whisper": "small",
-  "auto_pubblica_sopra": null
+  "auto_pubblica_sopra": null,
+  "clip_al_giorno": 8
  },
  "pubblica": {
   "piattaforme": [
@@ -47,13 +48,32 @@
    "es": "",
    "hi": "",
    "pcm": ""
+  },
+  "orari": {
+   "en": {
+    "tz": "America/New_York",
+    "ore": [
+     "08:00",
+     "10:00",
+     "12:00",
+     "13:30",
+     "15:00",
+     "16:30",
+     "18:00",
+     "19:30",
+     "21:00",
+     "22:30"
+    ]
+   }
   }
  },
  "lingue": {
   "en": {
    "nome": "English",
    "voce": "en-US-GuyNeural"
-  },
+  }
+ },
+ "lingue_future": {
   "it": {
    "nome": "Italian",
    "voce": "it-IT-DiegoNeural"
