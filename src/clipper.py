@@ -52,8 +52,15 @@ def trascrivi(audio, finestre, modello, offset=0):
         p = pcm(audio, 16000, t0, FINESTRA, "f32le")
         a = np.frombuffer(p.stdout.read(), dtype=np.float32).copy()
         p.wait()
-        segs, _ = m.transcribe(a, word_timestamps=True, vad_filter=True)
-        parole = [(offset + t0 + w.start, offset + t0 + w.end, w.word.strip()) for s in segs for w in (s.words or [])]
+        if len(a) < 16000 * 3:  # finestra vuota (fine del blocco)
+            continue
+        try:
+            segs, _ = m.transcribe(a, word_timestamps=True, vad_filter=True)
+            parole = [(offset + t0 + w.start, offset + t0 + w.end, w.word.strip())
+                      for s in segs for w in (s.words or [])]
+        except Exception as e:
+            print(f"   Trascrittore: finestra {t0} saltata ({e})")
+            parole = []
         out.append({"inizio": offset + t0, "parole": parole})
     return out
 
