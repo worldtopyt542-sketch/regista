@@ -93,25 +93,54 @@ def nasa(query, usati):
     return None
 
 
-def gameplay(query, usati, cartella, n):
-    """Spezzone di 8 s da un video di gameplay GTA 6 su YouTube (cercato con yt-dlp)."""
-    import sorgenti
-    righe = sorgenti._yt(["--flat-playlist", "--yes-playlist", "--print", "%(id)s\t%(duration)s\t%(channel)s",
-                          f"ytsearch8:GTA 6 {query} gameplay"]).splitlines()
-    for r in righe:
-        vid, dur, canale = (r.split("\t") + ["", ""])[:3]
-        try:
-            dur = float(dur)
-        except ValueError:
+VOD_GTA = []
+
+
+def gameplay_twitch(usati, cartella, n):
+    """Riserva: 8 s presi a caso dalle live GTA 6 degli streamer in config (Twitch non blocca i server)."""
+    import random, sorgenti
+    global VOD_GTA
+    if not VOD_GTA:
+        cfg = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config.json")))
+        c = cfg.get("clipper", {})
+        VOD_GTA = [u for u in sorgenti.da_canali([x for x in c.get("canali", []) if "twitch" in x],
+                                                  c.get("parole_chiave", ["gta"]), [], quanti=3)]
+    for _ in range(6):
+        url = random.choice(VOD_GTA)
+        dur = sorgenti.info(url)["durata"] or 3600
+        t = random.randint(300, max(301, int(dur) - 300))
+        vid = f"tw:{url.rsplit('/', 1)[-1]}:{t // 60}"
+        if vid in usati:
             continue
-        if "yt:" + vid in usati or not 40 < dur < 4 * 3600:
-            continue
-        url = "https://www.youtube.com/watch?v=" + vid
         dest = os.path.join(cartella, f"clip{n}.mp4")
-        inizio = dur * 0.35
-        sorgenti.scarica_pezzo(url, inizio, inizio + 8, dest)
-        return dest, {"id": "yt:" + vid, "credito": canale or "YouTube", "fonte": f"{canale}: {url}"}
-    raise RuntimeError(f"nessun gameplay per '{query}'")
+        sorgenti.scarica_pezzo(url, t, t + 8, dest)
+        canale = sorgenti.info(url)["canale"]
+        return dest, {"id": vid, "credito": canale, "fonte": f"{canale} (Twitch): {url}"}
+    raise RuntimeError("nessun pezzo Twitch libero")
+
+
+def gameplay(query, usati, cartella, n):
+    """Spezzone di 8 s di gameplay GTA 6: prima YouTube (ricerca), se bloccato le live Twitch."""
+    import sorgenti
+    try:
+        righe = sorgenti._yt(["--flat-playlist", "--yes-playlist", "--print", "%(id)s\t%(duration)s\t%(channel)s",
+                              f"ytsearch8:GTA 6 {query} gameplay"]).splitlines()
+        for r in righe:
+            vid, dur, canale = (r.split("\t") + ["", ""])[:3]
+            try:
+                dur = float(dur)
+            except ValueError:
+                continue
+            if "yt:" + vid in usati or not 40 < dur < 4 * 3600:
+                continue
+            url = "https://www.youtube.com/watch?v=" + vid
+            dest = os.path.join(cartella, f"clip{n}.mp4")
+            inizio = dur * 0.35
+            sorgenti.scarica_pezzo(url, inizio, inizio + 8, dest)
+            return dest, {"id": "yt:" + vid, "credito": canale or "YouTube", "fonte": f"{canale}: {url}"}
+    except Exception as e:
+        print(f"   YouTube non disponibile ({str(e)[:120]}), uso Twitch")
+    return gameplay_twitch(usati, cartella, n)
 
 
 def varianti(query, riserva=None):
@@ -132,8 +161,8 @@ def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None)
     for q in varianti(query, riserva):
         try:
             return _trova_clip(q, fonte_preferita, usati, chiavi, cartella, n)
-        except RuntimeError:
-            print(f"   nessuna clip per '{q}', provo una ricerca piu' semplice")
+        except RuntimeError as e:
+            print(f"   nessuna clip per '{q}' ({str(e)[:150]}), provo una ricerca piu' semplice")
     raise RuntimeError(f"Nessuna clip trovata per '{query}' (anche con ricerche semplificate)")
 
 
