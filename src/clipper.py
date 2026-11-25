@@ -61,7 +61,8 @@ def trascrivi(audio, finestre, modello, offset=0):
 PROMPT = """You are the editor of a viral clip channel (TikTok, YouTube Shorts, Reels) about streamers and GTA 6.
 Source: "{titolo}" by {canale}.
 Below are moments from the stream (absolute seconds). Pick the {k} BEST self-contained clips:
-- 15-50 seconds; start right before the setup, end right after the payoff/punchline. No dead air.
+- 12-35 seconds (viral streamer clips that hit millions of views are ~20-30 s); the FIRST 2 seconds must already be
+  loud/funny/shocking (no slow intro); end right after the payoff/punchline. No dead air.
 - Prefer: loud reactions, funny lines, shock, rage, wins/fails, quotable sentences, GTA 6 discoveries.
 - Each clip must make sense without context.
 For each clip write in English: a scroll-stopping overlay hook (max 6 words, no emojis),
@@ -95,7 +96,7 @@ def scegli(chiave, src, momenti, k):
         try:
             r = scrittore._post(f"{scrittore.BASE}models/{m}:generateContent?key={chiave}", body)
             clip = scrittore.estrai_json(r["candidates"][0]["content"]["parts"][0]["text"])["clip"]
-            clip = [c for c in clip if 8 <= float(c["fine"]) - float(c["inizio"]) <= 60]
+            clip = [c for c in clip if 8 <= float(c["fine"]) - float(c["inizio"]) <= 40]
             if clip:
                 scrittore.ULTIMO_BUONO = m
                 return sorted(clip, key=lambda c: -c.get("punteggio", 0))[:k]
@@ -167,7 +168,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
                 out = os.path.join(RADICE, "output", f"{src['id'].replace(':', '_')}_{n + 1}_{cod}.mp4")
                 os.makedirs(os.path.dirname(out), exist_ok=True)
                 monta(pezzo, dur, gruppi, t["hook"], "Clip: " + src["canale"], out, lavoro, lg.get("font"), cap)
-                ok = editor.critic(out, max_sec=60)
+                ok = editor.critic(out, max_sec=40)
                 cap_txt = didascalia(t, cod, src["canale"], f"{c['punteggio']}/100" + ("" if ok else " · critic ⚠️"))
                 telegram.video(chiavi["telegram"], chat_id, out, cap_txt + f"\n{url}", bottoni=BOTTONI)
                 os.remove(out)
@@ -181,7 +182,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
         try:
             video, t = top5.crea(url, src, momenti, tutte, chiavi["gemini"], lavoro, scrittore.notizie(),
                                  L["en"]["voce"])
-            ok = editor.critic(video, max_sec=75)
+            ok = editor.critic(video, max_sec=50)
             telegram.video(chiavi["telegram"], chat_id, video,
                            didascalia(t, "en", src["canale"], "TOP 5" + ("" if ok else " · critic ⚠️")) + f"\n{url}",
                            bottoni=BOTTONI)

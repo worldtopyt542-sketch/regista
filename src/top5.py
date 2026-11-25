@@ -6,7 +6,7 @@ import editor, scrittore, sorgenti
 SCELTA = """You make viral GTA 6 YouTube Shorts / TikToks: "Top 5" compilations of the craziest moments from a streamer's GTA 6 stream.
 Source: "{titolo}" by {canale}.
 {notizie}
-From the moments below (absolute seconds, transcript of the streamer), pick 5 DIFFERENT moments, each 7-12 seconds,
+From the moments below (absolute seconds, transcript of the streamer), pick 5 DIFFERENT moments, each 5-8 seconds (the whole Short must stay under 45 s, like viral Top 5 Shorts),
 the most viral ones (huge reactions, funny lines, chaos, fails, wins, insane GTA 6 details). Order from #5 to #1 (best last).
 Pick an angle that matches what's viral about GTA 6 right now.
 Reply JSON only:
@@ -19,10 +19,10 @@ MOMENTS:
 VOCE = """You are the narrator of a viral GTA 6 Shorts compilation titled "{titolo}" (streamer: {canale}).
 For each of the 5 clips you get 3 frames and what the streamer says. Write the narrator line spoken over the
 first seconds of that clip, BEFORE the streamer's reaction plays:
-- max 12 words, punchy, hype gamer tone, present tense;
+- max 7 words, punchy, hype gamer tone, present tense;
 - describe ONLY what is really visible in the frames / said in the transcript (no invented facts);
 - start with the rank, e.g. "Number 5: ...".
-Also write "gancio": max 10 words spoken at the very start to stop the scroll, coherent with the clips.
+Also write "gancio": max 7 words spoken at the very start to stop the scroll, coherent with the clips.
 Reply JSON only: {{"gancio": "...", "voci": ["...", "...", "...", "...", "..."]}}
 
 Transcripts:
@@ -41,12 +41,12 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
         testo.append(f"--- moment {i + 1} (starts {m['inizio']:.0f}) ---\n{frasi or '(loud, no speech)'}")
     s = scrittore.gemini(chiave, SCELTA.format(titolo=src["titolo"], canale=src["canale"], notizie=notizie,
                                                momenti="\n".join(testo)), 0.6)
-    items = [it for it in s["items"] if 4 <= float(it["fine"]) - float(it["inizio"]) <= 20][:5]
+    items = [it for it in s["items"] if 3 <= float(it["fine"]) - float(it["inizio"]) <= 12][:5]
     if len(items) < 3:
         raise RuntimeError("Top 5: troppo pochi momenti validi")
     pezzi, immagini, trascritti = [], [], []
     for n, it in enumerate(items):
-        a, b = float(it["inizio"]), float(it["fine"]) + 5  # margine per la voce narrante
+        a, b = float(it["inizio"]), float(it["fine"]) + 3  # margine per la voce narrante
         raw = sorgenti.scarica_pezzo(url, a, b, os.path.join(lavoro, f"top{n}.mp4"))
         for k, f in enumerate((0.2, 0.5, 0.8)):
             jpg = os.path.join(lavoro, f"top{n}_{k}.jpg")
@@ -67,7 +67,7 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
         mp3 = os.path.join(lavoro, f"voce{n}.mp3")
         parole_voce = editor.voce_ai(frase, voce, mp3)
         d = editor.durata(mp3) + 0.2
-        dur = min(max(float(items[n]["fine"]) - a, d + 4), b - a, 16)
+        dur = min(max(float(items[n]["fine"]) - a, d + 3.5), b - a, 10)
         streamer = [(x + 0, y, w) for x, y, w in _parole(tutte, a, a + dur) if x >= d]
         gruppi = editor.gruppi_parole(parole_voce + streamer, frase, dur)
         ass = os.path.join(lavoro, f"top{n}.ass")
