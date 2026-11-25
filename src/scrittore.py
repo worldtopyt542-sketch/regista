@@ -85,8 +85,8 @@ def modelli_candidati(chiave, preferito=None):
 def estrai_json(testo):
     testo = testo.strip()
     testo = re.sub(r"^```(?:json)?|```$", "", testo, flags=re.M).strip()
-    i, j = testo.find("{"), testo.rfind("}")
-    return json.loads(testo[i:j + 1])
+    i = testo.find("{")
+    return json.JSONDecoder().raw_decode(testo[i:])[0]  # ignora testo extra dopo il JSON
 
 
 def valida(s):
@@ -161,20 +161,26 @@ def gemini(chiave, prompt, temp=0.5, immagini=None):
                                       "data": base64.b64encode(open(path, "rb").read()).decode()}})
     body = {"contents": [{"parts": parti}],
             "generationConfig": {"temperature": temp, "responseMimeType": "application/json"}}
+    import time
     errori = []
-    for m in modelli_candidati(chiave, ULTIMO_BUONO):
-        try:
-            r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
-            out = estrai_json("".join(p.get("text", "") for p in r["candidates"][0]["content"]["parts"]))
-            ULTIMO_BUONO = m
-            return out
-        except Exception as e:
-            errori.append(f"{m}: {str(e)[:80]}")
+    for giro in range(3):  # piano gratuito: limiti al minuto (429) e sovraccarichi (503) -> aspetta e riprova
+        for m in modelli_candidati(chiave, ULTIMO_BUONO):
+            try:
+                r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
+                out = estrai_json("".join(p.get("text", "") for p in r["candidates"][0]["content"]["parts"]))
+                ULTIMO_BUONO = m
+                return out
+            except Exception as e:
+                errori.append(f"{m}: {str(e)[:80]}")
+        print(f"   Gemini: nessun modello libero, attendo 45 s (giro {giro + 1}/3)")
+        time.sleep(45)
     raise RuntimeError("Gemini non risponde: " + " | ".join(errori[-3:]))
 
 
 def traduci(chiave, dati, lingue):
     """dati: dict in inglese. lingue: {codice: nome}. Ritorna {codice: dict tradotto} (inglese se fallisce)."""
+    if not lingue:
+        return {}
     prompt = ("Translate every string value of this JSON into each target language. Keep keys and list lengths "
               "IDENTICAL. Sound native and viral for young gamers (slang ok), not literal. Keep names (GTA 6, "
               "Vice City, streamer names). Localize hashtags but keep #gta6. Keep each string about as short as the original.\n"

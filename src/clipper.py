@@ -96,20 +96,11 @@ def scegli(chiave, src, momenti, k):
             righe.append(f"[{t:.1f}] " + " ".join(riga))
         testo.append(f"--- moment {i + 1} ---\n" + ("\n".join(righe) or "(no speech, loud audio)"))
     prompt = PROMPT.format(titolo=src["titolo"], canale=src["canale"], k=k, momenti="\n".join(testo))
-    body = {"contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": 0.6, "responseMimeType": "application/json"}}
-    errori = []
-    for m in scrittore.modelli_candidati(chiave, scrittore.ULTIMO_BUONO):
-        try:
-            r = scrittore._post(f"{scrittore.BASE}models/{m}:generateContent?key={chiave}", body)
-            clip = scrittore.estrai_json(r["candidates"][0]["content"]["parts"][0]["text"])["clip"]
-            clip = [c for c in clip if 8 <= float(c["fine"]) - float(c["inizio"]) <= 40]
-            if clip:
-                scrittore.ULTIMO_BUONO = m
-                return sorted(clip, key=lambda c: -c.get("punteggio", 0))[:k]
-        except Exception as e:
-            errori.append(f"{m}: {str(e)[:80]}")
-    raise RuntimeError("Talent Scout: nessun modello ha risposto. " + " | ".join(errori[-3:]))
+    clip = scrittore.gemini(chiave, prompt, 0.6)["clip"]
+    clip = [c for c in clip if 8 <= float(c["fine"]) - float(c["inizio"]) <= 40]
+    if not clip:
+        raise RuntimeError("Talent Scout: nessuna clip valida")
+    return sorted(clip, key=lambda c: -c.get("punteggio", 0))[:k]
 
 
 COERENZA = """You check a viral GTA 6 Short before posting. You see 3 frames of the clip and the streamer's words.
