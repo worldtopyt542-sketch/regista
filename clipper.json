@@ -1,1 +1,17 @@
-{"sorgenti_fatte": [], "url_fatti": []}
+{
+ "sorgenti_fatte": [],
+ "url_fatti": [
+  "https://www.twitch.tv/videos/2939504732"
+ ],
+ "avanzamento": {
+  "https://www.twitch.tv/videos/2939504732": 14400,
+  "https://www.twitch.tv/videos/2936683310": 14400
+ },
+ "storico_clip": [
+  {
+   "fonte": "TwitchVod:v2936683310",
+   "titolo": "🗺️EXPLORING GTA 6🗺️",
+   "clip": 4
+  }
+ ]
+}
