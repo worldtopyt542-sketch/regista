@@ -1,7 +1,8 @@
 {
  "chat_id": 5193260023,
  "titoli": [
-  "5 Most Extreme Electrical Phenomena in the Universe"
+  "5 Most Extreme Electrical Phenomena in the Universe",
+  "5 Crazy Map Secrets in GTA 6 Leonida!"
  ],
  "clip_usate": [
   "nasa:311_ScienceCasts-observing-lightning-ISS",
@@ -11,10 +12,18 @@
   "nasa:Space-247365",
   "nasa:iss068m262721811_Expedition_68_Tropical_Storm_Ian_Flyover_220929",
   "nasa:ksc_081105_mro_intro",
-  "nasa:ksc_121304_comet_history"
+  "nasa:ksc_121304_comet_history",
+  "tw:2932753534:715",
+  "tw:2934276428:137",
+  "tw:2935383720:277",
+  "tw:2935613960:415",
+  "tw:2936683310:160",
+  "tw:2936704351:648",
+  "tw:2937629817:546"
  ],
  "temi_recenti": [
-  "lightning and rare electrical phenomena"
+  "lightning and rare electrical phenomena",
+  "GTA 6 Leonida map secrets"
  ],
  "storico": [
   {
@@ -30,6 +39,21 @@
     "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
     "nasa:Space-247365",
     "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944"
+   ]
+  },
+  {
+   "data": "2026-11-25",
+   "titolo": "5 Crazy Map Secrets in GTA 6 Leonida!",
+   "tema": "GTA 6 Leonida map secrets",
+   "critic_ok": true,
+   "clip": [
+    "tw:2935383720:277",
+    "tw:2936704351:648",
+    "tw:2936683310:160",
+    "tw:2934276428:137",
+    "tw:2932753534:715",
+    "tw:2937629817:546",
+    "tw:2935613960:415"
    ]
   }
  ]
