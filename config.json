@@ -34,7 +34,9 @@
   "momenti_candidati": 14,
   "whisper": "small",
   "auto_pubblica_sopra": null,
-  "clip_al_giorno": 8
+  "clip_al_giorno": 8,
+  "ore_per_blocco": 3,
+  "top5_al_giorno": 2
  },
  "pubblica": {
   "piattaforme": [

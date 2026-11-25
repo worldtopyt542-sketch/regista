@@ -150,10 +150,16 @@ def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
     raise RuntimeError("Sceneggiatore: nessun modello ha funzionato. " + " | ".join(problemi[-6:]))
 
 
-def gemini(chiave, prompt, temp=0.5):
-    """Chiamata JSON generica: prova i modelli flash finche' uno risponde."""
+def gemini(chiave, prompt, temp=0.5, immagini=None):
+    """Chiamata JSON generica (con fotogrammi jpg facoltativi): prova i modelli flash finche' uno risponde."""
+    import base64
     global ULTIMO_BUONO
-    body = {"contents": [{"parts": [{"text": prompt}]}],
+    parti = [{"text": prompt}]
+    for etichetta, path in immagini or []:
+        parti.append({"text": etichetta})
+        parti.append({"inline_data": {"mime_type": "image/jpeg",
+                                      "data": base64.b64encode(open(path, "rb").read()).decode()}})
+    body = {"contents": [{"parts": parti}],
             "generationConfig": {"temperature": temp, "responseMimeType": "application/json"}}
     errori = []
     for m in modelli_candidati(chiave, ULTIMO_BUONO):

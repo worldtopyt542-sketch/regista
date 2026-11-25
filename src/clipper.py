@@ -4,7 +4,7 @@ import json, os, shutil, subprocess, sys, traceback, wave
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(__file__))
-import editor, scrittore, sorgenti, telegram
+import datetime, editor, scrittore, sorgenti, telegram, top5
 from regista import ARCHIVIO, BOTTONI, CONFIG, RADICE, carica, didascalia, lingue, salva
 
 STATO = os.path.join(RADICE, "clipper.json")
@@ -175,6 +175,20 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
         except Exception as e:
             traceback.print_exc()
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Clip {n + 1} non riuscita: {str(e)[:300]}")
+    oggi = datetime.date.today().isoformat()
+    fatti_top = arch.setdefault("top5", {}).get(oggi, 0)
+    if fatti_top < cfg.get("top5_al_giorno", 2):
+        try:
+            video, t = top5.crea(url, src, momenti, tutte, chiavi["gemini"], lavoro, scrittore.notizie(),
+                                 L["en"]["voce"])
+            ok = editor.critic(video, max_sec=75)
+            telegram.video(chiavi["telegram"], chat_id, video,
+                           didascalia(t, "en", src["canale"], "TOP 5" + ("" if ok else " · critic ⚠️")) + f"\n{url}",
+                           bottoni=BOTTONI)
+            arch["top5"] = {oggi: fatti_top + 1}
+        except Exception as e:
+            traceback.print_exc()
+            telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Top 5 non riuscita: {str(e)[:300]}")
     if fine >= (src["durata"] or 0):
         arch["sorgenti_fatte"].append(src["id"])
     arch.setdefault("storico_clip", []).append({"fonte": src["id"], "titolo": src["titolo"], "clip": fatte})
@@ -212,7 +226,7 @@ def main():
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Non riesco a clippare {url}: {str(e)[:300]}")
         arch["url_fatti"] = arch["url_fatti"][-500:]
         salva(STATO, arch)
-    telegram.messaggio(chiavi["telegram"], chat_id, f"☀️ Buongiorno! {totale} clip degli streamer pronte qui sopra. Premi ✅ per pubblicarle su TikTok, Instagram e YouTube Shorts.")
+    telegram.messaggio(chiavi["telegram"], chat_id, f"☀️ Buongiorno! {totale} clip + {arch.get('top5', {}).get(datetime.date.today().isoformat(), 0)} Top 5 pronte qui sopra. Premi ✅ per pubblicarle su TikTok, Instagram e YouTube Shorts.")
 
 
 if __name__ == "__main__":

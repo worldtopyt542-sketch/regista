@@ -1,8 +1,8 @@
 name: News GTA 6 (5 lingue)
 
 on:
-  schedule:
-    - cron: "43 4 * * *"   # 05:43 in Italia: 2 news GTA 6 pronte per la mattina
+  # schedule:
+    # cron spento: le news sono sostituite dalle Top 5 dei momenti virali (clipper)
   workflow_dispatch:         # pulsante "Run workflow" per avviarlo a mano
     inputs:
       quanti:

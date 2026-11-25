@@ -76,8 +76,8 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         "Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         # zone sicure: niente testo nel 10% alto, 15% basso, 12% destro (pulsanti di YouTube)
         f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
-        f"Style: Rank,{font},190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,260,1",
-        f"Style: Hook,{font},70,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,230,1",
+        f"Style: Rank,{font},190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
+        f"Style: Hook,{font},70,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
         f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
