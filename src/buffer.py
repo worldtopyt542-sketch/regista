@@ -60,6 +60,56 @@ def diagnosi():
             break
 
 
+CREA = """mutation($i: CreatePostInput!) { createPost(input: $i) { __typename
+  ... on PostActionSuccess { post { id status externalLink } }
+  ... on LimitReachedError { message } ... on InvalidInputError { message } } }"""
+
+
+def metadati(servizio, titolo):
+    if servizio == "youtube":
+        return {"youtube": {"title": titolo[:100], "privacy": "public", "type": "short", "categoryId": "20",
+                            "madeForKids": False, "notifySubscribers": True}}
+    if servizio == "instagram":
+        return {"instagram": {"type": "reel", "shouldShareToFeed": True}}
+    if servizio == "tiktok":
+        return {"tiktok": {"title": titolo[:90]}}
+    return {}
+
+
+def pubblica(url_video, titolo, testo, servizi=("tiktok", "instagram", "youtube")):
+    """Pubblica subito il video (link pubblico) su tutti i canali Buffer dei servizi scelti."""
+    esiti = []
+    for c in canali():
+        if c["service"] not in servizi or c["isDisconnected"]:
+            continue
+        inp = {"channelId": c["id"], "text": testo, "mode": "shareNow", "schedulingType": "automatic",
+               "assets": [{"video": {"url": url_video, "metadata": {"title": titolo[:100]}}}],
+               "metadata": metadati(c["service"], titolo)}
+        try:
+            r = gql(CREA, {"i": inp})["createPost"]
+            if r["__typename"] == "PostActionSuccess":
+                esiti.append({"servizio": c["service"], "ok": True, "id": r["post"]["id"]})
+            else:
+                esiti.append({"servizio": c["service"], "ok": False, "errore": f"{r['__typename']}: {r.get('message', '')}"})
+        except Exception as e:
+            esiti.append({"servizio": c["service"], "ok": False, "errore": str(e)[:200]})
+    if not esiti:
+        raise RuntimeError("nessun canale Buffer collegato")
+    return esiti
+
+
+def visualizzazioni(post_ids):
+    """Somma delle views dei post Buffer (se l'API le espone)."""
+    tot = 0
+    for pid in post_ids:
+        try:
+            m = gql("query($i: PostInput!){ post(input: $i) { metrics { type value } } }", {"i": {"id": pid}})
+            tot += sum(x["value"] or 0 for x in (m["post"].get("metrics") or []) if x["type"] == "views")
+        except Exception:
+            pass
+    return int(tot)
+
+
 def mostra(nomi):
     for n in nomi:
         t = descrivi(n)

@@ -55,7 +55,42 @@ def prossimo_slot(lingua, occupati, cfg):
     raise RuntimeError("nessun orario libero nei prossimi 60 giorni")
 
 
+def url_pubblico(percorso, nome):
+    """Mette il video online come asset di una Release GitHub (repo pubblico) e ritorna il link diretto."""
+    repo = os.environ.get("MEDIA_REPO") or os.environ["GITHUB_REPOSITORY"]
+    token = os.environ.get("MEDIA_TOKEN") or os.environ["GITHUB_TOKEN"]
+    h = {"Authorization": "Bearer " + token, "Accept": "application/vnd.github+json"}
+    tag = "clip-" + dt.date.today().strftime("%Y%m")
+    r = requests.get(f"https://api.github.com/repos/{repo}/releases/tags/{tag}", headers=h, timeout=60)
+    if r.status_code == 404:
+        r = requests.post(f"https://api.github.com/repos/{repo}/releases", headers=h, timeout=60,
+                          json={"tag_name": tag, "name": tag, "body": "Clip pubblicate"})
+    r.raise_for_status()
+    up = requests.post(f"https://uploads.github.com/repos/{repo}/releases/{r.json()['id']}/assets",
+                       params={"name": nome}, data=open(percorso, "rb"), timeout=600,
+                       headers={**h, "Content-Type": "video/mp4"})
+    up.raise_for_status()
+    return up.json()["browser_download_url"]
+
+
+def pubblica_buffer(percorso, titolo, desc, tags, canale, lingua, cfg):
+    import buffer
+    url = url_pubblico(percorso, f"{dt.datetime.now():%Y%m%d%H%M%S}_{lingua}.mp4")
+    testo = f"{titolo}\n\n{desc}\n\n{tags}" + (f"\n\nCredit: {canale}" if canale else "")
+    esiti = buffer.pubblica(url, titolo, testo, cfg.get("piattaforme", ["tiktok", "instagram", "youtube"]))
+    falliti = [f"{e['servizio']}: {e['errore']}" for e in esiti if not e["ok"]]
+    if falliti and len(falliti) == len(esiti):
+        raise RuntimeError("Buffer: " + " | ".join(falliti))
+    return json.dumps(esiti)
+
+
 def pubblica(percorso, titolo, desc, tags, canale, lingua, cfg):
+    if cfg.get("servizio", "buffer") == "buffer":
+        return pubblica_buffer(percorso, titolo, desc, tags, canale, lingua, cfg)
+    return pubblica_uploadpost(percorso, titolo, desc, tags, canale, lingua, cfg)
+
+
+def pubblica_uploadpost(percorso, titolo, desc, tags, canale, lingua, cfg):
     """Upload-Post: un profilo per lingua (config pubblica.profili), altrimenti UPLOAD_POST_USER."""
     chiave = os.environ.get("UPLOAD_POST_API_KEY")
     utente = (cfg.get("profili") or {}).get(lingua) or os.environ.get("UPLOAD_POST_USER")
@@ -113,13 +148,16 @@ def report(token, st, chat):
     errori = sum(x["esito"] != "ok" for x in di_oggi)
     yt_ids = [i for x in log for i in x.get("yt", [])]
     viste = visualizzazioni_yt(yt_ids)
+    if viste is None and os.environ.get("BUFFER_API_KEY"):
+        import buffer
+        viste = buffer.visualizzazioni([i for x in log[-300:] for i in x.get("buffer", [])])
     prossimi = sorted(st["programmati"], key=lambda p: p["quando"])[:5]
     testo = [f"📊 REPORT {oggi}",
              f"Pubblicati oggi: {sum(per_lingua.values())} " + " ".join(f"{k.upper()}:{v}" for k, v in per_lingua.items()),
              f"Errori oggi: {errori}", f"In programma: {len(st['programmati'])}",
              f"Totale pubblicati: {sum(x['esito'] == 'ok' for x in log)}"]
     if viste is not None:
-        testo.append(f"Visualizzazioni YouTube totali: {viste:,}".replace(",", "."))
+        testo.append(f"Visualizzazioni totali: {viste:,}".replace(",", "."))
     if prossimi:
         testo.append("Prossimi: " + ", ".join(f"{p['lingua'].upper()} {p['quando'][5:16]} UTC" for p in prossimi))
     tg(token, "sendMessage", chat_id=chat, text="\n".join(testo))
@@ -169,8 +207,17 @@ def main():
             video = scarica_da_tg(token, p["file_id"])
             risposta = pubblica(video, *leggi_didascalia(p["caption"]), cfg)
             voce["yt"] = list(dict.fromkeys(YT_RE.findall(risposta)))
+            try:
+                esiti = json.loads(risposta)
+                voce["buffer"] = [e["id"] for e in esiti if e.get("ok")]
+                ko = [e["servizio"] for e in esiti if not e.get("ok")]
+            except Exception:
+                esiti, ko = [], []
             st["pubblicati"].append(p["msg"])
-            segna(token, chat_id, msg_id, f"✅ Pubblicata {p['lingua'].upper()}")
+            segna(token, chat_id, msg_id, "✅ Pubblicata" + (f" (⚠️ non su {', '.join(ko)})" if ko else ""))
+            if ko and chat:
+                tg(token, "sendMessage", chat_id=chat, text="⚠️ " + " | ".join(
+                    f"{e['servizio']}: {e.get('errore')}" for e in esiti if not e.get("ok"))[:1000])
         except Exception as e:
             voce["esito"] = str(e)[:200]
             segna(token, chat_id, msg_id, "⚠️ Errore: " + str(e)[:40])
