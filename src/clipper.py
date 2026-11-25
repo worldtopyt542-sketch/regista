@@ -72,6 +72,8 @@ Below are moments from the stream (absolute seconds). Pick the {k} BEST self-con
   loud/funny/shocking (no slow intro); end right after the payoff/punchline. No dead air.
 - Prefer: loud reactions, funny lines, shock, rage, wins/fails, quotable sentences, GTA 6 discoveries.
 - Each clip must make sense without context.
+- NEVER pick story spoilers (missions endings, plot twists, character deaths, final missions, credits).
+- Avoid moments where copyrighted music is clearly playing loudly.
 For each clip write in English: a scroll-stopping overlay hook (max 6 words, no emojis),
 a title (max 60 chars, curiosity-driven, not clickbait lies), a 1-sentence description, 5 hashtags.
 Score virality 1-100 honestly.

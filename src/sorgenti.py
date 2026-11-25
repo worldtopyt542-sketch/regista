@@ -13,6 +13,10 @@ def _yt(args):
     return r.stdout
 
 
+# Rockstar rimuove gli spoiler della storia: niente live di finali/epiloghi
+ESCLUSE = ("finale", "ending", "beating", "final mission", "last mission", "epilogue", "credits", "spoiler")
+
+
 def da_canali(canali, parole, fatti, quanti=2):
     """Ultimi video dei canali in lista che parlano del tema (es. 'gta')."""
     out = []
@@ -26,7 +30,8 @@ def da_canali(canali, parole, fatti, quanti=2):
             continue
         for r in righe:
             url, _, titolo = r.partition("\t")
-            if url not in fatti and any(p in titolo.lower() for p in parole):
+            t = titolo.lower()
+            if url not in fatti and any(p in t for p in parole) and not any(x in t for x in ESCLUSE):
                 out.append(url)
                 presi += 1
                 if presi >= quanti:

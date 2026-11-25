@@ -9,6 +9,7 @@ Source: "{titolo}" by {canale}.
 From the moments below (absolute seconds, transcript of the streamer), pick 5 DIFFERENT moments, each 5-8 seconds (the whole Short must stay under 45 s, like viral Top 5 Shorts),
 the most viral ones (huge reactions, funny lines, chaos, fails, wins, insane GTA 6 details). Order from #5 to #1 (best last).
 Pick an angle that matches what's viral about GTA 6 right now.
+NEVER pick story spoilers (mission endings, plot twists, deaths, finale) or moments with loud copyrighted music.
 Reply JSON only:
 {{"titolo": "max 60 chars, curiosity title", "descrizione": "1 sentence", "hashtags": ["#gta6", "..."],
  "items": [{{"inizio": 0.0, "fine": 0.0, "perche": "what happens"}}]}}
