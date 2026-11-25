@@ -15,4 +15,4 @@ jobs:
       - run: pip install -q requests
       - env:
           BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
-        run: python src/buffer.py
+        run: python src/buffer.py AssetInput VideoAssetInput PostInputMetaData ShareMode SchedulingType Service PostActionPayload PostActionSuccess PostStatus YoutubePostMetadataInput InstagramPostMetadataInput TiktokPostMetadataInput PostMetricType

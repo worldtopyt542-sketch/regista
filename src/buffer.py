@@ -22,7 +22,7 @@ TIPO = "name kind ofType { name kind ofType { name kind ofType { name kind } } }
 
 def descrivi(nome):
     t = gql(f'{{ __type(name: "{nome}") {{ name kind inputFields {{ name type {{ {TIPO} }} }} '
-            f'fields {{ name args {{ name type {{ {TIPO} }} }} type {{ {TIPO} }} }} enumValues {{ name }} }} }}')["__type"]
+            f'fields {{ name args {{ name type {{ {TIPO} }} }} type {{ {TIPO} }} }} enumValues {{ name }} possibleTypes {{ name }} }} }}')["__type"]
     return t
 
 
@@ -60,5 +60,33 @@ def diagnosi():
             break
 
 
+def mostra(nomi):
+    for n in nomi:
+        t = descrivi(n)
+        if not t:
+            print("?", n); continue
+        print(t["kind"], n)
+        for f in (t.get("fields") or []) + (t.get("inputFields") or []):
+            print(f"  {f['name']} -> {nome_tipo(f['type'])} ({f['type']['kind']})")
+        if t.get("enumValues"):
+            print("  enum:", ", ".join(e["name"] for e in t["enumValues"]))
+        if t.get("possibleTypes"):
+            print("  union:", ", ".join(e["name"] for e in t["possibleTypes"]))
+
+
+def canali():
+    org = gql("{ account { organizations { id name } } }")["account"]["organizations"]
+    out = []
+    for o in org:
+        for c in gql("query($i: ChannelsInput!){ channels(input: $i) { id name service isDisconnected } }",
+                     {"i": {"organizationId": o["id"]}})["channels"]:
+            out.append({**c, "org": o["id"]})
+    return out
+
+
 if __name__ == "__main__":
-    diagnosi()
+    if len(sys.argv) > 1:
+        mostra(sys.argv[1:])
+        print("CANALI:", json.dumps([{k: c[k] for k in ("name", "service", "isDisconnected")} for c in canali()]))
+    else:
+        diagnosi()
