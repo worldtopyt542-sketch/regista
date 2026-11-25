@@ -112,6 +112,32 @@ def scegli(chiave, src, momenti, k):
     raise RuntimeError("Talent Scout: nessun modello ha risposto. " + " | ".join(errori[-3:]))
 
 
+COERENZA = """You check a viral GTA 6 Short before posting. You see 3 frames of the clip and the streamer's words.
+Draft texts: {bozza}
+Streamer says: "{parlato}"
+Rewrite hook, titolo, descrizione, hashtags so they are 100% coherent with what is VISIBLE in the frames and SAID
+in the clip, in GTA 6. If the title claims someone finds/does/sees something, it must be in the clip. Keep them
+viral and curiosity-driven but never misleading. hook max 6 words; titolo max 60 chars; descrizione 1 sentence;
+5 hashtags including #gta6.
+Reply JSON only: {{"hook": "...", "titolo": "...", "descrizione": "...", "hashtags": ["#gta6", "..."]}}"""
+
+
+def coerenza(chiave, pezzo, dur, rel, c, lavoro):
+    """Agent REVISORE: titolo/gancio/descrizione/hashtag riscritti guardando i fotogrammi veri."""
+    immagini = []
+    for k, f in enumerate((0.2, 0.5, 0.8)):
+        jpg = os.path.join(lavoro, f"f{k}.jpg")
+        editor.run(["ffmpeg", "-y", "-ss", f"{dur * f:.1f}", "-i", pezzo, "-frames:v", "1", "-vf", "scale=512:-2", jpg])
+        immagini.append((f"Frame {k + 1}:", jpg))
+    bozza = json.dumps({k: c.get(k) for k in ("hook", "titolo", "descrizione", "hashtags")}, ensure_ascii=False)
+    try:
+        r = scrittore.gemini(chiave, COERENZA.format(bozza=bozza, parlato=" ".join(w for *_, w in rel)[:1500]),
+                             0.5, immagini)
+        c.update({k: r[k] for k in ("hook", "titolo", "descrizione", "hashtags") if r.get(k)})
+    except Exception as e:
+        print("   Revisore: salto", e)
+
+
 def frasi(rel, dur):
     """Parole -> frasi brevi (pausa > 0.6 s o 7 parole); ogni frase resta fino all'inizio della successiva."""
     gr, cur = [], []
@@ -161,6 +187,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
         try:
             pezzo = sorgenti.scarica_pezzo(url, c["inizio"], c["fine"], os.path.join(lavoro, f"raw{n}.mp4"))
             rel = [(a - c["inizio"], b - c["inizio"], w) for a, b, w in tutte if c["inizio"] <= a < c["fine"]]
+            coerenza(chiavi["gemini"], pezzo, dur, rel, c, lavoro)
             fr = frasi(rel, dur)
             base = {"titolo": c["titolo"], "hook": c.get("hook", ""), "descrizione": c.get("descrizione", ""),
                     "hashtags": c.get("hashtags") or ["#gta6"], "frasi": [f[2] for f in fr]}

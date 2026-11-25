@@ -23,7 +23,11 @@ first seconds of that clip, BEFORE the streamer's reaction plays:
 - describe ONLY what is really visible in the frames / said in the transcript (no invented facts);
 - start with the rank, e.g. "Number 5: ...".
 Also write "gancio": max 7 words spoken at the very start to stop the scroll, coherent with the clips.
-Reply JSON only: {{"gancio": "...", "voci": ["...", "...", "...", "...", "..."]}}
+Then write the post texts. They MUST match what the frames show and what the narrator says (GTA 6 only):
+if the title says someone finds/does something, that thing must be visible or said in the clips. No clickbait lies.
+- "titolo": max 60 chars, curiosity-driven; "descrizione": 1 sentence; "hashtags": 5, include #gta6.
+Reply JSON only: {{"gancio": "...", "voci": ["...", "...", "...", "...", "..."],
+ "titolo": "...", "descrizione": "...", "hashtags": ["#gta6", "..."]}}
 
 Transcripts:
 {trascritti}"""
@@ -57,6 +61,9 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
         pezzi.append((raw, a, b))
     v = scrittore.gemini(chiave, VOCE.format(titolo=s["titolo"], canale=src["canale"],
                                              trascritti="\n".join(trascritti)), 0.7, immagini)
+    for k in ("titolo", "descrizione", "hashtags"):  # testi riscritti guardando le immagini
+        if v.get(k):
+            s[k] = v[k]
     voci = (v.get("voci") or [])[:len(pezzi)]
     if len(voci) < len(pezzi):
         raise RuntimeError("Top 5: voce narrante incompleta")
