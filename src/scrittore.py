@@ -163,7 +163,7 @@ def gemini(chiave, prompt, temp=0.5, immagini=None):
             "generationConfig": {"temperature": temp, "responseMimeType": "application/json"}}
     import time
     errori = []
-    for giro in range(3):  # piano gratuito: limiti al minuto (429) e sovraccarichi (503) -> aspetta e riprova
+    for giro in range(6):  # piano gratuito: limiti al minuto (429) e sovraccarichi (503) -> aspetta e riprova
         for m in modelli_candidati(chiave, ULTIMO_BUONO):
             try:
                 r = _post(f"{BASE}models/{m}:generateContent?key={urllib.parse.quote(chiave)}", body)
@@ -172,8 +172,9 @@ def gemini(chiave, prompt, temp=0.5, immagini=None):
                 return out
             except Exception as e:
                 errori.append(f"{m}: {str(e)[:80]}")
-        print(f"   Gemini: nessun modello libero, attendo 45 s (giro {giro + 1}/3)")
-        time.sleep(45)
+        attesa = min(60 * (giro + 1), 180)
+        print(f"   Gemini: nessun modello libero, attendo {attesa} s (giro {giro + 1}/6)")
+        time.sleep(attesa)
     raise RuntimeError("Gemini non risponde: " + " | ".join(errori[-3:]))
 
 
