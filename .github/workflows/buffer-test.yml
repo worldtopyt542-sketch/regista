@@ -2,6 +2,8 @@ name: Buffer - diagnosi
 
 on:
   workflow_dispatch:
+  push:
+    paths: [".github/workflows/buffer-test.yml", "src/buffer.py"]
 
 jobs:
   diagnosi:
