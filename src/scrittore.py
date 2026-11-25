@@ -4,7 +4,7 @@ import json, re, urllib.parse, urllib.request
 BASE = "https://generativelanguage.googleapis.com/v1beta/"
 
 PROMPT = """You write scripts for a viral YouTube Shorts / TikTok channel about GTA 6 (Grand Theft Auto VI,
-released November 19, 2026). Format: Top 5 news, secrets, tips or facts. Use Google Search for the LATEST facts.
+released November 19, 2026). Format: Top 5 news, secrets, tips or facts. Base news on the LATEST HEADLINES below when relevant.
 
 Theme for today: {tema}
 Do NOT repeat any of these already-published titles: {gia_fatti}
@@ -43,6 +43,22 @@ def _post(url, body):
 
 ULTIMO_BUONO = None  # il modello che ha funzionato, provato per primo al video successivo
 ESCLUSI = ("image", "tts", "live", "omni", "audio", "embedding", "vision", "learnlm")
+
+
+def notizie(query="GTA 6", quante=15):
+    """Ultimi titoli da Google News (RSS gratuito), per avere fatti freschi senza grounding a pagamento."""
+    import xml.etree.ElementTree as ET
+    try:
+        url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
+            {"q": query + " when:3d", "hl": "en-US", "gl": "US", "ceid": "US:en"})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            items = ET.fromstring(r.read()).iter("item")
+            righe = [f"- {i.findtext('title')} ({i.findtext('link')})" for _, i in zip(range(quante), items)]
+        return "LATEST HEADLINES (last 3 days):\n" + "\n".join(righe) if righe else ""
+    except Exception as e:
+        print("   Notizie: RSS non disponibile", e)
+        return ""
 
 
 def modelli_candidati(chiave, preferito=None):
@@ -92,13 +108,12 @@ def valida(s):
 
 
 def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
-    testo_spunti = ""
+    testo_spunti = notizie()
     if spunti:
-        testo_spunti = ("Trending on YouTube right now for this theme (use ONLY as inspiration for the angle; "
+        testo_spunti += ("\nTrending on YouTube right now for this theme (use ONLY as inspiration for the angle; "
                         "never copy titles, never mention channels): " + " | ".join(spunti[:3]))
     prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
-    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.9},
-            "tools": [{"google_search": {}}]}
+    body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.9, "responseMimeType": "application/json"}}
     global ULTIMO_BUONO
     candidati = modelli_candidati(chiave, ULTIMO_BUONO or (None if modello == "auto" else modello))
     if not candidati:

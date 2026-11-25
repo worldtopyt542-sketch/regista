@@ -12,14 +12,25 @@ STATO = os.path.join(RADICE, "clipper.json")
 FINESTRA = 70  # secondi di contesto attorno a ogni picco
 
 
-def picchi(wav, quanti):
-    """Agent ORECCHIO: i momenti piu' rumorosi/agitati (urla, risate, reazioni)."""
-    with wave.open(wav) as w:
-        sr = w.getframerate()
-        a = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(np.float32)
-    sec = len(a) // sr
-    rms = np.sqrt((a[:sec * sr].reshape(sec, sr) ** 2).mean(1)) + 1
-    db = 20 * np.log10(rms)
+def pcm(file, sr, inizio=None, durata=None, fmt="s16le"):
+    cmd = ["ffmpeg", "-v", "error"] + (["-ss", str(inizio), "-t", str(durata)] if inizio is not None else [])
+    return subprocess.Popen(cmd + ["-i", file, "-ac", "1", "-ar", str(sr), "-f", fmt, "-"], stdout=subprocess.PIPE)
+
+
+def picchi(audio, quanti):
+    """Agent ORECCHIO: i momenti piu' rumorosi/agitati (urla, risate, reazioni). Legge a pezzi, poca RAM."""
+    sr, db = 8000, []
+    p = pcm(audio, sr)
+    while True:
+        b = p.stdout.read(sr * 2)
+        if len(b) < sr:
+            break
+        a = np.frombuffer(b[:len(b) // 2 * 2], dtype=np.int16).astype(np.float32)
+        db.append(20 * np.log10(np.sqrt((a ** 2).mean()) + 1))
+    p.wait()
+    db = np.array(db)
+    if len(db) < 2 * FINESTRA:
+        raise RuntimeError("audio troppo corto")
     liscio = np.convolve(db, np.ones(4) / 4, "same")
     base = np.convolve(db, np.ones(120) / 120, "same")  # rumore di fondo dei 2 minuti attorno
     punteggio = liscio - base + 0.3 * (liscio - db.mean())
@@ -29,21 +40,21 @@ def picchi(wav, quanti):
             scelti.append(int(t))
         if len(scelti) >= quanti:
             break
-    return sorted(max(0, t - FINESTRA // 2) for t in scelti), sec
+    return sorted(max(0, t - FINESTRA // 2) for t in scelti), len(db)
 
 
-def trascrivi(wav, finestre, modello):
-    """Agent TRASCRITTORE: parole con tempi esatti solo nei momenti candidati."""
+def trascrivi(audio, finestre, modello, offset=0):
+    """Agent TRASCRITTORE: parole con tempi esatti (assoluti nel video) solo nei momenti candidati."""
     from faster_whisper import WhisperModel
     m = WhisperModel(modello, device="cpu", compute_type="int8")
     out = []
-    for i, t0 in enumerate(finestre):
-        tmp = wav + f".{i}.wav"
-        editor.run(["ffmpeg", "-y", "-ss", str(t0), "-t", str(FINESTRA), "-i", wav, tmp])
-        segs, _ = m.transcribe(tmp, word_timestamps=True, vad_filter=True)
-        parole = [(t0 + w.start, t0 + w.end, w.word.strip()) for s in segs for w in (s.words or [])]
-        out.append({"inizio": t0, "parole": parole})
-        os.remove(tmp)
+    for t0 in finestre:
+        p = pcm(audio, 16000, t0, FINESTRA, "f32le")
+        a = np.frombuffer(p.stdout.read(), dtype=np.float32).copy()
+        p.wait()
+        segs, _ = m.transcribe(a, word_timestamps=True, vad_filter=True)
+        parole = [(offset + t0 + w.start, offset + t0 + w.end, w.word.strip()) for s in segs for w in (s.words or [])]
+        out.append({"inizio": offset + t0, "parole": parole})
     return out
 
 
@@ -120,15 +131,18 @@ def monta(pezzo, dur, gruppi, hook, credito, out, lavoro, font=None, cap=84):
 
 def lavora(url, cfg, chiavi, chat_id, arch, k):
     src = sorgenti.info(url)
-    if src["id"] in arch.setdefault("sorgenti_fatte", []):
-        print("   gia' clippato, salto"); return 0
-    print(f"\n=== {src['titolo']} ({src['canale']}, {src['durata'] // 60} min)")
+    blocco = cfg.get("ore_per_blocco", 4) * 3600
+    inizio = arch.setdefault("avanzamento", {}).get(url, 0)
+    fine = min(inizio + blocco, src["durata"] or inizio + blocco)
+    arch["avanzamento"][url] = fine
+    print(f"\n=== {src['titolo']} ({src['canale']}, {src['durata'] // 60} min) blocco {inizio // 3600:.0f}-{fine / 3600:.1f} h")
     lavoro = os.path.join(RADICE, "lavoro", "clip")
     shutil.rmtree(lavoro, ignore_errors=True); os.makedirs(lavoro)
     editor.WORK = lavoro
-    wav = sorgenti.scarica_audio(url, os.path.join(lavoro, "audio"))
-    finestre, _ = picchi(wav, cfg.get("momenti_candidati", 14))
-    momenti = trascrivi(wav, finestre, cfg.get("whisper", "small"))
+    audio = sorgenti.scarica_audio(url, os.path.join(lavoro, "audio"), inizio, fine)
+    finestre, _ = picchi(audio, cfg.get("momenti_candidati", 14))
+    os.environ.setdefault("OMP_NUM_THREADS", "4")
+    momenti = trascrivi(audio, finestre, cfg.get("whisper", "small"), offset=inizio)
     clip = scegli(chiavi["gemini"], src, momenti, k)
     tutte = [p for m in momenti for p in m["parole"]]
     L = lingue(carica(CONFIG, {}))
@@ -161,7 +175,8 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
         except Exception as e:
             traceback.print_exc()
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Clip {n + 1} non riuscita: {str(e)[:300]}")
-    arch["sorgenti_fatte"].append(src["id"])
+    if fine >= (src["durata"] or 0):
+        arch["sorgenti_fatte"].append(src["id"])
     arch.setdefault("storico_clip", []).append({"fonte": src["id"], "titolo": src["titolo"], "clip": fatte})
     shutil.rmtree(lavoro, ignore_errors=True)
     return fatte
@@ -178,7 +193,8 @@ def main():
     coda += carica(os.path.join(RADICE, "pubblica.json"), {}).get("coda_link", [])
     if cfg.get("canali"):
         coda += sorgenti.da_canali(cfg["canali"], cfg.get("parole_chiave", ["gta"]), arch["url_fatti"])
-    coda = [u for u in dict.fromkeys(coda) if u not in arch["url_fatti"]][:cfg.get("video_per_giro", 2)]
+    in_corso = [u for u, t in arch.get("avanzamento", {}).items() if u not in arch["url_fatti"]]
+    coda = [u for u in dict.fromkeys(in_corso + coda) if u not in arch["url_fatti"]][:cfg.get("video_per_giro", 2)]
     if not coda:
         print("Niente di nuovo da clippare."); return
     totale = 0
@@ -186,11 +202,13 @@ def main():
     for url in coda:
         if totale >= obiettivo:
             break
-        arch["url_fatti"].append(url)
         try:
             totale += lavora(url, cfg, chiavi, chat_id, arch, min(cfg.get("clip_per_video", 4), obiettivo - totale))
+            if arch.get("avanzamento", {}).get(url, 0) >= (sorgenti.info(url)["durata"] or 0):
+                arch["url_fatti"].append(url)
         except Exception as e:
             traceback.print_exc()
+            arch["url_fatti"].append(url)
             telegram.messaggio(chiavi["telegram"], chat_id, f"❌ Non riesco a clippare {url}: {str(e)[:300]}")
         arch["url_fatti"] = arch["url_fatti"][-500:]
         salva(STATO, arch)

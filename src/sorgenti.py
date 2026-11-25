@@ -40,10 +40,11 @@ def info(url):
             "canale": j.get("uploader") or j.get("channel") or "", "durata": j.get("duration") or 0}
 
 
-def scarica_audio(url, dest):
-    _yt(["-f", "ba/b", "-x", "--audio-format", "wav", "--postprocessor-args", "ExtractAudio:-ac 1 -ar 16000",
-         "-o", dest + ".%(ext)s", url])
-    return dest + ".wav"
+def scarica_audio(url, dest, inizio, fine):
+    """Solo l'audio del blocco [inizio, fine] in secondi (niente WAV giganti)."""
+    import glob
+    _yt(["-f", "ba/b", "--download-sections", f"*{inizio:.0f}-{fine:.0f}", "-o", dest + ".%(ext)s", url])
+    return sorted(glob.glob(dest + ".*"))[0]
 
 
 def scarica_pezzo(url, inizio, fine, dest):
