@@ -7,8 +7,8 @@
  "avanzamento": {
   "https://www.twitch.tv/videos/2939504732": 14400,
   "https://www.twitch.tv/videos/2936683310": 24289,
-  "https://www.twitch.tv/videos/2935613960": 10800,
-  "https://www.twitch.tv/videos/2934866208": 10800
+  "https://www.twitch.tv/videos/2935613960": 21600,
+  "https://www.twitch.tv/videos/2934866208": 21600
  },
  "storico_clip": [
   {
@@ -25,9 +25,19 @@
    "fonte": "TwitchVod:v2934866208",
    "titolo": "🌴PLAYING GTA 6 FOR THE FIRST TIME🌴",
    "clip": 4
+  },
+  {
+   "fonte": "TwitchVod:v2935613960",
+   "titolo": "BEATING GTA 6 RIGHT NOW *FINALE*",
+   "clip": 4
+  },
+  {
+   "fonte": "TwitchVod:v2934866208",
+   "titolo": "🌴PLAYING GTA 6 FOR THE FIRST TIME🌴",
+   "clip": 4
   }
  ],
  "top5": {
-  "2026-11-25": 1
+  "2026-11-26": 2
  }
 }
