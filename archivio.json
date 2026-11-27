@@ -2,13 +2,29 @@
  "chat_id": 5193260023,
  "titoli": [
   "5 Most Extreme Electrical Phenomena in the Universe",
-  "5 Crazy Map Secrets in GTA 6 Leonida!"
+  "5 Crazy Map Secrets in GTA 6 Leonida!",
+  "5 Largest Monsters in the Universe",
+  "5 Mind-Blowing Scale Comparisons of Earth to the Universe"
  ],
  "clip_usate": [
   "nasa:311_ScienceCasts-observing-lightning-ISS",
+  "nasa:ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb",
+  "nasa:GRC-2022-CM-0114",
+  "nasa:GRC-2022-CM-0123",
+  "nasa:GSFC_20080520_HST_m10217_Zoom_Out",
+  "nasa:GSFC_20080520_HST_m10223_COS",
+  "nasa:GSFC_20100722_Hubble_m10619_Exoplanets",
   "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
+  "nasa:GSFC_20120614_GPM_m10999_Core_Rotates",
+  "nasa:GSFC_20140911_SDO_m11651_Flare",
+  "nasa:GSFC_20151214_EPIC_m12097",
   "nasa:GSFC_20170811_Solar_m11797_Eruption",
+  "nasa:GSFC_20181002_SMBH_m13043_Simulation",
+  "nasa:GSFC_20181129_FERMI_m13104_Starlight",
+  "nasa:GSFC_20190808_HST_m13279_Jupiter",
+  "nasa:JPL-20250409-NUSTARf-0001-Hunting_Hidden_Black_Holes_2160cc",
   "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944",
+  "nasa:NASAsRomanSpaceTelescopeHardwareHighlightsSpring2024_1080",
   "nasa:Space-247365",
   "nasa:iss068m262721811_Expedition_68_Tropical_Storm_Ian_Flyover_220929",
   "nasa:ksc_081105_mro_intro",
@@ -23,7 +39,9 @@
  ],
  "temi_recenti": [
   "lightning and rare electrical phenomena",
-  "GTA 6 Leonida map secrets"
+  "GTA 6 Leonida map secrets",
+  "the biggest stars and black holes",
+  "how small Earth is in the universe"
  ],
  "storico": [
   {
@@ -54,6 +72,36 @@
     "tw:2932753534:715",
     "tw:2937629817:546",
     "tw:2935613960:415"
+   ]
+  },
+  {
+   "data": "2026-11-27",
+   "titolo": "5 Largest Monsters in the Universe",
+   "tema": "the biggest stars and black holes",
+   "critic_ok": true,
+   "clip": [
+    "nasa:GSFC_20181129_FERMI_m13104_Starlight",
+    "nasa:GRC-2022-CM-0123",
+    "nasa:ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb",
+    "nasa:GSFC_20120614_GPM_m10999_Core_Rotates",
+    "nasa:GSFC_20181002_SMBH_m13043_Simulation",
+    "nasa:GSFC_20080520_HST_m10217_Zoom_Out",
+    "nasa:JPL-20250409-NUSTARf-0001-Hunting_Hidden_Black_Holes_2160cc"
+   ]
+  },
+  {
+   "data": "2026-11-27",
+   "titolo": "5 Mind-Blowing Scale Comparisons of Earth to the Universe",
+   "tema": "how small Earth is in the universe",
+   "critic_ok": true,
+   "clip": [
+    "nasa:NASAsRomanSpaceTelescopeHardwareHighlightsSpring2024_1080",
+    "nasa:GSFC_20190808_HST_m13279_Jupiter",
+    "nasa:GSFC_20140911_SDO_m11651_Flare",
+    "nasa:GRC-2022-CM-0114",
+    "nasa:GSFC_20080520_HST_m10223_COS",
+    "nasa:GSFC_20100722_Hubble_m10619_Exoplanets",
+    "nasa:GSFC_20151214_EPIC_m12097"
    ]
   }
  ]

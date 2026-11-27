@@ -1,0 +1,66 @@
+{
+ "id": "2611271714637b",
+ "creato": "2026-11-27T17:14:54.004904",
+ "formato": "facts",
+ "titolo": "5 Largest Monsters in the Universe",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Tracing the History of Starlight with NASA's Fermi Mission: https://images.nasa.gov/details/GSFC_20181129_FERMI_m13104_Starlight\n- NASA, 2021 NASA Glenn's Evening with the Stars Promo Video: https://images.nasa.gov/details/GRC-2022-CM-0123\n- NASA, SOFIA Reveals New View of Milky Way’s Center: https://images.nasa.gov/details/ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb\n- NASA, GPM Core Spacecraft Integration and Testing: Core Rotates: https://images.nasa.gov/details/GSFC_20120614_GPM_m10999_Core_Rotates\n- NASA, New Simulation Sheds Light on Spiraling Supermassive Black Holes: https://images.nasa.gov/details/GSFC_20181002_SMBH_m13043_Simulation\n- NASA, HST Zoom-Way-Out: https://images.nasa.gov/details/GSFC_20080520_HST_m10217_Zoom_Out\n- NASA, NuSTAR-Hunting Hidden Black Holes: https://images.nasa.gov/details/JPL-20250409-NUSTARf-0001-Hunting_Hidden_Black_Holes_2160cc\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://science.nasa.gov/universe/stars/",
+  "https://science.nasa.gov/universe/black-holes/",
+  "https://chandra.si.edu/photo/2020/phoenix/",
+  "https://science.nasa.gov/universe/black-holes/",
+  "https://science.nasa.gov/universe/black-holes/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Largest Monsters in the Universe",
+   "descrizione": "From stars that swallow billions of Suns to black holes that defy physics, here are the largest objects in the universe.",
+   "hashtags": [
+    "#space",
+    "#blackhole",
+    "#astronomy",
+    "#universe",
+    "#science",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOLawm6kOGcNGfedVTGG-nhvA7IlSUAAksmAALaYlBQeUlek5V-SOA9BA",
+   "msg": "5193260023:139"
+  },
+  "it": {
+   "titolo": "I 5 mostri più grandi dell'universo",
+   "descrizione": "Da stelle che inghiottono miliardi di Soli a buchi neri impossibili: ecco gli oggetti più giganti dell'universo.",
+   "hashtags": [
+    "#spazio",
+    "#bucheneri",
+    "#astronomia",
+    "#universo",
+    "#scienza",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOMawm6kVSsj3y7qZv2w9t52Q1VB0wAAkwmAALaYlBQuS8AAWjQaLS3PQQ",
+   "msg": "5193260023:140"
+  },
+  "es": {
+   "titolo": "Los 5 monstruos más grandes del universo",
+   "descrizione": "De estrellas que devoran miles de millones de Soles a agujeros negros gigantescos: estos son los objetos más grandes del universo.",
+   "hashtags": [
+    "#espacio",
+    "#agujeronegro",
+    "#astronomia",
+    "#universo",
+    "#ciencia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAONawm6k1CWkIZWlE8kkOihmyf3rk8AAk0mAALaYlBQP6gj9kexQhg9BA",
+   "msg": "5193260023:141"
+  }
+ },
+ "msg_bottoni": "5193260023:142"
+}
