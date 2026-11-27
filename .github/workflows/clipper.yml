@@ -18,15 +18,20 @@ concurrency:
 
 jobs:
   clippa:
-    runs-on: ubuntu-latest
+    # YouTube blocca spesso i server di GitHub ("Sign in to confirm you're not a bot").
+    # Variabile CLIPPER_RUNNER = self-hosted -> il giro gira sul PC di Fra (IP di casa, CPU piu' forte). Vedi COLLABORARE.md.
+    runs-on: ${{ vars.CLIPPER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 240
     steps:
       - uses: actions/checkout@v4
+      - name: Stato del bot (ramo stato)
+        run: .github/carica-stato.sh
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
       - name: Installa ffmpeg e font
+        if: runner.os == 'Linux'
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core fonts-noto-core
       - name: Installa librerie
         run: pip install -q -U -r requirements.txt

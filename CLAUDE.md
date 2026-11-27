@@ -6,7 +6,8 @@
 - Format: Clip (`src/clipper.py`, notte), Top 5 (`src/top5.py`, dentro il clipper), Off Scale Facts (`src/fatti.py`, workflow "Off Scale Facts").
 - Ogni video prodotto = un **gruppo** (tutte le lingue) in `pronte/<id>.json` + un messaggio Telegram con un solo ✅. `auto_pubblica_sopra` programma da solo sopra quel punteggio.
 - Pubblicazione: `src/pubblica.py` ogni 15 min via Buffer (`src/buffer.py`); ogni lingua solo sui suoi canali (`pubblica.canali`). Il bot obbedisce solo alla chat del proprietario. Video online come asset di Release GitHub.
-- Stato (li scrive il bot, mai a mano): archivio.json (Facts + chat_id), clipper.json, pubblica.json, pronte/. I workflow salvano con `.github/salva-stato.sh`.
+- Stato (li scrive il bot, mai a mano): archivio.json (Facts + chat_id), clipper.json, pubblica.json, pronte/. Vivono nel ramo `stato` (main e' protetto): i workflow li leggono con `.github/carica-stato.sh` e li salvano con `.github/salva-stato.sh`.
+- YouTube blocca i server di GitHub: l'Autoclipper puo' girare sul PC di Fra (variabile `CLIPPER_RUNNER=self-hosted`) o con il secret `YT_COOKIES`.
 - Roadmap condivisa: `PERCORSO.md` (formato rigido, la legge la mappa Egghead di Fra): aggiornala nella stessa PR del lavoro.
 - Prima della PR: `python -m unittest discover -s tests` e `python src/anteprima.py` (PNG in anteprima/). Agent pronti in `.claude/agents/`: format-designer, revisore-pr, nuovo-canale.
 - Collaborazione (2 sviluppatori, ognuno col suo Claude Code): leggi COLLABORARE.md. Mai commit diretti su main: branch `nome/cosa` + Pull Request; collega la PR all'Issue.

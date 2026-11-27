@@ -19,6 +19,20 @@ def durata_iso(s):
     return d * 86400 + h * 3600 + mi * 60 + se
 
 
+# Categorie YouTube coerenti con natura/spazio/momenti reali: animali, viaggi, persone, news, educazione, scienza, sport.
+CATEGORIE = {"15", "17", "19", "22", "25", "27", "28"}
+# Titoli che tradiscono contenuti non reali o fuori tema (CGI, giochi, tutorial...).
+ESCLUSE = re.compile(r"\b(cgi|vfx|houdini|blender|animation|animated|goanimate|cartoon|tutorial|how to|tips|"
+                     r"gameplay|minecraft|roblox|fortnite|rocket league|gta|lyrics|music video|remix|reaction|"
+                     r"pen spinning|unboxing|review)\b", re.I)
+
+
+def adatto(v, categorie=CATEGORIE):
+    """Il video e' del tema giusto? Categoria YouTube ammessa e titolo senza parole sospette."""
+    sn = v.get("snippet", {})
+    return sn.get("categoryId") in categorie and not ESCLUSE.search(sn.get("title", "") + " " + " ".join(sn.get("tags", [])[:10]))
+
+
 def cerca(chiave, ricerche, fatti, min_views=1_000_000, quanti=4):
     """Ritorna [{url, titolo, canale, views, durata}] di video CC BY virali non ancora usati."""
     trovati = []
@@ -45,7 +59,7 @@ def cerca(chiave, ricerche, fatti, min_views=1_000_000, quanti=4):
                 lingua = (v["snippet"].get("defaultAudioLanguage") or v["snippet"].get("defaultLanguage") or "en")[:2]
                 if (v.get("status", {}).get("license") != "creativeCommon" or views < min_views or lingua != "en"
                         or re.search(r"[\u0900-\u097F]", v["snippet"]["title"])
-                        or url in fatti or any(t["url"] == url for t in trovati)):
+                        or not adatto(v) or url in fatti or any(t["url"] == url for t in trovati)):
                     continue
                 trovati.append({"url": url, "titolo": v["snippet"]["title"], "canale": v["snippet"]["channelTitle"],
                                 "views": views, "durata": durata_iso(v["contentDetails"].get("duration"))})

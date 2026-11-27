@@ -50,6 +50,17 @@ class Licenza(unittest.TestCase):
             self.assertEqual(scopri.verifica("k", "https://youtu.be/em9cqXjEZ60")["autore"], "ESA")
 
 
+class Scopritore(unittest.TestCase):
+    def test_scarta_cgi_e_giochi(self):
+        for titolo, cat in (("Houdini - Tornado FX Compilation (CGI VFX)", "28"), ("How to Air Roll in Rocket League", "20"),
+                            ("Pen spinning Tornado tips", "22"), ("Goanimate Tornado", "1")):
+            self.assertFalse(scopri.adatto({"snippet": {"title": titolo, "categoryId": cat}}), titolo)
+
+    def test_accetta_natura_vera(self):
+        self.assertTrue(scopri.adatto({"snippet": {"title": "Massive tornado caught on camera", "categoryId": "25"}}))
+        self.assertTrue(scopri.adatto({"snippet": {"title": "Humpback whale breach", "categoryId": "15"}}))
+
+
 class Pubblica(unittest.TestCase):
     def test_senza_mappa_solo_inglese_su_tutti_i_canali(self):
         self.assertIsNone(pubblica.canali_lingua("en", {}))
