@@ -1,4 +1,4 @@
-# Come collaboriamo su Regista (2 persone + Claude Code)
+# Come collaboriamo su Autoclipping-video virali di massa (2 persone + Claude Code)
 
 ## Chi fa cosa
 - **Il lavoro pesante** (scaricare, trascrivere, montare, pubblicare) gira su **GitHub Actions**, non sui nostri PC.

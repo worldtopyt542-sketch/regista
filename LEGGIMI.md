@@ -1,23 +1,18 @@
-# Regista — Planet Off Scale
+# Autoclipping-video virali di massa
 
-Ogni mattina alle 06:15 crea 3 short (Top 5, 25–30 s) e te li manda su Telegram con titolo, descrizione e fonti dei fatti da controllare. Tu li guardi e li programmi su Buffer.
+Sistema automatico che ogni notte trova video virali **senza copyright** (Creative Commons BY con almeno 1M di views,
+o pubblico dominio), ne estrae le clip migliori, monta Short verticali col format del canale **Planet Off Scale**
+e te li manda su Telegram. Tu premi ✅ e vengono pubblicati da soli su TikTok, Instagram e YouTube Shorts.
 
-Agent: Sceneggiatore (Gemini) → Scout (Pixabay, NASA, Pexels se disponibile) → Voce (Edge TTS) → Editor → Critic → Telegram.
-`archivio.json` ricorda titoli e clip già usati, così i video non si ripetono.
+## Come gira
+| Workflow | Quando | Cosa fa |
+|---|---|---|
+| Autoclipper Planet Off Scale | ogni notte | 8 clip + 2 Top 5 su Telegram |
+| Pubblicatore | ogni 15 min | ✅ → pubblica via Buffer nell'orario migliore, report serale |
 
-## Secrets da inserire (Settings → Secrets and variables → Actions → New repository secret)
+## Secret (Settings → Secrets and variables → Actions)
+`TELEGRAM_BOT_TOKEN`, `GEMINI_API_KEY`, `BUFFER_API_KEY`, `YOUTUBE_API_KEY`, `YT_COOKIES` (se YouTube blocca i download).
+Mai scrivere chiavi nei file o in chat.
 
-| Nome | Da dove arriva |
-|---|---|
-| `TELEGRAM_BOT_TOKEN` | Il token che ti ha dato @BotFather |
-| `GEMINI_API_KEY` | https://aistudio.google.com → Get API key |
-| `PIXABAY_API_KEY` | https://pixabay.com/api/docs/ (la chiave compare nella pagina dopo il login) |
-| `PEXELS_API_KEY` | Facoltativa: Pexels ha sospeso le nuove chiavi |
-
-Non scrivere mai queste chiavi nei file o in chat.
-
-## Avviarlo a mano
-Scheda **Actions** → **Regista - video del giorno** → **Run workflow**.
-
-## Cambiare temi, voce o numero di video
-Modifica `config.json` direttamente da GitHub (icona matita).
+## Lavorare in due
+Vedi `COLLABORARE.md`.

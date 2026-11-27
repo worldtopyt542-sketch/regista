@@ -1,4 +1,4 @@
-# Regole del progetto (per Claude)
+# Autoclipping-video virali di massa — regole del progetto (per Claude)
 - Rispondi in italiano. Domande all'utente: brevi, sempre a scelta multipla (A, B, C, D...).
 - Risparmia token: niente spiegazioni lunghe, agisci.
 - Tema: Planet Off Scale = spazio/lanci, animali/natura, momenti incredibili. SOLO video Creative Commons BY (>=1M views, src/scopri.py) o pubblico dominio: niente copyright. Credito 'Autore (CC BY)' sempre. Obiettivo: clip virali, intervento umano minimo.
