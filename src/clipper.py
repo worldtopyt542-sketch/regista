@@ -281,9 +281,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
             gruppo["auto"] = bool(soglia and tutti_ok and gruppo["punteggio"] >= soglia)
             telegram.invia_gruppo(chiavi["telegram"], chat_id, gruppo, video,
                                   f"{gruppo['punteggio']}/100 · {fonte['url']}")
-            comune.salva_gruppo(gruppo)
-            for out, _ in video.values():
-                os.remove(out)
+            comune.salva_gruppo(gruppo)  # i file restano in output/: il workflow li conserva 7 giorni negli artifact
             fatte += 1
         except Exception as e:
             traceback.print_exc()
@@ -320,6 +318,8 @@ def crea_top5(url, src, fonte, momenti, tutte, chiavi, chat_id, lavoro, L, cfg):
                           {"en": (video, didascalia(t, "en", src["canale"], "TOP 5" + ("" if ok else " · critic ⚠️")))},
                           f"TOP 5 · {fonte['url']}")
     comune.salva_gruppo(gruppo)
+    os.makedirs(os.path.join(RADICE, "output"), exist_ok=True)  # copia per gli artifact (lavoro/ viene cancellata)
+    shutil.copy(video, os.path.join(RADICE, "output", f"{src['id'].replace(':', '_')}_top5_en.mp4"))
 
 
 def main():
