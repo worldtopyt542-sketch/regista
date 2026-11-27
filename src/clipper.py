@@ -246,7 +246,8 @@ def main():
         else:
             coda += [t["url"] for t in scopri.cerca(os.environ["YOUTUBE_API_KEY"], cfg["ricerche"], arch["url_fatti"],
                                                     cfg.get("min_views", 1_000_000), cfg.get("video_per_giro", 4))]
-    in_corso = [u for u, t in arch.get("avanzamento", {}).items() if u not in arch["url_fatti"]]
+    in_corso = [u for u, t in arch.get("avanzamento", {}).items() if u not in arch["url_fatti"]
+                and ("twitch.tv" not in u or cfg.get("canali"))]  # niente piu' live GTA se i canali sono spenti
     coda = [u for u in dict.fromkeys(in_corso + coda) if u not in arch["url_fatti"]][:cfg.get("video_per_giro", 2)]
     if not coda:
         print("Niente di nuovo da clippare."); return
