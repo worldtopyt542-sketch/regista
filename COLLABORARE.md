@@ -22,6 +22,18 @@ Il lavoro pesante gira comunque su GitHub Actions. Sui PC gira solo lo sviluppo,
   PR con l'agent `revisore-pr` e il link all'anteprima negli artifact del workflow "Controlli (PR)".
 - Chi vuole vedere un render senza farlo sul proprio PC: Actions → **Controlli (PR)** → artifact `anteprima-format`.
 
+## L'Autoclipper sul PC di Fra (YouTube blocca GitHub)
+YouTube spesso rifiuta i download dai server di GitHub. Soluzione: il PC di Fra fa da "runner" per il solo Autoclipper.
+1. GitHub → Settings → Actions → Runners → **New self-hosted runner** (macOS), e si seguono i 3 comandi; poi `./svc.sh install && ./svc.sh start`
+   (serve un admin del repo).
+2. Sul Mac: `brew install ffmpeg yt-dlp` (Python 3.12 c'e' gia' o `brew install python@3.12`).
+3. Settings → Secrets and variables → Actions → **Variables** → `CLIPPER_RUNNER` = `self-hosted`.
+Togliendo la variabile si torna ai server di GitHub. In alternativa: secret `YT_COOKIES` (cookie di un account YouTube secondario).
+
+## Lo stato del bot sta nel ramo `stato`
+`main` e' protetto (solo Pull Request), quindi `archivio.json`, `clipper.json`, `pubblica.json` e `pronte/` li scrive il bot
+nel ramo **`stato`** (`.github/carica-stato.sh` e `.github/salva-stato.sh`). Le copie su `main` sono solo il punto di partenza.
+
 ## Agent pronti per Claude Code (`.claude/agents/`)
 - `format-designer`: "migliora la grafica del format", "nuovo format Scale Check".
 - `revisore-pr`: "rivedi la PR #N" (licenze, chiavi, file di stato, bug).
