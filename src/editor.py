@@ -65,8 +65,30 @@ def gruppi_parole(parole, testo, dur, n=3):
     return [tempi[i:i + n] for i in range(0, len(tempi), n)]
 
 
+FONT = "Inter Display Black"  # font del marchio (assets/fonts, licenza OFL)
+ASSETS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+
+
+def ass_filtro(path):
+    return f"ass={path}:fontsdir={os.path.join(ASSETS, 'fonts')}"
+
+
+def marchia(video, out):
+    """Format riconoscibile su ogni video: logo 'bug' in alto a sinistra del video + barra di avanzamento gialla."""
+    d = durata(video)
+    fc = (f"[1:v]scale=260:-1,format=rgba,colorchannelmixer=aa=0.9[logo];"
+          f"[0:v]drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[b];"
+          f"color=c=0xFFD400:s=1080x14:d={d:.2f}[bar];"
+          f"[b][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[c];"
+          f"[c][logo]overlay=x=24:y=548[v]")
+    run(["ffmpeg", "-y", "-i", video, "-i", os.path.join(ASSETS, "logo_video.png"), "-filter_complex", fc,
+         "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-maxrate", "3M",
+         "-bufsize", "6M", "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", out])
+    return out
+
+
 def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84):
-    font = font or "DejaVu Sans"
+    font = font or FONT
     pulisci = lambda s: s.replace("{", "(").replace("}", ")").replace("\n", " ")
     righe = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}", "",
@@ -77,7 +99,7 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         # zone sicure: niente testo nel 10% alto, 15% basso, 12% destro (pulsanti di YouTube)
         f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
         f"Style: Rank,{font},190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
-        f"Style: Hook,{font},70,&H00FFFFFF,&H000000FF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
+        f"Style: Hook,{font},70,&H00000000,&H000000FF,&H0000D4FF,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
         f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
@@ -103,7 +125,7 @@ def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook=
     z = f"(1+0.08*t/{dur:.2f})"  # zoom lento da 1.00 a 1.08
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
           f"scale=w='trunc({W}*{z}/2)*2':h='trunc({H}*{z}/2)*2':eval=frame,crop={W}:{H},"
-          f"fps={FPS},setsar=1,ass={ass}")
+          f"fps={FPS},setsar=1,{ass_filtro(ass)}")
     run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", clip, "-i", audio,
          "-t", f"{dur:.2f}", "-vf", vf, "-af", "apad", "-map", "0:v:0", "-map", "1:a:0",
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",

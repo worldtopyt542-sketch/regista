@@ -83,8 +83,8 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
                           s["titolo"] if n == 0 else "")
         out = os.path.join(lavoro, f"seg_top{n}.mp4")
         fc = ("[0:v]split[x][y];[x]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
-              "boxblur=25:3,eq=brightness=-0.2[bg];[y]scale=1080:-2[fg];"
-              f"[bg][fg]overlay=(W-w)/2:(H-h)/2-120,fps=30,setsar=1,ass={ass}[v];"
+              "boxblur=25:3,eq=brightness=-0.2[bg];[y]scale=1080:1920:force_original_aspect_ratio=decrease[fg];"
+              f"[bg][fg]overlay=(W-w)/2:'if(lt(h,1100),(H-h)/2-120,(H-h)/2)',fps=30,setsar=1,{editor.ass_filtro(ass)}[v];"
               f"[0:a]volume='if(lt(t,{d:.2f}),0.2,1)':eval=frame[o];[1:a]apad[n];"
               "[o][n]amix=inputs=2:duration=first:normalize=0,aresample=44100,"
               "aformat=sample_fmts=fltp:channel_layouts=stereo[a]")

@@ -149,8 +149,8 @@ def monta(pezzo, dur, gruppi, hook, credito, out, lavoro, font=None, cap=84):
     ass = os.path.join(lavoro, "sub.ass")
     editor.scrivi_ass(ass, gruppi, "", dur, credito, hook, font, cap)
     fc = ("[0:v]split[a][b];[a]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
-          "boxblur=25:3,eq=brightness=-0.2[bg];[b]scale=1080:-2[fg];"
-          f"[bg][fg]overlay=(W-w)/2:(H-h)/2-120,fps=30,setsar=1,ass={ass}[v]")
+          "boxblur=25:3,eq=brightness=-0.2[bg];[b]scale=1080:1920:force_original_aspect_ratio=decrease[fg];"
+          f"[bg][fg]overlay=(W-w)/2:'if(lt(h,1100),(H-h)/2-120,(H-h)/2)',fps=30,setsar=1,{editor.ass_filtro(ass)}[v]")
     editor.run(["ffmpeg", "-y", "-i", pezzo, "-t", f"{dur:.2f}", "-filter_complex", fc, "-map", "[v]",
                 "-map", "0:a:0", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-c:v", "libx264", "-preset",
                 "veryfast", "-crf", "21", "-maxrate", "3M", "-bufsize", "6M", "-pix_fmt", "yuv420p",
@@ -198,6 +198,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
                 out = os.path.join(RADICE, "output", f"{src['id'].replace(':', '_')}_{n + 1}_{cod}.mp4")
                 os.makedirs(os.path.dirname(out), exist_ok=True)
                 monta(pezzo, dur, gruppi, t["hook"], "Clip: " + src["canale"], out, lavoro, lg.get("font"), cap)
+                editor.marchia(out, out + ".m.mp4"); os.replace(out + ".m.mp4", out)
                 ok = editor.critic(out, max_sec=40)
                 cap_txt = didascalia(t, cod, src["canale"], f"{c['punteggio']}/100" + ("" if ok else " · critic ⚠️"))
                 telegram.video(chiavi["telegram"], chat_id, out, cap_txt + f"\n{url}", bottoni=BOTTONI)
@@ -211,6 +212,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
     if fatti_top < cfg.get("top5_al_giorno", 2):
         try:
             video, t = top5.crea(url, src, momenti, tutte, chiavi["gemini"], lavoro, "", L["en"]["voce"], NICCHIA)
+            editor.marchia(video, video + ".m.mp4"); os.replace(video + ".m.mp4", video)
             ok = editor.critic(video, max_sec=50)
             telegram.video(chiavi["telegram"], chat_id, video,
                            didascalia(t, "en", src["canale"], "TOP 5" + ("" if ok else " · critic ⚠️")) + f"\n{url}",
