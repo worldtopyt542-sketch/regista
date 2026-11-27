@@ -18,13 +18,6 @@
   "GTA 6 Vice City locations"
  ],
  "clipper": {
-  "canali": [
-   "https://www.twitch.tv/kaicenat/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/xqc/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/summit1g/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/caseoh_/videos?filter=archives&sort=time",
-   "https://www.youtube.com/@IShowSpeed/streams"
-  ],
   "parole_chiave": [
    "gta",
    "grand theft auto"
@@ -36,7 +29,37 @@
   "auto_pubblica_sopra": null,
   "clip_al_giorno": 8,
   "ore_per_blocco": 3,
-  "top5_al_giorno": 2
+  "top5_al_giorno": 2,
+  "canali_gta": [
+   "https://www.twitch.tv/kaicenat/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/xqc/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/summit1g/videos?filter=archives&sort=time",
+   "https://www.twitch.tv/caseoh_/videos?filter=archives&sort=time",
+   "https://www.youtube.com/@IShowSpeed/streams"
+  ],
+  "nicchia": "Planet Off Scale: jaw-dropping real videos of space and rocket launches, wild animals and nature, and incredible moments caught on camera",
+  "hashtag_base": "#shorts",
+  "ricerche": [
+   "rocket launch",
+   "SpaceX launch",
+   "space station",
+   "astronaut",
+   "solar eclipse",
+   "meteor",
+   "wild animals",
+   "animal attack",
+   "ocean creatures",
+   "volcano eruption",
+   "tornado",
+   "storm chasing",
+   "caught on camera",
+   "incredible moments",
+   "extreme sports",
+   "nature documentary",
+   "drone footage",
+   "satisfying"
+  ],
+  "min_views": 1000000
  },
  "pubblica": {
   "piattaforme": [

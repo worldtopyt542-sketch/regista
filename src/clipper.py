@@ -8,6 +8,7 @@ import datetime, editor, scrittore, sorgenti, telegram, top5
 from regista import ARCHIVIO, BOTTONI, CONFIG, RADICE, carica, didascalia, lingue, salva
 
 STATO = os.path.join(RADICE, "clipper.json")
+NICCHIA = carica(CONFIG, {}).get("clipper", {}).get("nicchia", "viral videos")
 
 FINESTRA = 70  # secondi di contesto attorno a ogni picco
 
@@ -29,8 +30,8 @@ def picchi(audio, quanti):
         db.append(20 * np.log10(np.sqrt((a ** 2).mean()) + 1))
     p.wait()
     db = np.array(db)
-    if len(db) < 2 * FINESTRA:
-        raise RuntimeError("audio troppo corto")
+    if len(db) < 2 * FINESTRA:  # video breve: tutto e' un unico momento
+        return [0], len(db)
     liscio = np.convolve(db, np.ones(4) / 4, "same")
     base = np.convolve(db, np.ones(120) / 120, "same")  # rumore di fondo dei 2 minuti attorno
     punteggio = liscio - base + 0.3 * (liscio - db.mean())
@@ -65,12 +66,12 @@ def trascrivi(audio, finestre, modello, offset=0):
     return out
 
 
-PROMPT = """You are the editor of a viral clip channel (TikTok, YouTube Shorts, Reels) about streamers and GTA 6.
+PROMPT = """You are the editor of a viral clip channel (TikTok, YouTube Shorts, Reels): {nicchia}.
 Source: "{titolo}" by {canale}.
 Below are moments from the stream (absolute seconds). Pick the {k} BEST self-contained clips:
-- 12-35 seconds (viral streamer clips that hit millions of views are ~20-30 s); the FIRST 2 seconds must already be
+- 12-35 seconds (viral clips that hit millions of views are ~20-30 s); the FIRST 2 seconds must already be
   loud/funny/shocking (no slow intro); end right after the payoff/punchline. No dead air.
-- Prefer: loud reactions, funny lines, shock, rage, wins/fails, quotable sentences, GTA 6 discoveries.
+- Prefer: shocking or awe moments, peaks of action, funny or quotable lines, wins/fails, never-seen-before details.
 - Each clip must make sense without context.
 - NEVER pick story spoilers (missions endings, plot twists, character deaths, final missions, credits).
 - Avoid moments where copyrighted music is clearly playing loudly.
@@ -97,7 +98,7 @@ def scegli(chiave, src, momenti, k):
         if riga:
             righe.append(f"[{t:.1f}] " + " ".join(riga))
         testo.append(f"--- moment {i + 1} ---\n" + ("\n".join(righe) or "(no speech, loud audio)"))
-    prompt = PROMPT.format(titolo=src["titolo"], canale=src["canale"], k=k, momenti="\n".join(testo))
+    prompt = PROMPT.format(nicchia=NICCHIA, titolo=src["titolo"], canale=src["canale"], k=k, momenti="\n".join(testo))
     clip = scrittore.gemini(chiave, prompt, 0.6)["clip"]
     clip = [c for c in clip if 8 <= float(c["fine"]) - float(c["inizio"]) <= 40]
     if not clip:
@@ -105,14 +106,14 @@ def scegli(chiave, src, momenti, k):
     return sorted(clip, key=lambda c: -c.get("punteggio", 0))[:k]
 
 
-COERENZA = """You check a viral GTA 6 Short before posting. You see 3 frames of the clip and the streamer's words.
+COERENZA = """You check a viral Short before posting ({nicchia}). You see 3 frames of the clip and the words spoken in it.
 Draft texts: {bozza}
 Streamer says: "{parlato}"
 Rewrite hook, titolo, descrizione, hashtags so they are 100% coherent with what is VISIBLE in the frames and SAID
-in the clip, in GTA 6. If the title claims someone finds/does/sees something, it must be in the clip. Keep them
+in the clip. If the title claims someone finds/does/sees something, it must be in the clip. Keep them
 viral and curiosity-driven but never misleading. hook max 6 words; titolo max 60 chars; descrizione 1 sentence;
-5 hashtags including #gta6.
-Reply JSON only: {{"hook": "...", "titolo": "...", "descrizione": "...", "hashtags": ["#gta6", "..."]}}"""
+5 relevant hashtags.
+Reply JSON only: {{"hook": "...", "titolo": "...", "descrizione": "...", "hashtags": ["#...", "..."]}}"""
 
 
 def coerenza(chiave, pezzo, dur, rel, c, lavoro):
@@ -124,7 +125,7 @@ def coerenza(chiave, pezzo, dur, rel, c, lavoro):
         immagini.append((f"Frame {k + 1}:", jpg))
     bozza = json.dumps({k: c.get(k) for k in ("hook", "titolo", "descrizione", "hashtags")}, ensure_ascii=False)
     try:
-        r = scrittore.gemini(chiave, COERENZA.format(bozza=bozza, parlato=" ".join(w for *_, w in rel)[:1500]),
+        r = scrittore.gemini(chiave, COERENZA.format(nicchia=NICCHIA, bozza=bozza, parlato=" ".join(w for *_, w in rel)[:1500]),
                              0.5, immagini)
         c.update({k: r[k] for k in ("hook", "titolo", "descrizione", "hashtags") if r.get(k)})
     except Exception as e:
@@ -158,6 +159,8 @@ def monta(pezzo, dur, gruppi, hook, credito, out, lavoro, font=None, cap=84):
 
 def lavora(url, cfg, chiavi, chat_id, arch, k):
     src = sorgenti.info(url)
+    if "youtube" in url:
+        src["canale"] = f"{src['canale']} (CC BY)"
     blocco = cfg.get("ore_per_blocco", 4) * 3600
     inizio = arch.setdefault("avanzamento", {}).get(url, 0)
     fine = min(inizio + blocco, src["durata"] or inizio + blocco)
@@ -183,7 +186,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
             coerenza(chiavi["gemini"], pezzo, dur, rel, c, lavoro)
             fr = frasi(rel, dur)
             base = {"titolo": c["titolo"], "hook": c.get("hook", ""), "descrizione": c.get("descrizione", ""),
-                    "hashtags": c.get("hashtags") or ["#gta6"], "frasi": [f[2] for f in fr]}
+                    "hashtags": c.get("hashtags") or ["#shorts"], "frasi": [f[2] for f in fr]}
             trad = scrittore.traduci(chiavi["gemini"], base, {k: v["nome"] for k, v in L.items() if k != "en"})
             trad["en"] = base
             for cod, lg in L.items():
@@ -207,8 +210,7 @@ def lavora(url, cfg, chiavi, chat_id, arch, k):
     fatti_top = arch.setdefault("top5", {}).get(oggi, 0)
     if fatti_top < cfg.get("top5_al_giorno", 2):
         try:
-            video, t = top5.crea(url, src, momenti, tutte, chiavi["gemini"], lavoro, scrittore.notizie(),
-                                 L["en"]["voce"])
+            video, t = top5.crea(url, src, momenti, tutte, chiavi["gemini"], lavoro, "", L["en"]["voce"], NICCHIA)
             ok = editor.critic(video, max_sec=50)
             telegram.video(chiavi["telegram"], chat_id, video,
                            didascalia(t, "en", src["canale"], "TOP 5" + ("" if ok else " · critic ⚠️")) + f"\n{url}",
@@ -235,6 +237,13 @@ def main():
     coda += carica(os.path.join(RADICE, "pubblica.json"), {}).get("coda_link", [])
     if cfg.get("canali"):
         coda += sorgenti.da_canali(cfg["canali"], cfg.get("parole_chiave", ["gta"]), arch["url_fatti"])
+    if cfg.get("ricerche"):
+        import scopri
+        if not os.environ.get("YOUTUBE_API_KEY"):
+            telegram.messaggio(chiavi["telegram"], chat_id, "⚠️ Manca il secret YOUTUBE_API_KEY: non posso cercare video virali CC.")
+        else:
+            coda += [t["url"] for t in scopri.cerca(os.environ["YOUTUBE_API_KEY"], cfg["ricerche"], arch["url_fatti"],
+                                                    cfg.get("min_views", 1_000_000), cfg.get("video_per_giro", 4))]
     in_corso = [u for u, t in arch.get("avanzamento", {}).items() if u not in arch["url_fatti"]]
     coda = [u for u in dict.fromkeys(in_corso + coda) if u not in arch["url_fatti"]][:cfg.get("video_per_giro", 2)]
     if not coda:

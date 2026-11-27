@@ -1,4 +1,4 @@
-name: Autoclipper GTA 6
+name: Autoclipper Planet Off Scale
 
 on:
   schedule:
@@ -38,6 +38,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           URL: ${{ github.event.inputs.url }}
           PYTHONUNBUFFERED: "1"
         run: python src/clipper.py

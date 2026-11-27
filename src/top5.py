@@ -3,32 +3,32 @@
 import os
 import editor, scrittore, sorgenti
 
-SCELTA = """You make viral GTA 6 YouTube Shorts / TikToks: "Top 5" compilations of the craziest moments from a streamer's GTA 6 stream.
+SCELTA = """You make viral YouTube Shorts / TikToks ({nicchia}): "Top 5" compilations of the most jaw-dropping moments of a video.
 Source: "{titolo}" by {canale}.
 {notizie}
-From the moments below (absolute seconds, transcript of the streamer), pick 5 DIFFERENT moments, each 5-8 seconds (the whole Short must stay under 45 s, like viral Top 5 Shorts),
-the most viral ones (huge reactions, funny lines, chaos, fails, wins, insane GTA 6 details). Order from #5 to #1 (best last).
-Pick an angle that matches what's viral about GTA 6 right now.
+From the moments below (absolute seconds, transcript of what is said), pick 5 DIFFERENT moments, each 5-8 seconds (the whole Short must stay under 45 s, like viral Top 5 Shorts),
+the most viral ones (shock, awe, action peaks, funny lines, fails, wins, incredible details). Order from #5 to #1 (best last).
+Pick a curiosity angle that makes people watch to the end.
 NEVER pick story spoilers (mission endings, plot twists, deaths, finale) or moments with loud copyrighted music.
 Reply JSON only:
-{{"titolo": "max 60 chars, curiosity title", "descrizione": "1 sentence", "hashtags": ["#gta6", "..."],
+{{"titolo": "max 60 chars, curiosity title", "descrizione": "1 sentence", "hashtags": ["#...", "..."],
  "items": [{{"inizio": 0.0, "fine": 0.0, "perche": "what happens"}}]}}
 
 MOMENTS:
 {momenti}"""
 
-VOCE = """You are the narrator of a viral GTA 6 Shorts compilation titled "{titolo}" (streamer: {canale}).
-For each of the 5 clips you get 3 frames and what the streamer says. Write the narrator line spoken over the
-first seconds of that clip, BEFORE the streamer's reaction plays:
+VOCE = """You are the narrator of a viral Shorts compilation titled "{titolo}" (source: {canale}).
+For each of the 5 clips you get 3 frames and what is said in it. Write the narrator line spoken over the
+first seconds of that clip, BEFORE the original audio plays:
 - max 7 words, punchy, hype gamer tone, present tense;
 - describe ONLY what is really visible in the frames / said in the transcript (no invented facts);
 - start with the rank, e.g. "Number 5: ...".
 Also write "gancio": max 7 words spoken at the very start to stop the scroll, coherent with the clips.
-Then write the post texts. They MUST match what the frames show and what the narrator says (GTA 6 only):
+Then write the post texts. They MUST match what the frames show and what the narrator says (real footage only):
 if the title says someone finds/does something, that thing must be visible or said in the clips. No clickbait lies.
-- "titolo": max 60 chars, curiosity-driven; "descrizione": 1 sentence; "hashtags": 5, include #gta6.
+- "titolo": max 60 chars, curiosity-driven; "descrizione": 1 sentence; "hashtags": 5 relevant.
 Reply JSON only: {{"gancio": "...", "voci": ["...", "...", "...", "...", "..."],
- "titolo": "...", "descrizione": "...", "hashtags": ["#gta6", "..."]}}
+ "titolo": "...", "descrizione": "...", "hashtags": ["#...", "..."]}}
 
 Transcripts:
 {trascritti}"""
@@ -38,13 +38,13 @@ def _parole(tutte, a, b):
     return [(x - a, y - a, w) for x, y, w in tutte if a <= x < b]
 
 
-def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeural"):
+def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeural", nicchia="viral videos"):
     """Ritorna (percorso video, testi per la didascalia)."""
     testo = []
     for i, m in enumerate(momenti):
         frasi = " ".join(f"[{a:.0f}] {w}" if k % 10 == 0 else w for k, (a, _, w) in enumerate(m["parole"]))
         testo.append(f"--- moment {i + 1} (starts {m['inizio']:.0f}) ---\n{frasi or '(loud, no speech)'}")
-    s = scrittore.gemini(chiave, SCELTA.format(titolo=src["titolo"], canale=src["canale"], notizie=notizie,
+    s = scrittore.gemini(chiave, SCELTA.format(nicchia=nicchia, titolo=src["titolo"], canale=src["canale"], notizie=notizie,
                                                momenti="\n".join(testo)), 0.6)
     items = [it for it in s["items"] if 3 <= float(it["fine"]) - float(it["inizio"]) <= 12][:5]
     if len(items) < 3:
@@ -96,4 +96,4 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
     editor.WORK = lavoro
     editor.unisci(segmenti, video)
     return video, {"titolo": s["titolo"], "descrizione": s.get("descrizione", ""),
-                   "hashtags": s.get("hashtags") or ["#gta6"]}
+                   "hashtags": s.get("hashtags") or ["#shorts"]}
