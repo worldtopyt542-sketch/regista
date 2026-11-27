@@ -84,12 +84,13 @@ def nasa(query, usati):
         except Exception:
             continue
         mp4 = [a for a in assets if isinstance(a, str) and a.lower().endswith(".mp4")]
-        for pref in ("~medium.mp4", "~small.mp4", "~mobile.mp4"):
-            ok = [a for a in mp4 if a.lower().endswith(pref)]
-            if ok:
-                return {"id": nid, "src": ok[0].replace("http://", "https://"), "credito": "NASA",
-                        "fonte": f"NASA, {d.get('title', '')}: https://images.nasa.gov/details/"
-                                 + urllib.parse.quote(d["nasa_id"])}
+        # dalla qualita' migliore alla piu' leggera: se la prima e' troppo pesante si prova la successiva
+        alt = [a.replace("http://", "https://") for pref in ("~medium.mp4", "~small.mp4", "~mobile.mp4")
+               for a in mp4 if a.lower().endswith(pref)]
+        if alt:
+            return {"id": nid, "src": alt[0], "alt": alt, "credito": "NASA",
+                    "fonte": f"NASA, {d.get('title', '')}: https://images.nasa.gov/details/"
+                             + urllib.parse.quote(d["nasa_id"])}
     return None
 
 
@@ -106,9 +107,13 @@ def varianti(query, riserva=None):
     return list(dict.fromkeys(q for q in out if q))
 
 
+RISERVE = ("galaxy", "stars night sky", "earth from space", "nature")
+
+
 def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None):
-    """Prova la query e le sue varianti piu' semplici su tutte le fonti."""
-    for q in varianti(query, riserva):
+    """Prova la query e le sue varianti piu' semplici su tutte le fonti, poi ricerche generiche:
+    un segmento senza clip non deve far perdere l'intero video."""
+    for q in varianti(query, riserva) + [r for r in RISERVE if r not in (query, riserva)]:
         try:
             return _trova_clip(q, fonte_preferita, usati, chiavi, cartella, n)
         except RuntimeError as e:
@@ -116,11 +121,16 @@ def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None)
     raise RuntimeError(f"Nessuna clip trovata per '{query}' (anche con ricerche semplificate)")
 
 
+SPENTE = set()  # fonti con chiave rifiutata: non si riprovano per tutta l'esecuzione
+
+
 def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
     """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito)."""
     stock = ["pexels", "pixabay"]
     ordine = ["nasa"] + stock if fonte_preferita == "nasa" else stock + ["nasa"]
     for f in ordine:
+        if f in SPENTE:
+            continue
         try:
             if f == "nasa":
                 info = nasa(query, usati)
@@ -130,14 +140,18 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
                 info = pixabay(query, usati, chiavi.get("pixabay"))
         except Exception as e:
             print(f"   {f}: errore ricerca ({e})")
+            if "api key" in str(e).lower() or "HTTP 401" in str(e) or "HTTP 403" in str(e):
+                SPENTE.add(f)
+                print(f"   {f}: chiave rifiutata, la salto fino alla fine (controlla il secret)")
             continue
         if not info:
             continue
         dest = os.path.join(cartella, f"clip{n}.mp4")
-        try:
-            scarica(info["src"], dest)
-            return dest, info
-        except Exception as e:
-            print(f"   {f}: download fallito ({e})")
-            usati.add(info["id"])
+        for src in info.get("alt") or [info["src"]]:
+            try:
+                scarica(src, dest)
+                return dest, {**info, "src": src}
+            except Exception as e:
+                print(f"   {f}: download fallito ({e})")
+        usati.add(info["id"])
     raise RuntimeError(f"Nessuna clip trovata per '{query}'")

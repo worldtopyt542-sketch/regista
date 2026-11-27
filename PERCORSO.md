@@ -24,12 +24,12 @@ Aggiornato: 27 novembre 2026
 |---|---|---|
 | Clip da video YouTube CC BY (audio + fotogrammi) | ✅ | |
 | Top 5 con voce narrante | ✅ | solo EN |
-| Off Scale Facts con filmati NASA | ✅ | da provare su Actions |
+| Off Scale Facts con filmati NASA | ✅ | primo giro su Actions 27/11: EN/IT/ES ok |
 | Top 5 in IT ed ES (voce tradotta per segmento) | ⬜ | |
 | Scale Check (confronti di grandezza) | ⬜ | FORMAT.md |
 | Long cut 60-90 s | ⬜ | per i programmi che pagano solo > 1 min |
 
-## Target 3 — Senza rischi · **83%**
+## Target 3 — Senza rischi · **86%**
 
 | Task | Stato | Nota |
 |---|---|---|
@@ -38,6 +38,7 @@ Aggiornato: 27 novembre 2026
 | Bot Telegram solo per il proprietario | ✅ | |
 | Errori temporanei non bruciano i video | ✅ | 3 tentativi |
 | Stato salvato con retry, niente push silenziosi | ✅ | salva-stato.sh |
+| Una clip mancante o troppo pesante non fa perdere il video | ✅ | fonti.trova_clip |
 | Repository privato o media su un repo separato | ⬜ | oggi e' pubblico |
 
 ## Target 4 — Tante pagine, tante lingue · **40%**
