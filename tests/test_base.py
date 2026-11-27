@@ -89,5 +89,35 @@ class Editor(unittest.TestCase):
         self.assertEqual(editor.ass_colore("#FFD400"), "&H0000D4FF")
 
 
+class Fonti(unittest.TestCase):
+    def test_nasa_pesante_prova_la_versione_piu_leggera_e_chiave_rifiutata_si_spegne(self):
+        import fonti
+        chiamate, scaricati = [], []
+
+        def pixabay(q, usati, chiave):
+            chiamate.append(q)
+            raise RuntimeError("HTTP 400: [ERROR 400] Invalid API key.")
+
+        def scarica(src, dest, max_mb=200):
+            scaricati.append(src)
+            if "medium" in src:
+                raise RuntimeError("file troppo grande (928 MB)")
+
+        vecchi = fonti.pixabay, fonti.scarica, fonti.pexels, fonti.nasa
+        fonti.pixabay, fonti.scarica = pixabay, scarica
+        fonti.pexels = lambda q, u, c: None
+        fonti.nasa = lambda q, u: {"id": "nasa:x", "src": "a~medium.mp4", "alt": ["a~medium.mp4", "a~small.mp4"],
+                                   "credito": "NASA", "fonte": "NASA"}
+        fonti.SPENTE.clear()
+        try:
+            _, info = fonti.trova_clip("jupiter", "stock", set(), {"pixabay": "k"}, "/tmp", 0)
+            fonti.trova_clip("saturn", "stock", set(), {"pixabay": "k"}, "/tmp", 1)
+        finally:
+            fonti.pixabay, fonti.scarica, fonti.pexels, fonti.nasa = vecchi
+            fonti.SPENTE.clear()
+        self.assertEqual(info["src"], "a~small.mp4")
+        self.assertEqual(chiamate, ["jupiter"])  # Pixabay non si riprova dopo la chiave rifiutata
+
+
 if __name__ == "__main__":
     unittest.main()

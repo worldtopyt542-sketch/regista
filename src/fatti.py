@@ -69,6 +69,7 @@ def main():
     chiavi = {"gemini": os.environ.get("GEMINI_API_KEY"), "pexels": os.environ.get("PEXELS_API_KEY"),
               "pixabay": os.environ.get("PIXABAY_API_KEY"), "telegram": os.environ.get("TELEGRAM_BOT_TOKEN"),
               "youtube": os.environ.get("YOUTUBE_API_KEY")}
+    chiavi = {k: (v or "").strip() or None for k, v in chiavi.items()}  # spazi/a capo incollati nel secret
     mancanti = [k for k in ("gemini", "telegram") if not chiavi[k]]
     if mancanti:
         sys.exit(f"Mancano i secret: {mancanti}. Aggiungili in Settings > Secrets and variables > Actions.")
