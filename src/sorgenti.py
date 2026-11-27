@@ -1,5 +1,4 @@
-# ==== AGENT SORGENTI: raccoglie i video lunghi da clippare ====
-# 1) link mandati al bot Telegram  2) nuovi video dai canali in config.json  3) URL passato a mano
+# ==== AGENT SORGENTI: scarica info, audio e pezzi dei video lunghi (yt-dlp) ====
 import json, os, subprocess
 
 
@@ -11,32 +10,6 @@ def _yt(args):
     if r.returncode != 0:
         raise RuntimeError("yt-dlp: " + r.stderr.strip()[-400:])
     return r.stdout
-
-
-# Rockstar rimuove gli spoiler della storia: niente live di finali/epiloghi
-ESCLUSE = ("finale", "ending", "beating", "final mission", "last mission", "epilogue", "credits", "spoiler")
-
-
-def da_canali(canali, parole, fatti, quanti=2):
-    """Ultimi video dei canali in lista che parlano del tema (es. 'gta')."""
-    out = []
-    for c in canali:
-        presi = 0
-        try:
-            righe = _yt(["--flat-playlist", "--playlist-end", "8", "--print", "%(url)s\t%(title)s",
-                         "--yes-playlist", c]).splitlines()
-        except RuntimeError as e:
-            print(f"   Sorgenti: {c} saltato ({e})")
-            continue
-        for r in righe:
-            url, _, titolo = r.partition("\t")
-            t = titolo.lower()
-            if url not in fatti and any(p in t for p in parole) and not any(x in t for x in ESCLUSE):
-                out.append(url)
-                presi += 1
-                if presi >= quanti:
-                    break
-    return out
 
 
 def info(url):

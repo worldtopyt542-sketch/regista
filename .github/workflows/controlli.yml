@@ -1,0 +1,37 @@
+name: Controlli (PR)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  controlli:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Installa ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+      - run: pip install -q numpy requests edge-tts pillow
+      - name: Il codice si compila
+        run: python -m py_compile src/*.py
+      - name: Test (senza chiavi, senza rete)
+        run: python -m unittest discover -s tests -v
+      - name: Nessun file di stato toccato a mano
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch -q origin "${{ github.base_ref }}" --depth=1
+          if git diff --name-only "origin/${{ github.base_ref }}"...HEAD 2>/dev/null | grep -E '^(archivio|clipper|pubblica)\.json$|^pronte/.*\.json$'; then
+            echo "::warning::La PR modifica file di stato scritti dal bot: controlla che sia voluto"
+          fi
+      - name: Anteprima del format (template + brand kit)
+        run: python src/anteprima.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: anteprima-format
+          path: anteprima/*.png
+          retention-days: 14

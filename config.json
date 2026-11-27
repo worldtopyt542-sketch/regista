@@ -1,44 +1,69 @@
 {
- "video_al_giorno": 2,
- "voce": "en-US-GuyNeural",
- "durata_max": 45,
- "modello_gemini": "auto",
- "temi": [
-  "GTA 6 latest news today",
-  "GTA 6 hidden secrets and easter eggs",
-  "GTA 6 fastest ways to make money",
-  "GTA 6 Leonida map secrets",
-  "GTA 6 best cars and vehicles",
-  "GTA 6 sales and records",
-  "GTA 6 vs GTA 5 differences",
-  "GTA 6 funniest NPC details",
-  "GTA 6 best weapons",
-  "GTA 6 Online multiplayer news",
-  "GTA 6 tips for beginners",
-  "GTA 6 Vice City locations"
- ],
- "clipper": {
-  "parole_chiave": [
-   "gta",
-   "grand theft auto"
+ "_come": "Il prodotto e' replicabile: per un nuovo canale si cambiano 'brand' (+ assets), clipper.ricerche e fatti.temi. Vedi FORMAT.md.",
+ "brand": {
+  "nome": "Planet Off Scale",
+  "handle": "@planetoffscale",
+  "colore": "#FFD400",
+  "logo_video": "assets/logo_video.png",
+  "font": "Inter Display Black",
+  "nicchia": "Planet Off Scale: jaw-dropping real videos of space and rocket launches, wild animals and nature, and incredible moments caught on camera",
+  "tono": "awe-struck documentary narrator: short, vivid, factual sentences, numbers and scale comparisons",
+  "hashtag_fissi": [
+   "#shorts",
+   "#planetoffscale"
   ],
+  "cta": {
+   "en": "Follow for more off-scale moments",
+   "it": "Seguici per altri momenti fuori scala",
+   "es": "Síguenos para más momentos fuera de escala",
+   "hi": "ऐसे और वीडियो के लिए फॉलो करें",
+   "pcm": "Follow us for more crazy moments"
+  }
+ },
+ "modello_gemini": "auto",
+ "durata_max": 45,
+ "lingue": {
+  "en": {
+   "nome": "English",
+   "voce": "en-US-GuyNeural"
+  },
+  "it": {
+   "nome": "Italian",
+   "voce": "it-IT-DiegoNeural"
+  },
+  "es": {
+   "nome": "Spanish (Latin American)",
+   "voce": "es-MX-JorgeNeural"
+  }
+ },
+ "lingue_future": {
+  "hi": {
+   "nome": "Hindi",
+   "voce": "hi-IN-MadhurNeural",
+   "font": "Noto Sans Devanagari"
+  },
+  "pcm": {
+   "nome": "Nigerian Pidgin English",
+   "voce": "en-NG-AbeoNeural"
+  },
+  "pt": {
+   "nome": "Portuguese (Brazil)",
+   "voce": "pt-BR-AntonioNeural"
+  },
+  "de": {
+   "nome": "German",
+   "voce": "de-DE-ConradNeural"
+  }
+ },
+ "clipper": {
   "video_per_giro": 4,
   "clip_per_video": 4,
   "momenti_candidati": 14,
   "whisper": "small",
-  "auto_pubblica_sopra": null,
   "clip_al_giorno": 8,
   "ore_per_blocco": 3,
   "top5_al_giorno": 2,
-  "canali_gta": [
-   "https://www.twitch.tv/kaicenat/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/xqc/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/summit1g/videos?filter=archives&sort=time",
-   "https://www.twitch.tv/caseoh_/videos?filter=archives&sort=time",
-   "https://www.youtube.com/@IShowSpeed/streams"
-  ],
-  "nicchia": "Planet Off Scale: jaw-dropping real videos of space and rocket launches, wild animals and nature, and incredible moments caught on camera",
-  "hashtag_base": "#shorts",
+  "min_views": 1000000,
   "ricerche": [
    "rocket launch",
    "SpaceX launch",
@@ -58,21 +83,51 @@
    "nature documentary",
    "drone footage",
    "satisfying"
-  ],
-  "min_views": 1000000
+  ]
+ },
+ "fatti": {
+  "al_giorno": 1,
+  "trend_scout": true,
+  "auto_se_critic_ok": false,
+  "temi": [
+   "the biggest stars and black holes",
+   "the sun's raw power",
+   "life on the International Space Station",
+   "the deepest parts of the ocean",
+   "the largest animals that ever lived",
+   "the fastest animals on Earth",
+   "volcanoes and supervolcanoes",
+   "tornadoes and hurricanes from space",
+   "the moons of Jupiter and Saturn",
+   "rocket launches by the numbers",
+   "Mars, the red planet",
+   "how small Earth is in the universe",
+   "animal superpowers",
+   "the tallest trees and biggest forests",
+   "lightning and electrical phenomena",
+   "comets, asteroids and meteors",
+   "Earth's most extreme places",
+   "migrations across the planet"
+  ]
  },
  "pubblica": {
+  "servizio": "buffer",
   "piattaforme": [
    "tiktok",
    "instagram",
    "youtube"
   ],
+  "auto_pubblica_sopra": null,
+  "_canali": "id dei canali Buffer per lingua (workflow 'Buffer - diagnosi' li elenca). Vuoto = tutto su tutti i canali, solo EN.",
+  "canali": {
+   "en": [],
+   "it": [],
+   "es": []
+  },
   "profili": {
    "en": "",
    "it": "",
-   "es": "",
-   "hi": "",
-   "pcm": ""
+   "es": ""
   },
   "orari": {
    "en": {
@@ -90,32 +145,6 @@
      "22:30"
     ]
    }
-  },
-  "servizio": "buffer"
- },
- "lingue": {
-  "en": {
-   "nome": "English",
-   "voce": "en-US-GuyNeural"
-  }
- },
- "lingue_future": {
-  "it": {
-   "nome": "Italian",
-   "voce": "it-IT-DiegoNeural"
-  },
-  "es": {
-   "nome": "Spanish (Latin American)",
-   "voce": "es-MX-JorgeNeural"
-  },
-  "hi": {
-   "nome": "Hindi",
-   "voce": "hi-IN-MadhurNeural",
-   "font": "Noto Sans Devanagari"
-  },
-  "pcm": {
-   "nome": "Nigerian Pidgin English",
-   "voce": "en-NG-AbeoNeural"
   }
  }
 }

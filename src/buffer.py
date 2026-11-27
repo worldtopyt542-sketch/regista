@@ -76,11 +76,14 @@ def metadati(servizio, titolo):
     return {}
 
 
-def pubblica(url_video, titolo, testo, servizi=("tiktok", "instagram", "youtube")):
-    """Pubblica subito il video (link pubblico) su tutti i canali Buffer dei servizi scelti."""
+def pubblica(url_video, titolo, testo, servizi=("tiktok", "instagram", "youtube"), ammessi=None):
+    """Pubblica subito il video (link pubblico) sui canali Buffer dei servizi scelti.
+    ammessi: lista di id canale (una lingua = le sue pagine); None = tutti i canali."""
     esiti = []
     for c in canali():
         if c["service"] not in servizi or c["isDisconnected"]:
+            continue
+        if ammessi is not None and c["id"] not in ammessi:
             continue
         inp = {"channelId": c["id"], "text": testo, "mode": "shareNow", "schedulingType": "automatic",
                "assets": [{"video": {"url": url_video, "metadata": {"title": titolo[:100]}}}],
@@ -137,6 +140,8 @@ def canali():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         mostra(sys.argv[1:])
-        print("CANALI:", json.dumps([{k: c[k] for k in ("name", "service", "isDisconnected")} for c in canali()]))
+        print("CANALI (copia gli id in config.json -> pubblica.canali -> lingua):")
+        for c in canali():
+            print(f"  {c['id']}  {c['service']:<10} {c['name']}{'  (scollegato)' if c['isDisconnected'] else ''}")
     else:
         diagnosi()

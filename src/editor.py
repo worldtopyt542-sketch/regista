@@ -73,22 +73,45 @@ def ass_filtro(path):
     return f"ass={path}:fontsdir={os.path.join(ASSETS, 'fonts')}"
 
 
+def _brand():
+    import comune
+    return comune.brand()
+
+
+def ass_colore(hexrgb, alpha="00"):
+    """'#FFD400' -> '&H0000D4FF' (ASS vuole alpha+BGR)."""
+    h = hexrgb.lstrip("#")
+    return f"&H{alpha}{h[4:6]}{h[2:4]}{h[0:2]}".upper()
+
+
+def logo_path():
+    return os.path.join(os.path.dirname(ASSETS), _brand()["logo_video"])
+
+
+def filtro_marchio(d, ingresso, logo, uscita, y_logo=548):
+    """Pezzo di filtergraph: logo 'bug' + barra di avanzamento nel colore del brand (Y della barra: 1150)."""
+    col = "0x" + _brand()["colore"].lstrip("#")
+    return (f"{logo}scale=260:-1,format=rgba,colorchannelmixer=aa=0.9[logo];"
+            f"{ingresso}drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[mb];"
+            f"color=c={col}:s=1080x14:d={d:.2f}[bar];"
+            f"[mb][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[mc];"
+            f"[mc][logo]overlay=x=24:y={y_logo}{uscita}")
+
+
 def marchia(video, out):
-    """Format riconoscibile su ogni video: logo 'bug' in alto a sinistra del video + barra di avanzamento gialla."""
+    """Format riconoscibile su ogni video: logo 'bug' + barra di avanzamento (usato da Top 5 e Facts)."""
     d = durata(video)
-    fc = (f"[1:v]scale=260:-1,format=rgba,colorchannelmixer=aa=0.9[logo];"
-          f"[0:v]drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[b];"
-          f"color=c=0xFFD400:s=1080x14:d={d:.2f}[bar];"
-          f"[b][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[c];"
-          f"[c][logo]overlay=x=24:y=548[v]")
-    run(["ffmpeg", "-y", "-i", video, "-i", os.path.join(ASSETS, "logo_video.png"), "-filter_complex", fc,
+    fc = filtro_marchio(d, "[0:v]", "[1:v]", "[v]")
+    run(["ffmpeg", "-y", "-i", video, "-i", logo_path(), "-filter_complex", fc,
          "-map", "[v]", "-map", "0:a?", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-maxrate", "3M",
          "-bufsize", "6M", "-pix_fmt", "yuv420p", "-c:a", "copy", "-movflags", "+faststart", out])
     return out
 
 
-def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84):
-    font = font or FONT
+def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84, cta=""):
+    b = _brand()
+    font = font or b.get("font") or FONT
+    acc = ass_colore(b["colore"])
     pulisci = lambda s: s.replace("{", "(").replace("}", ")").replace("\n", " ")
     righe = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}", "",
@@ -98,30 +121,33 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         "Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
         # zone sicure: niente testo nel 10% alto, 15% basso, 12% destro (pulsanti di YouTube)
         f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
-        f"Style: Rank,{font},190,&H0000D4FF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
-        f"Style: Hook,{font},70,&H00000000,&H000000FF,&H0000D4FF,&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
+        f"Style: Rank,{font},190,{acc},&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
+        f"Style: Hook,{font},70,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
         f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
+        f"Style: Cta,{font},54,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,14,0,2,80,170,400,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     if etichetta:
         righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Rank,,0,0,0,,{pulisci(etichetta)}")
     if hook:  # titolo-gancio in un box nero per i primi 3 secondi
         righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(min(3, dur))},Hook,,0,0,0,,{pulisci(hook).upper()}")
-    giallo, bianco = r"{\c&H0000D4FF&}", r"{\c&H00FFFFFF&}"
+    giallo, bianco = "{\\c" + acc + "&}", r"{\c&H00FFFFFF&}"
     for g in gruppi:  # la parola pronunciata diventa gialla (#FFD400)
         for i, (a, b, _) in enumerate(g):
             txt = " ".join((giallo + pulisci(w).upper() + bianco) if j == i else pulisci(w).upper()
                            for j, (_, _, w) in enumerate(g))
             righe.append(f"Dialogue: 0,{t_ass(a)},{t_ass(b)},Cap,,0,0,0,,{txt}")
     righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Cred,,0,0,0,,{pulisci(credito)}")
+    if cta and dur > 6:  # invito a seguire negli ultimi 2.5 s, con dissolvenza
+        righe.append(f"Dialogue: 1,{t_ass(dur - 2.5)},{t_ass(dur)},Cta,,0,0,0,,{{\\fad(250,0)}}{pulisci(cta).upper()}")
     with open(path, "w", encoding="utf-8") as f:
         f.write("\n".join(righe) + "\n")
 
 
-def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None):
+def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None, cta=""):
     dur = durata(audio) + 0.25
     ass = os.path.join(WORK, f"seg{n}.ass")
-    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font)
+    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font, cta=cta)
     z = f"(1+0.08*t/{dur:.2f})"  # zoom lento da 1.00 a 1.08
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
           f"scale=w='trunc({W}*{z}/2)*2':h='trunc({H}*{z}/2)*2':eval=frame,crop={W}:{H},"

@@ -55,3 +55,36 @@ def cerca(chiave, ricerche, fatti, min_views=1_000_000, quanti=4):
     for t in trovati[:quanti]:
         print(f"   Scopritore: {t['views']:,} views · {t['titolo'][:60]} ({t['canale']})")
     return trovati[:quanti]
+
+
+class LicenzaNonLibera(RuntimeError):
+    """Errore definitivo: il video non si puo' usare (non riprovare)."""
+
+
+def id_youtube(url):
+    m = re.search(r"(?:v=|youtu\.be/|shorts/|live/)([\w-]{11})", url or "")
+    return m.group(1) if m else None
+
+
+DOMINI_PUBBLICO_DOMINIO = ("nasa.gov",)  # NASA: pubblico dominio (salvo materiale di terzi)
+
+
+def verifica(chiave, url):
+    """Ritorna {'autore','titolo','url','licenza'} se il video si puo' usare, altrimenti LicenzaNonLibera.
+    Vale anche per i link mandati a mano o via Telegram: niente piu' '(CC BY)' dato per scontato."""
+    vid = id_youtube(url)
+    if vid:
+        if not chiave:  # temporaneo: il video si riprova quando c'e' la chiave
+            raise RuntimeError("manca YOUTUBE_API_KEY: non posso verificare la licenza")
+        it = _get("videos", chiave, part="snippet,status", id=vid).get("items", [])
+        if not it:
+            raise LicenzaNonLibera("video YouTube non trovato")
+        if it[0].get("status", {}).get("license") != "creativeCommon":
+            raise LicenzaNonLibera("licenza YouTube standard (non Creative Commons): non si puo' usare")
+        sn = it[0]["snippet"]
+        return {"autore": sn.get("channelTitle", ""), "titolo": sn.get("title", ""),
+                "url": "https://www.youtube.com/watch?v=" + vid, "licenza": "CC BY"}
+    dominio = re.sub(r"^https?://([^/]+).*", r"\1", url or "").lower()
+    if any(dominio == d or dominio.endswith("." + d) for d in DOMINI_PUBBLICO_DOMINIO):
+        return {"autore": "NASA", "titolo": "", "url": url, "licenza": "Public domain"}
+    raise LicenzaNonLibera(f"fonte non ammessa ({dominio}): solo YouTube CC BY o NASA")
