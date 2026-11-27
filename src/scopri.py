@@ -28,7 +28,8 @@ def cerca(chiave, ricerche, fatti, min_views=1_000_000, quanti=4):
         for durata in ("medium", "long"):  # 4-20 min e > 20 min: materiale per piu' clip
             try:
                 ris = _get("search", chiave, part="id", q=q, type="video", videoLicense="creativeCommon",
-                           order="viewCount", videoDuration=durata, maxResults=25)
+                           order="viewCount", videoDuration=durata, maxResults=25,
+                           relevanceLanguage="en", regionCode="US")
                 ids = [i["id"]["videoId"] for i in ris.get("items", [])]
                 if not ids:
                     continue
@@ -41,7 +42,9 @@ def cerca(chiave, ricerche, fatti, min_views=1_000_000, quanti=4):
             for v in det.get("items", []):
                 url = "https://www.youtube.com/watch?v=" + v["id"]
                 views = int(v.get("statistics", {}).get("viewCount", 0))
-                if (v.get("status", {}).get("license") != "creativeCommon" or views < min_views
+                lingua = (v["snippet"].get("defaultAudioLanguage") or v["snippet"].get("defaultLanguage") or "en")[:2]
+                if (v.get("status", {}).get("license") != "creativeCommon" or views < min_views or lingua != "en"
+                        or re.search(r"[\u0900-\u097F]", v["snippet"]["title"])
                         or url in fatti or any(t["url"] == url for t in trovati)):
                     continue
                 trovati.append({"url": url, "titolo": v["snippet"]["title"], "canale": v["snippet"]["channelTitle"],

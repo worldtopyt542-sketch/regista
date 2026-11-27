@@ -33,8 +33,18 @@ def messaggio(token, chat_id, testo, bottoni=None):
     return r
 
 
-def video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True):
+def video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True, tentativi=3):
     """Ritorna il messaggio inviato (serve il file_id del video per pubblicarlo dopo)."""
+    for t in range(tentativi):  # l'upload su Telegram a volte va in timeout: riprova
+        try:
+            return _video(token, chat_id, percorso, didascalia, bottoni, silenzioso)
+        except requests.exceptions.RequestException as e:
+            if t == tentativi - 1:
+                raise
+            print("   Telegram: invio fallito, riprovo", e)
+
+
+def _video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True):
     with open(percorso, "rb") as f:
         r = requests.post(API.format(token=token, metodo="sendVideo"),
                           data={"chat_id": chat_id, "caption": didascalia[:1000],
