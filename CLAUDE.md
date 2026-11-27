@@ -1,9 +1,11 @@
 # Regole del progetto (per Claude)
 - Rispondi in italiano. Domande all'utente: brevi, sempre a scelta multipla (A, B, C, D...).
 - Risparmia token: niente spiegazioni lunghe, agisci.
-- Tema: Planet Off Scale = spazio/lanci, animali/natura, momenti incredibili. SOLO video Creative Commons BY (>=1M views, src/scopri.py) o pubblico dominio: niente copyright. Credito 'Autore (CC BY)' sempre. Obiettivo: clip virali, intervento umano minimo.
-- Pipeline principale: `src/clipper.py` (workflow "Autoclipper Planet Off Scale"; vecchi canali GTA in config clipper.canali_gta, spenti). `src/regista.py` = news Top 5 GTA 6.
-- Top 5 (src/top5.py): 2 al giorno dai momenti virali delle live, voce narrante scritta da Gemini guardando i fotogrammi. `src/regista.py` (news) solo manuale.
-- Pubblicazione: `src/pubblica.py` ogni 15 min via Buffer (`src/buffer.py`, GraphQL api.buffer.com); video messi online come asset di Release GitHub (MEDIA_REPO/MEDIA_TOKEN o repo stesso se pubblico). ✅ = prossimo orario migliore; report 20 UTC.
-- Stato: archivio.json (news), clipper.json (clipper), pubblica.json (pubblicatore).
-- Collaborazione (2 sviluppatori, ognuno col suo Claude Code): leggi COLLABORARE.md. Mai commit diretti su main: branch `nome/cosa` + Pull Request; collega la PR all'Issue; non modificare a mano archivio.json/clipper.json/pubblica.json.
+- Tema: Planet Off Scale = spazio/lanci, animali/natura, momenti incredibili. SOLO video YouTube Creative Commons BY (licenza verificata da `scopri.verifica`, anche per i link manuali) o NASA pubblico dominio / Pixabay / Pexels. Credito con autore, link e licenza sempre (`comune.attribuzione`). GTA abbandonato: non riproporlo.
+- Prodotto replicabile: brand kit in `config.json` -> `brand`, letto da `src/comune.py`. Niente nome del canale scritto nel codice. Catalogo format: `FORMAT.md`.
+- Format: Clip (`src/clipper.py`, notte), Top 5 (`src/top5.py`, dentro il clipper), Off Scale Facts (`src/fatti.py`, workflow "Off Scale Facts").
+- Ogni video prodotto = un **gruppo** (tutte le lingue) in `pronte/<id>.json` + un messaggio Telegram con un solo ✅. `auto_pubblica_sopra` programma da solo sopra quel punteggio.
+- Pubblicazione: `src/pubblica.py` ogni 15 min via Buffer (`src/buffer.py`); ogni lingua solo sui suoi canali (`pubblica.canali`). Il bot obbedisce solo alla chat del proprietario. Video online come asset di Release GitHub.
+- Stato (li scrive il bot, mai a mano): archivio.json (Facts + chat_id), clipper.json, pubblica.json, pronte/. I workflow salvano con `.github/salva-stato.sh`.
+- Prima della PR: `python -m unittest discover -s tests` e `python src/anteprima.py` (PNG in anteprima/). Agent pronti in `.claude/agents/`: format-designer, revisore-pr, nuovo-canale.
+- Collaborazione (2 sviluppatori, ognuno col suo Claude Code): leggi COLLABORARE.md. Mai commit diretti su main: branch `nome/cosa` + Pull Request; collega la PR all'Issue.

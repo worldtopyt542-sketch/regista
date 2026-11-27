@@ -1,12 +1,14 @@
 # ==== AGENT PUBBLICATORE + PROGRAMMATORE + REPORT ====
-# Ogni 15 min: legge Telegram (link -> coda, ✅ -> programma nel prossimo orario migliore della lingua),
-# pubblica quelli scaduti via Upload-Post, alle 20 UTC manda il report del giorno.
+# Ogni 15 min: legge Telegram (solo dalla chat del proprietario: link -> coda, ✅ -> programma il gruppo in TUTTE
+# le sue lingue, ognuna nel prossimo orario migliore del suo pubblico), programma da solo i gruppi auto-approvati,
+# pubblica quelli scaduti via Buffer (canali per lingua) o Upload-Post, alle 20 UTC manda il report del giorno.
 import datetime as dt, json, os, re, sys, tempfile
 from zoneinfo import ZoneInfo
 import requests
 
 sys.path.insert(0, os.path.dirname(__file__))
-from regista import CONFIG, RADICE, carica, salva
+import comune
+from comune import CONFIG, RADICE, carica, salva
 
 STATO = os.path.join(RADICE, "pubblica.json")
 TG = "https://api.telegram.org/bot{t}/{m}"
@@ -41,7 +43,7 @@ def leggi_didascalia(cap):
 
 
 def prossimo_slot(lingua, occupati, cfg):
-    o = (cfg.get("orari") or ORARI).get(lingua) or ORARI["en"]
+    o = (cfg.get("orari") or {}).get(lingua) or ORARI.get(lingua) or ORARI["en"]
     tz = ZoneInfo(o["tz"])
     ora = dt.datetime.now(tz)
     for d in range(60):
@@ -73,11 +75,30 @@ def url_pubblico(percorso, nome):
     return up.json()["browser_download_url"]
 
 
+def canali_lingua(lingua, cfg):
+    """Buffer: id dei canali di quella lingua (config pubblica.canali). None = tutti (solo se la mappa e' vuota)."""
+    mappa = {k: v for k, v in (cfg.get("canali") or {}).items() if v}
+    if not mappa:
+        return None if lingua == "en" else []
+    return mappa.get(lingua, [])
+
+
+def ha_destinazione(lingua, cfg):
+    if cfg.get("servizio", "buffer") == "buffer":
+        return canali_lingua(lingua, cfg) != []
+    return bool((cfg.get("profili") or {}).get(lingua) or (lingua == "en" and os.environ.get("UPLOAD_POST_USER")))
+
+
+def testo_post(titolo, desc, tags, credito):
+    return f"{titolo}\n\n{desc}\n\n{tags}" + (f"\n\n{credito}" if credito else "")
+
+
 def pubblica_buffer(percorso, titolo, desc, tags, canale, lingua, cfg):
     import buffer
     url = url_pubblico(percorso, f"{dt.datetime.now():%Y%m%d%H%M%S}_{lingua}.mp4")
-    testo = f"{titolo}\n\n{desc}\n\n{tags}" + (f"\n\nCredit: {canale}" if canale else "")
-    esiti = buffer.pubblica(url, titolo, testo, cfg.get("piattaforme", ["tiktok", "instagram", "youtube"]))
+    credito = canale if "\n" in canale or canale.startswith("🎥") else (f"Credit: {canale}" if canale else "")
+    esiti = buffer.pubblica(url, titolo, testo_post(titolo, desc, tags, credito),
+                            cfg.get("piattaforme", ["tiktok", "instagram", "youtube"]), canali_lingua(lingua, cfg))
     falliti = [f"{e['servizio']}: {e['errore']}" for e in esiti if not e["ok"]]
     if falliti and len(falliti) == len(esiti):
         raise RuntimeError("Buffer: " + " | ".join(falliti))
@@ -97,7 +118,7 @@ def pubblica_uploadpost(percorso, titolo, desc, tags, canale, lingua, cfg):
     if not (chiave and utente):
         raise RuntimeError("mancano i secret UPLOAD_POST_API_KEY / UPLOAD_POST_USER")
     dati = [("user", utente), ("title", f"{titolo} {tags}"[:100]),
-            ("description", f"{titolo}\n\n{desc}\n\n{tags}" + (f"\n\nCredit: {canale}" if canale else ""))]
+            ("description", testo_post(titolo, desc, tags, canale if canale.startswith("🎥") else (f"Credit: {canale}" if canale else "")))]
     dati += [("platform[]", p) for p in cfg.get("piattaforme", ["tiktok", "instagram", "youtube"])]
     with open(percorso, "rb") as f:
         r = requests.post("https://api.upload-post.com/api/upload", headers={"Authorization": "Apikey " + chiave},
@@ -146,6 +167,10 @@ def report(token, st, chat):
     for x in di_oggi:
         per_lingua[x["lingua"]] = per_lingua.get(x["lingua"], 0) + (x["esito"] == "ok")
     errori = sum(x["esito"] != "ok" for x in di_oggi)
+    per_formato = {}
+    for x in di_oggi:
+        if x["esito"] == "ok":
+            per_formato[x.get("formato") or "?"] = per_formato.get(x.get("formato") or "?", 0) + 1
     yt_ids = [i for x in log for i in x.get("yt", [])]
     viste = visualizzazioni_yt(yt_ids)
     if viste is None and os.environ.get("BUFFER_API_KEY"):
@@ -154,6 +179,7 @@ def report(token, st, chat):
     prossimi = sorted(st["programmati"], key=lambda p: p["quando"])[:5]
     testo = [f"📊 REPORT {oggi}",
              f"Pubblicati oggi: {sum(per_lingua.values())} " + " ".join(f"{k.upper()}:{v}" for k, v in per_lingua.items()),
+             "Per formato: " + (" ".join(f"{k}:{v}" for k, v in per_formato.items()) or "-"),
              f"Errori oggi: {errori}", f"In programma: {len(st['programmati'])}",
              f"Totale pubblicati: {sum(x['esito'] == 'ok' for x in log)}"]
     if viste is not None:
@@ -163,31 +189,84 @@ def report(token, st, chat):
     tg(token, "sendMessage", chat_id=chat, text="\n".join(testo))
 
 
+def testi_gruppo(g, lingua):
+    """(titolo, descrizione, hashtag, credito, lingua) dal file del gruppo: niente piu' parsing della didascalia."""
+    v = g["versioni"][lingua]
+    credito = g.get("crediti") or comune.attribuzione(g.get("fonte"))
+    return v["titolo"], v.get("descrizione", ""), " ".join(v.get("hashtags") or []), credito, lingua
+
+
+def programma_gruppo(token, st, g, cfg, avvisi):
+    """Mette in programma ogni lingua del gruppo che ha un canale; le altre le salta (e lo dice una volta)."""
+    occupati = {p["slot"] for p in st["programmati"]} | set(st.get("slot_usati", []))
+    righe = []
+    for lingua, v in g["versioni"].items():
+        if not v.get("file_id"):
+            continue
+        if not ha_destinazione(lingua, cfg):
+            avvisi.add(lingua)
+            continue
+        quando, slot = prossimo_slot(lingua, occupati, cfg)
+        occupati.add(slot)
+        st["programmati"].append({"gruppo": g["id"], "lingua": lingua, "file_id": v["file_id"], "msg": v.get("msg", ""),
+                                  "slot": slot, "quando": quando.astimezone(dt.timezone.utc).isoformat()})
+        righe.append(f"{lingua.upper()} {quando:%d/%m %H:%M}")
+    st.setdefault("gruppi_fatti", []).append(g["id"])
+    if g.get("msg_bottoni"):
+        c, m = g["msg_bottoni"].split(":")
+        segna(token, c, m, "🕒 " + (" · ".join(righe) or "nessun canale configurato"))
+
+
 def main():
     token = os.environ["TELEGRAM_BOT_TOKEN"]
     cfg = carica(CONFIG, {}).get("pubblica", {})
     st = carica(STATO, {})
-    for k, v in {"ultimo_update": 0, "coda_link": [], "pubblicati": [], "programmati": [], "log": []}.items():
+    for k, v in {"ultimo_update": 0, "coda_link": [], "pubblicati": [], "programmati": [], "log": [],
+                 "gruppi_fatti": [], "in_attesa": []}.items():
         st.setdefault(k, v)
     chat = carica(os.path.join(RADICE, "archivio.json"), {}).get("chat_id")
+    tutti = comune.gruppi()
+    avvisi = set()
     upd = requests.get(TG.format(t=token, m="getUpdates"),
                        params={"offset": st["ultimo_update"] + 1, "timeout": 0}, timeout=60).json().get("result", [])
     for u in upd:
         st["ultimo_update"] = u["update_id"]
+        mittente = (u.get("message") or (u.get("callback_query") or {}).get("message") or {}).get("chat", {}).get("id")
+        if chat and mittente != chat:  # il bot obbedisce solo al proprietario
+            print("   ignorato update da chat", mittente)
+            continue
         if u.get("message"):
             nuovi = URL_RE.findall(u["message"].get("text") or "")
             if nuovi:
                 st["coda_link"] = list(dict.fromkeys(st["coda_link"] + nuovi))[-50:]
                 tg(token, "sendMessage", chat_id=u["message"]["chat"]["id"],
-                   text=f"📥 {len(nuovi)} link in coda per il clipper (parte entro 3 ore).")
+                   text=f"📥 {len(nuovi)} link in coda per il clipper (licenza verificata prima di clippare).")
             continue
         q = u.get("callback_query")
-        if not q or q.get("data") not in ("ok", "no"):
+        if not q:
             continue
+        dato = q.get("data", "")
         msg = q["message"]
+        if ":" in dato and dato.split(":")[0] in ("ok", "no"):  # gruppo: un ✅ per tutte le lingue
+            azione, gid = dato.split(":", 1)
+            tg(token, "answerCallbackQuery", callback_query_id=q["id"], text="Ricevuto")
+            if gid in st["gruppi_fatti"]:
+                continue
+            if azione == "no":
+                st["gruppi_fatti"].append(gid)
+                segna(token, msg["chat"]["id"], msg["message_id"], "❌ Scartata")
+            elif gid in tutti:
+                programma_gruppo(token, st, tutti[gid], cfg, avvisi)
+            else:  # il clipper non ha ancora salvato il gruppo: lo programmo al prossimo giro
+                st["in_attesa"] = list(dict.fromkeys(st["in_attesa"] + [gid]))
+                segna(token, msg["chat"]["id"], msg["message_id"], "⏳ Approvata, in coda")
+            continue
+        if dato not in ("ok", "no"):
+            continue
+        # vecchi messaggi (un bottone per video)
         chiave = f"{msg['chat']['id']}:{msg['message_id']}"
         tg(token, "answerCallbackQuery", callback_query_id=q["id"], text="Ricevuto")
-        if q["data"] == "no":
+        if dato == "no":
             segna(token, msg["chat"]["id"], msg["message_id"], "❌ Scartata")
             continue
         if chiave in st["pubblicati"] or any(p["msg"] == chiave for p in st["programmati"]):
@@ -199,13 +278,31 @@ def main():
                                   "lingua": lingua, "slot": slot, "quando": quando.astimezone(dt.timezone.utc).isoformat()})
         segna(token, msg["chat"]["id"], msg["message_id"], f"🕒 {lingua.upper()} {quando:%d/%m %H:%M} (ora locale)")
 
+    # gruppi approvati prima che il file arrivasse + gruppi auto-approvati dal punteggio
+    for gid in list(st["in_attesa"]):
+        if gid in tutti and gid not in st["gruppi_fatti"]:
+            programma_gruppo(token, st, tutti[gid], cfg, avvisi)
+        if gid in tutti or gid in st["gruppi_fatti"]:
+            st["in_attesa"].remove(gid)
+    for gid, g in tutti.items():
+        if g.get("auto") and gid not in st["gruppi_fatti"]:
+            programma_gruppo(token, st, g, cfg, avvisi)
+    if avvisi and chat:
+        tg(token, "sendMessage", chat_id=chat, text="ℹ️ Nessun canale per: " + ", ".join(sorted(avvisi)).upper()
+           + ". Aggiungi gli id in config.json → pubblica.canali (lista: workflow 'Buffer - diagnosi').")
+
     adesso = dt.datetime.now(dt.timezone.utc)
     for p in [p for p in st["programmati"] if dt.datetime.fromisoformat(p["quando"]) <= adesso]:
-        voce = {"data": adesso.isoformat(), "lingua": p["lingua"], "esito": "ok", "yt": []}
-        chat_id, msg_id = p["msg"].split(":")
+        voce = {"data": adesso.isoformat(), "lingua": p["lingua"], "esito": "ok", "yt": [],
+                "gruppo": p.get("gruppo"), "formato": (tutti.get(p.get("gruppo")) or {}).get("formato")}
+        chat_id, msg_id = (p.get("msg") or ":").split(":")
         try:
             video = scarica_da_tg(token, p["file_id"])
-            risposta = pubblica(video, *leggi_didascalia(p["caption"]), cfg)
+            if p.get("gruppo") in tutti:
+                testi = testi_gruppo(tutti[p["gruppo"]], p["lingua"])
+            else:
+                testi = leggi_didascalia(p["caption"])
+            risposta = pubblica(video, *testi, cfg)
             voce["yt"] = list(dict.fromkeys(YT_RE.findall(risposta)))
             try:
                 esiti = json.loads(risposta)
@@ -213,14 +310,16 @@ def main():
                 ko = [e["servizio"] for e in esiti if not e.get("ok")]
             except Exception:
                 esiti, ko = [], []
-            st["pubblicati"].append(p["msg"])
-            segna(token, chat_id, msg_id, "✅ Pubblicata" + (f" (⚠️ non su {', '.join(ko)})" if ko else ""))
+            st["pubblicati"].append(p.get("msg") or f"{p.get('gruppo')}:{p['lingua']}")
+            if msg_id:
+                segna(token, chat_id, msg_id, "✅ Pubblicata" + (f" (⚠️ non su {', '.join(ko)})" if ko else ""))
             if ko and chat:
                 tg(token, "sendMessage", chat_id=chat, text="⚠️ " + " | ".join(
                     f"{e['servizio']}: {e.get('errore')}" for e in esiti if not e.get("ok"))[:1000])
         except Exception as e:
             voce["esito"] = str(e)[:200]
-            segna(token, chat_id, msg_id, "⚠️ Errore: " + str(e)[:40])
+            if msg_id:
+                segna(token, chat_id, msg_id, "⚠️ Errore: " + str(e)[:40])
             if chat:
                 tg(token, "sendMessage", chat_id=chat, text=f"⚠️ Pubblicazione fallita ({p['lingua']}): {str(e)[:300]}")
         st["programmati"].remove(p)
@@ -232,6 +331,7 @@ def main():
         st["ultimo_report"] = adesso.date().isoformat()
     st["pubblicati"], st["log"] = st["pubblicati"][-1000:], st["log"][-2000:]
     st["slot_usati"] = st.get("slot_usati", [])[-500:]
+    st["gruppi_fatti"] = st["gruppi_fatti"][-1000:]
     salva(STATO, st)
 
 

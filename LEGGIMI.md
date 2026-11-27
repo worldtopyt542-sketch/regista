@@ -1,23 +1,24 @@
 # Regista — Planet Off Scale
 
-Ogni mattina alle 06:15 crea 3 short (Top 5, 25–30 s) e te li manda su Telegram con titolo, descrizione e fonti dei fatti da controllare. Tu li guardi e li programmi su Buffer.
+Fabbrica automatica di Shorts / Reels / TikTok in piu' lingue, tutti nello stesso format (vedi [FORMAT.md](FORMAT.md)).
 
-Agent: Sceneggiatore (Gemini) → Scout (Pixabay, NASA, Pexels se disponibile) → Voce (Edge TTS) → Editor → Critic → Telegram.
-`archivio.json` ricorda titoli e clip già usati, così i video non si ripetono.
+Ogni notte: **Autoclipper** (clip + Top 5 da video YouTube CC BY) e **Off Scale Facts** (fatti veri con filmati NASA).
+Ogni video arriva su Telegram con tutte le lingue: un ✅ le mette in programma tutte, ognuna negli orari migliori del
+suo pubblico e sui suoi canali. Il **Pubblicatore** (ogni 15 min) pubblica via Buffer e alle 21 manda il report.
 
-## Secrets da inserire (Settings → Secrets and variables → Actions → New repository secret)
-
+## Secrets (Settings → Secrets and variables → Actions)
 | Nome | Da dove arriva |
 |---|---|
-| `TELEGRAM_BOT_TOKEN` | Il token che ti ha dato @BotFather |
+| `TELEGRAM_BOT_TOKEN` | @BotFather |
 | `GEMINI_API_KEY` | https://aistudio.google.com → Get API key |
-| `PIXABAY_API_KEY` | https://pixabay.com/api/docs/ (la chiave compare nella pagina dopo il login) |
-| `PEXELS_API_KEY` | Facoltativa: Pexels ha sospeso le nuove chiavi |
+| `YOUTUBE_API_KEY` | Google Cloud → YouTube Data API v3 (ricerca e verifica licenze) |
+| `BUFFER_API_KEY` | Buffer → impostazioni API |
+| `PIXABAY_API_KEY` | https://pixabay.com/api/docs/ (Facts) |
+| `PEXELS_API_KEY` | facoltativa |
+| `YT_COOKIES` | facoltativo, se YouTube blocca i download dai server di GitHub |
 
-Non scrivere mai queste chiavi nei file o in chat.
+## Avviare a mano
+Scheda **Actions** → "Autoclipper Planet Off Scale" o "Off Scale Facts" → **Run workflow**.
 
-## Avviarlo a mano
-Scheda **Actions** → **Regista - video del giorno** → **Run workflow**.
-
-## Cambiare temi, voce o numero di video
-Modifica `config.json` direttamente da GitHub (icona matita).
+## Aggiungere una lingua o un canale
+`config.json` (lingue, `brand.cta`, `pubblica.canali`) e `python src/avatar.py <lingua>`. Dettagli: agent `nuovo-canale`.

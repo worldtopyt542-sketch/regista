@@ -3,13 +3,13 @@
 import os
 import editor, scrittore, sorgenti
 
-SCELTA = """You make viral YouTube Shorts / TikToks ({nicchia}): "Top 5" compilations of the most jaw-dropping moments of a video.
-Source: "{titolo}" by {canale}.
-{notizie}
-From the moments below (absolute seconds, transcript of what is said), pick 5 DIFFERENT moments, each 5-8 seconds (the whole Short must stay under 45 s, like viral Top 5 Shorts),
-the most viral ones (shock, awe, action peaks, funny lines, fails, wins, incredible details). Order from #5 to #1 (best last).
-Pick a curiosity angle that makes people watch to the end.
-NEVER pick story spoilers (mission endings, plot twists, deaths, finale) or moments with loud copyrighted music.
+SCELTA = """You make viral YouTube Shorts / TikToks ({nicchia}): "Top 5" countdowns of the most jaw-dropping moments of a video.
+Source (Creative Commons): "{titolo}" by {canale}.
+From the moments below (absolute seconds, transcript of what is said), pick 5 DIFFERENT moments, each 5-8 seconds
+(the whole Short must stay under 45 s). Choose the most striking: sheer scale, raw power, rare behaviour, perfect
+timing, "how is this real". Order from #5 to #1 (best last). Pick ONE clear angle for the list (e.g. "biggest",
+"closest calls", "most powerful") that makes people watch to the end.
+Avoid intros, sponsor reads, other channels' logos or on-screen text, and moments with loud copyrighted music.
 Reply JSON only:
 {{"titolo": "max 60 chars, curiosity title", "descrizione": "1 sentence", "hashtags": ["#...", "..."],
  "items": [{{"inizio": 0.0, "fine": 0.0, "perche": "what happens"}}]}}
@@ -17,15 +17,14 @@ Reply JSON only:
 MOMENTS:
 {momenti}"""
 
-VOCE = """You are the narrator of a viral Shorts compilation titled "{titolo}" (source: {canale}).
+VOCE = """You are the narrator of a viral Shorts countdown titled "{titolo}" (source: {canale}). Voice: {tono}.
 For each of the 5 clips you get 3 frames and what is said in it. Write the narrator line spoken over the
 first seconds of that clip, BEFORE the original audio plays:
-- max 7 words, punchy, hype gamer tone, present tense;
-- describe ONLY what is really visible in the frames / said in the transcript (no invented facts);
+- max 7 words, punchy, present tense, numbers and scale when you are sure of them;
+- describe ONLY what is really visible in the frames / said in the transcript (no invented facts, no guessed species);
 - start with the rank, e.g. "Number 5: ...".
 Also write "gancio": max 7 words spoken at the very start to stop the scroll, coherent with the clips.
-Then write the post texts. They MUST match what the frames show and what the narrator says (real footage only):
-if the title says someone finds/does something, that thing must be visible or said in the clips. No clickbait lies.
+Then write the post texts. They MUST match what the frames show and what the narrator says (real footage only).
 - "titolo": max 60 chars, curiosity-driven; "descrizione": 1 sentence; "hashtags": 5 relevant.
 Reply JSON only: {{"gancio": "...", "voci": ["...", "...", "...", "...", "..."],
  "titolo": "...", "descrizione": "...", "hashtags": ["#...", "..."]}}
@@ -38,13 +37,14 @@ def _parole(tutte, a, b):
     return [(x - a, y - a, w) for x, y, w in tutte if a <= x < b]
 
 
-def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeural", nicchia="viral videos"):
+def crea(url, src, momenti, tutte, chiave, lavoro, voce="en-US-GuyNeural", nicchia="viral videos",
+         tono="documentary narrator", cta=""):
     """Ritorna (percorso video, testi per la didascalia)."""
     testo = []
     for i, m in enumerate(momenti):
         frasi = " ".join(f"[{a:.0f}] {w}" if k % 10 == 0 else w for k, (a, _, w) in enumerate(m["parole"]))
         testo.append(f"--- moment {i + 1} (starts {m['inizio']:.0f}) ---\n{frasi or '(loud, no speech)'}")
-    s = scrittore.gemini(chiave, SCELTA.format(nicchia=nicchia, titolo=src["titolo"], canale=src["canale"], notizie=notizie,
+    s = scrittore.gemini(chiave, SCELTA.format(nicchia=nicchia, titolo=src["titolo"], canale=src["canale"],
                                                momenti="\n".join(testo)), 0.6)
     items = [it for it in s["items"] if 3 <= float(it["fine"]) - float(it["inizio"]) <= 12][:5]
     if len(items) < 3:
@@ -60,7 +60,7 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
             immagini.append((f"Clip {n + 1}, frame {k + 1}:", jpg))
         trascritti.append(f"Clip {n + 1}: " + " ".join(w for *_, w in _parole(tutte, a, b)))
         pezzi.append((raw, a, b))
-    v = scrittore.gemini(chiave, VOCE.format(titolo=s["titolo"], canale=src["canale"],
+    v = scrittore.gemini(chiave, VOCE.format(titolo=s["titolo"], canale=src["canale"], tono=tono,
                                              trascritti="\n".join(trascritti)), 0.7, immagini)
     for k in ("titolo", "descrizione", "hashtags"):  # testi riscritti guardando le immagini
         if v.get(k):
@@ -80,7 +80,7 @@ def crea(url, src, momenti, tutte, chiave, lavoro, notizie, voce="en-US-GuyNeura
         gruppi = editor.gruppi_parole(parole_voce + streamer, frase, dur)
         ass = os.path.join(lavoro, f"top{n}.ass")
         editor.scrivi_ass(ass, gruppi, f"#{len(pezzi) - n}", dur, "Clip: " + src["canale"],
-                          s["titolo"] if n == 0 else "")
+                          s["titolo"] if n == 0 else "", cta=cta if n == len(pezzi) - 1 else "")
         out = os.path.join(lavoro, f"seg_top{n}.mp4")
         fc = ("[0:v]split[x][y];[x]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,"
               "boxblur=25:3,eq=brightness=-0.2[bg];[y]scale=1080:1920:force_original_aspect_ratio=decrease[fg];"

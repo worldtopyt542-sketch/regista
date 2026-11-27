@@ -1,32 +1,37 @@
-# ==== AGENT SCENEGGIATORE: scrive una Top 5 con Gemini (piano gratuito) ====
+# ==== AGENT SCENEGGIATORE + chiamate Gemini (piano gratuito) ====
+# scrivi(): copione del format "Off Scale Facts" (5 fatti fuori scala, voce narrante, filmati NASA / Pixabay).
 import json, re, urllib.parse, urllib.request
 
 BASE = "https://generativelanguage.googleapis.com/v1beta/"
 
-PROMPT = """You write scripts for a viral YouTube Shorts / TikTok channel about GTA 6 (Grand Theft Auto VI,
-released November 19, 2026). Format: Top 5 news, secrets, tips or facts. Base news on the LATEST HEADLINES below when relevant.
+PROMPT = """You write scripts for "{brand}", a viral YouTube Shorts / TikTok / Reels channel: {nicchia}.
+Format "Off Scale Facts": a Top 5 countdown of mind-blowing, REAL facts about one theme, narrated over real footage.
+Narrator voice: {tono}.
 
 Theme for today: {tema}
 Do NOT repeat any of these already-published titles: {gia_fatti}
 {spunti}
 
 Rules:
-- Only verifiable facts (official Rockstar info, reliable gaming press). No story spoilers. No invented leaks.
-- Total spoken text 55-65 words, NEVER more than 70 (25-30 seconds). Short, punchy sentences, gamer tone.
-- Hook: max 14 words, a surprising statement or question.
-- Each item: max 10 words.
-- For each item one YouTube search query (2-5 words) for matching GTA 6 gameplay footage, e.g. "Vice City beach", "police chase". Do not include "GTA 6" in it.
-- "fonte": always "gameplay".
-- "verifica": one public URL that supports the fact.
+- Only well-established facts (NASA, ESA, NOAA, National Geographic, peer-reviewed science). No myths, no rumours.
+  Prefer facts with a striking NUMBER or COMPARISON of scale ("big enough to fit 1,300 Earths").
+- Total spoken text 55-65 words, NEVER more than 70 (25-30 seconds). Short, punchy sentences.
+- Hook: max 14 words, a surprising statement or question about scale.
+- Each item: max 12 words. Finale: max 10 words, a twist or a question that makes people comment.
+- For each item one footage search query (2-4 plain English words) that a stock/NASA library can match,
+  e.g. "solar flare", "humpback whale", "rocket launch night". No brand names.
+- "fonte": "nasa" for space/Earth-from-orbit footage, "stock" for animals, nature, weather, oceans.
+- "verifica": one public URL (nasa.gov, esa.int, noaa.gov, nationalgeographic.com, britannica.com...) that supports the fact.
 - "descrizione": one catchy sentence for the post.
 
 Reply with JSON only, no markdown:
-{{"titolo": "...", "descrizione": "...", "hook": "...", "hook_query": "...", "hook_fonte": "gameplay",
- "items": [{{"label": "#5", "testo": "...", "query": "...", "fonte": "gameplay", "verifica": "..."}},
+{{"titolo": "...", "descrizione": "...", "hook": "...", "hook_query": "...", "hook_fonte": "nasa",
+ "items": [{{"label": "#5", "testo": "...", "query": "...", "fonte": "stock", "verifica": "..."}},
            ... down to "#1"],
- "finale": "...", "finale_query": "...", "finale_fonte": "gameplay",
- "hashtags": ["#gta6", "..."]}}
+ "finale": "...", "finale_query": "...", "finale_fonte": "nasa",
+ "hashtags": ["#space", "..."]}}
 """
+
 
 
 def _post(url, body):
@@ -43,22 +48,6 @@ def _post(url, body):
 
 ULTIMO_BUONO = None  # il modello che ha funzionato, provato per primo al video successivo
 ESCLUSI = ("image", "tts", "live", "omni", "audio", "embedding", "vision", "learnlm")
-
-
-def notizie(query="GTA 6", quante=15):
-    """Ultimi titoli da Google News (RSS gratuito), per avere fatti freschi senza grounding a pagamento."""
-    import xml.etree.ElementTree as ET
-    try:
-        url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
-            {"q": query + " when:3d", "hl": "en-US", "gl": "US", "ceid": "US:en"})
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            items = ET.fromstring(r.read()).iter("item")
-            righe = [f"- {i.findtext('title')} ({i.findtext('link')})" for _, i in zip(range(quante), items)]
-        return "LATEST HEADLINES (last 3 days):\n" + "\n".join(righe) if righe else ""
-    except Exception as e:
-        print("   Notizie: RSS non disponibile", e)
-        return ""
 
 
 def modelli_candidati(chiave, preferito=None):
@@ -107,12 +96,14 @@ def valida(s):
     return errori
 
 
-def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None):
-    testo_spunti = notizie()
+def scrivi(chiave, tema, gia_fatti, modello="auto", tentativi=3, spunti=None, brand=None):
+    brand = brand or {}
+    testo_spunti = ""
     if spunti:
         testo_spunti += ("\nTrending on YouTube right now for this theme (use ONLY as inspiration for the angle; "
                         "never copy titles, never mention channels): " + " | ".join(spunti[:3]))
-    prompt = PROMPT.format(tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
+    prompt = PROMPT.format(brand=brand.get("nome", "Planet Off Scale"), nicchia=brand.get("nicchia", ""),
+                           tono=brand.get("tono", ""), tema=tema, gia_fatti="; ".join(gia_fatti[-60:]) or "none", spunti=testo_spunti)
     body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"temperature": 0.9, "responseMimeType": "application/json"}}
     global ULTIMO_BUONO
     candidati = modelli_candidati(chiave, ULTIMO_BUONO or (None if modello == "auto" else modello))
@@ -183,8 +174,10 @@ def traduci(chiave, dati, lingue):
     if not lingue:
         return {}
     prompt = ("Translate every string value of this JSON into each target language. Keep keys and list lengths "
-              "IDENTICAL. Sound native and viral for young gamers (slang ok), not literal. Keep names (GTA 6, "
-              "Vice City, streamer names). Localize hashtags but keep #gta6. Keep each string about as short as the original.\n"
+              "IDENTICAL. Sound native and viral on Shorts/TikTok for that country, not literal. Keep proper names "
+              "(NASA, SpaceX, place and species names as locals say them), numbers and units converted only if "
+              "locals use other units. Localize hashtags. Keep each string about as short as the original "
+              "(subtitles must fit on screen).\n"
               "Target languages: " + ", ".join(f'"{k}" = {v}' for k, v in lingue.items()) +
               '\nReply JSON only: {"<code>": <translated JSON>, ...}\n\n' + json.dumps(dati, ensure_ascii=False))
     try:

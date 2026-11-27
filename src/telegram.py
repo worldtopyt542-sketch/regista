@@ -1,5 +1,5 @@
-# ==== INVIO SU TELEGRAM: il video arriva sul telefono di Andrea per l'approvazione ====
-import json, urllib.request
+# ==== INVIO SU TELEGRAM: i video arrivano al proprietario del bot per l'approvazione ====
+import json
 import requests
 
 API = "https://api.telegram.org/bot{token}/{metodo}"
@@ -24,13 +24,17 @@ def trova_chat_id(token):
     return None
 
 
-def messaggio(token, chat_id, testo):
+def messaggio(token, chat_id, testo, bottoni=None):
+    r = None
     for i in range(0, len(testo), 3900):  # limite Telegram 4096 caratteri
-        _chiama(token, "sendMessage", chat_id=chat_id, text=testo[i:i + 3900],
-                disable_web_page_preview="true")
+        extra = {"reply_markup": json.dumps({"inline_keyboard": bottoni})} if bottoni and i + 3900 >= len(testo) else {}
+        r = _chiama(token, "sendMessage", chat_id=chat_id, text=testo[i:i + 3900],
+                    disable_web_page_preview="true", **extra)
+    return r
 
 
 def video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True):
+    """Ritorna il messaggio inviato (serve il file_id del video per pubblicarlo dopo)."""
     with open(percorso, "rb") as f:
         r = requests.post(API.format(token=token, metodo="sendVideo"),
                           data={"chat_id": chat_id, "caption": didascalia[:1000],
@@ -41,3 +45,23 @@ def video(token, chat_id, percorso, didascalia, bottoni=None, silenzioso=True):
     j = r.json()
     if not j.get("ok"):
         raise RuntimeError(f"Telegram sendVideo: {j.get('description')}")
+    return j["result"]
+
+
+def bottoni_gruppo(gid, lingue):
+    etichetta = "✅ Pubblica " + " ".join(l.upper() for l in lingue)
+    return [[{"text": etichetta, "callback_data": f"ok:{gid}"}, {"text": "❌ Scarta", "callback_data": f"no:{gid}"}]]
+
+
+def invia_gruppo(token, chat_id, gruppo, video_per_lingua, extra=""):
+    """Manda tutte le versioni (una per lingua) e UN solo messaggio coi bottoni che approva tutto il gruppo.
+    video_per_lingua: {cod: (percorso, didascalia)}. Riempie gruppo['versioni'][cod]['file_id'/'msg']."""
+    for cod, (percorso, cap) in video_per_lingua.items():
+        m = video(token, chat_id, percorso, cap)
+        v = gruppo["versioni"][cod]
+        v["file_id"], v["msg"] = m["video"]["file_id"], f"{chat_id}:{m['message_id']}"
+    stato = "🤖 Auto-approvata: va in programma da sola" if gruppo.get("auto") else "Approva una volta sola per tutte le lingue"
+    m = messaggio(token, chat_id, f"🎬 {gruppo['titolo']}\n{extra}\n{stato}",
+                  bottoni=None if gruppo.get("auto") else bottoni_gruppo(gruppo["id"], list(video_per_lingua)))
+    gruppo["msg_bottoni"] = f"{chat_id}:{m['message_id']}"
+    return gruppo

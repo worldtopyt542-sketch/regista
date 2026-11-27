@@ -13,6 +13,20 @@
 5. **Non toccare a mano** `archivio.json`, `clipper.json`, `pubblica.json`: li scrive il bot.
 6. **Mai chiavi nei file o in chat**: stanno solo in Settings → Secrets (le usa GitHub, non servono a noi).
 
+## Come ci dividiamo il lavoro (PC diversi)
+Il lavoro pesante gira comunque su GitHub Actions. Sui PC gira solo lo sviluppo, quindi:
+- **Fra (PC piu' potente)**: grafica e format (`python src/anteprima.py` in loop, render di prova con video veri,
+  Whisper in locale), format nuovi, agent `format-designer` e `nuovo-canale`.
+- **Proprietario del repo (PC piu' leggero)**: niente render in locale. Config e contenuti (`config.json`: ricerche,
+  temi, lingue, orari), approvazioni su Telegram, canali Buffer/TikTok/Instagram/YouTube per lingua, revisione delle
+  PR con l'agent `revisore-pr` e il link all'anteprima negli artifact del workflow "Controlli (PR)".
+- Chi vuole vedere un render senza farlo sul proprio PC: Actions → **Controlli (PR)** → artifact `anteprima-format`.
+
+## Agent pronti per Claude Code (`.claude/agents/`)
+- `format-designer`: "migliora la grafica del format", "nuovo format Scale Check".
+- `revisore-pr`: "rivedi la PR #N" (licenze, chiavi, file di stato, bug).
+- `nuovo-canale`: "aggiungi la lingua portoghese", "replica per un canale di oceani".
+
 ## Come si chiede un lavoro a Claude
 Apri Claude Code nel repo e scrivi, per esempio:
 > Leggi COLLABORARE.md e l'Issue #N. Crea il branch, fai il lavoro, apri la Pull Request.

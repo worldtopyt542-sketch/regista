@@ -42,16 +42,11 @@ jobs:
           URL: ${{ github.event.inputs.url }}
           PYTHONUNBUFFERED: "1"
         run: python src/clipper.py
-      - name: Salva l'archivio
+      - name: Salva l'archivio e le clip pronte
         if: always()
         run: |
           rm -f cookies.txt
-          git config user.name "regista-bot"
-          git config user.email "regista-bot@users.noreply.github.com"
-          git add clipper.json
-          git diff --cached --quiet || git commit -m "Archivio clip $(date -u +%F-%H)"
-          git pull --rebase -q || true
-          git push || true
+          .github/salva-stato.sh "Archivio clip $(date -u +%F-%H)" clipper.json pronte
       - uses: actions/upload-artifact@v4
         if: always()
         with:

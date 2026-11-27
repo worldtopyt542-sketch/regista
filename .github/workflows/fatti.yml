@@ -1,38 +1,35 @@
-name: News GTA 6 (5 lingue)
+name: Off Scale Facts (NASA + natura)
 
 on:
-  # schedule:
-    # cron spento: le news sono sostituite dalle Top 5 dei momenti virali (clipper)
-  workflow_dispatch:         # pulsante "Run workflow" per avviarlo a mano
+  schedule:
+    - cron: "37 4 * * *"   # 05:37 in Italia: arriva su Telegram insieme alle clip della notte
+  workflow_dispatch:
     inputs:
       quanti:
-        description: "Quanti video creare"
-        default: "3"
+        description: "Quanti video Facts creare"
+        default: "1"
 
 permissions:
-  contents: write            # serve per salvare archivio.json
+  contents: write
 
 concurrency:
-  group: regista
+  group: fatti
   cancel-in-progress: false
 
 jobs:
   produci:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: pip
       - name: Installa ffmpeg e font
         run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-dejavu-core fonts-noto-core
       - name: Installa librerie Python
         run: pip install -q -r requirements.txt
-      - name: Cookie per YouTube (facoltativo)
-        env:
-          YT_COOKIES: ${{ secrets.YT_COOKIES }}
-        run: '[ -n "$YT_COOKIES" ] && printf "%s" "$YT_COOKIES" > cookies.txt || true'
       - name: Fa lavorare gli agent
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -42,22 +39,15 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           PYTHONUNBUFFERED: "1"
           QUANTI: ${{ github.event.inputs.quanti }}
-        run: python src/regista.py
-      - name: Salva l'archivio (anti-doppioni)
+        run: python src/fatti.py
+      - name: Salva l'archivio (anti-doppioni) e i video pronti
         if: always()
-        run: |
-          git config user.name "regista-bot"
-          git config user.email "regista-bot@users.noreply.github.com"
-          git add archivio.json
-          git diff --cached --quiet || git commit -m "Archivio aggiornato $(date -u +%F)"
-          rm -f cookies.txt
-          git pull --rebase -q || true
-          git push || true
+        run: .github/salva-stato.sh "Archivio Facts $(date -u +%F)" archivio.json pronte
       - name: Conserva i video anche su GitHub (7 giorni)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: video-${{ github.run_number }}
+          name: facts-${{ github.run_number }}
           path: output/*.mp4
           retention-days: 7
           if-no-files-found: ignore
