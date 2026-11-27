@@ -5,13 +5,16 @@
  "url_fatti": [
   "https://www.twitch.tv/videos/2939504732",
   "https://www.twitch.tv/videos/2936683310",
-  "https://www.twitch.tv/videos/2935613960"
+  "https://www.twitch.tv/videos/2935613960",
+  "https://www.youtube.com/watch?v=em9cqXjEZ60",
+  "https://www.youtube.com/watch?v=hMzJDVEQg5g",
+  "https://www.youtube.com/watch?v=vhf55ZYzRWI"
  ],
  "avanzamento": {
   "https://www.twitch.tv/videos/2939504732": 14400,
   "https://www.twitch.tv/videos/2936683310": 24289,
   "https://www.twitch.tv/videos/2935613960": 27395,
-  "https://www.twitch.tv/videos/2934866208": 32400
+  "https://www.twitch.tv/videos/2934866208": 43200
  },
  "storico_clip": [
   {
@@ -48,6 +51,11 @@
    "fonte": "TwitchVod:v2934866208",
    "titolo": "🌴PLAYING GTA 6 FOR THE FIRST TIME🌴",
    "clip": 4
+  },
+  {
+   "fonte": "TwitchVod:v2934866208",
+   "titolo": "🌴PLAYING GTA 6 FOR THE FIRST TIME🌴",
+   "clip": 2
   }
  ],
  "top5": {
