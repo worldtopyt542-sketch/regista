@@ -1,0 +1,66 @@
+{
+ "id": "261128101974ce",
+ "creato": "2026-11-28T10:19:31.282956",
+ "formato": "facts",
+ "titolo": "5 Biggest Black Holes Ever Found",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Big Ozone Holes Headed For Extinction By 2040: Excerpt: https://images.nasa.gov/details/GSFC_20150506_Ozone_m11781_2040Holes_17s_Snippet\n- NASA, What's Up: June 2025 Skywatching Tips from NASA: https://images.nasa.gov/details/JPL-20250529-WHATSUf-0001-Whats_Up_June_2025cc\n- NASA, Hubble's 29th Anniversary: https://images.nasa.gov/details/GSFC_20190424_HST_m13189_Hubble29\n- NASA, Video file: NASA’s Deep Space Atomic Clock to Launch on SpaceX Falcon Heavy Rocket: https://images.nasa.gov/details/JPL-20190618-TECHf-0001-Deep_Space_Atomic_Clock_Videofile\n- NASA, KSC-05-S-00274: https://images.nasa.gov/details/ksc_081505_goesn_onguard\n- NASA, KSC-07-S-00077: https://images.nasa.gov/details/ksc_042507_chandra_2\n- NASA, Evolution of Galaxies: https://images.nasa.gov/details/Evolution_of_Galaxies_H264\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://science.nasa.gov/universe/black-holes/sagittarius-a/",
+  "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/m87/",
+  "https://www.eso.org/public/",
+  "https://science.nasa.gov/",
+  "https://chandra.harvard.edu/photo/2012/phoenix/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Biggest Black Holes Ever Found",
+   "descrizione": "Count down the 5 largest supermassive black holes in the known universe, from Sagittarius A* to Phoenix A.",
+   "hashtags": [
+    "#space",
+    "#blackhole",
+    "#universe",
+    "#astronomy",
+    "#sciencefacts",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOkawqqtf5nPAABZQ6rbqUBhVwWtpl4AALpIQAC2mJYUJfuoCFDb72iPQQ",
+   "msg": "5193260023:164"
+  },
+  "it": {
+   "titolo": "I 5 buchi neri più grandi mai scoperti",
+   "descrizione": "La classifica dei 5 buchi neri supermassicci più grandi dell'universo conosciuto, da Sagittarius A* a Phoenix A.",
+   "hashtags": [
+    "#spazio",
+    "#buchineri",
+    "#universo",
+    "#astronomia",
+    "#scienza",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOlawqquOTKgcq2ioEGh6qa1bp0pWIAAuohAALaYlhQ08xvKBTyjUg9BA",
+   "msg": "5193260023:165"
+  },
+  "es": {
+   "titolo": "Los 5 agujeros negros más grandes jamás encontrados",
+   "descrizione": "Top 5 de los agujeros negros supermasivos más colosales del universo conocido, de Sagittarius A* a Phoenix A.",
+   "hashtags": [
+    "#espacio",
+    "#agujeronegro",
+    "#universo",
+    "#astronomia",
+    "#datoscuriosos",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOmawqqu_ekxe8j2oo86VQMTNGY08cAAushAALaYlhQuAWutG1tt2Y9BA",
+   "msg": "5193260023:166"
+  }
+ },
+ "msg_bottoni": "5193260023:167"
+}
