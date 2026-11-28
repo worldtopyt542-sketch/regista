@@ -55,3 +55,4 @@ Prossimo format suggerito dai riferimenti: **Space Sounds** (sonificazioni NASA 
 `scaletta.json`: 100 idee in ordine (categoria, titolo, gancio, 5 voci, formato `top5` / `storia` / `suoni`).
 Off Scale Facts la segue prima dei temi a caso e segna le fatte in `archivio.json -> scaletta_fatte`.
 Per provare un formato: workflow "Off Scale Facts" con `formato` (es. `storia`) o `numero` (es. `42`).
+Filmati: il workflow "Controlla i filmati della scaletta" (`src/copertura.py`) cerca ogni voce su NASA e Pexels (4K verticale) e segnala i video con meno di 4 voci coperte. NASA si scarica in `~large` (1080p) o `~orig` prima di `~medium`.
