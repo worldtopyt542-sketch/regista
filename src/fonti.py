@@ -99,6 +99,7 @@ def nasa(query, usati):
 ARCHIVI_ESA = (("ESA/Hubble", "https://esahubble.org"), ("ESA/Webb", "https://esawebb.org"),
                ("ESO", "https://www.eso.org/public"))
 MP4_PREFERITI = ("hd_1080p25_screen", "hd_and_apple", "large_qt", "medium_podcast", "medium_flash")
+EPISODI = ("hubblecast", "webbcast", "esocast", "cs0", "chilecast")  # puntate con presentatori e titoli
 MP4_ESCLUSI = ("dome", "4k", "ultra_hd", "8k", "uhd")
 
 
@@ -119,7 +120,9 @@ def esa_mp4(html):
     import re
     tutti = list(dict.fromkeys(re.findall(r'(https?://[^"\'\s]+?\.mp4)', html)))
     tutti = [u for u in tutti if not any(x in u.lower() for x in MP4_ESCLUSI)]
-    return [u.replace("http://", "https://") for pref in MP4_PREFERITI for u in tutti if f"/{pref}/" in u]
+    scelti = [u for pref in MP4_PREFERITI for u in tutti if f"/{pref}/" in u]
+    # poi tutti gli altri formati: se il 1080p e' troppo pesante il download prova il successivo
+    return [u.replace("http://", "https://") for u in scelti + [u for u in tutti if u not in scelti]]
 
 
 def esa(query, usati):
@@ -132,7 +135,7 @@ def esa(query, usati):
             continue
         for vid in ids[:6]:
             eid = f"esa:{vid}"
-            if eid in usati:
+            if eid in usati or vid.startswith(EPISODI):
                 continue
             pagina = f"{base}/videos/{vid}/"
             try:
