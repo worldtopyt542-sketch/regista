@@ -160,11 +160,12 @@ class ClipPulite(unittest.TestCase):
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc=s=320x240:d=12",
                             "-pix_fmt", "yuv420p", clip], check=True)
             try:
-                scrittore.gemini = lambda *a, **k: {"pulito": [False, True, True, True, False, False]}
-                self.assertTrue(fonti.pulisci_clip(clip, "k"))
+                scrittore.gemini = lambda *a, **k: {"pulito": [False, True, True, True, False, False],
+                                                    "centro_x": [0.9, 0.2, 0.3, 0.4, 0.9, 0.9]}
+                self.assertAlmostEqual(fonti.pulisci_clip(clip, "k"), 0.3, places=2)
                 self.assertAlmostEqual(editor.durata(clip), 6.0, delta=0.6)
                 scrittore.gemini = lambda *a, **k: {"pulito": [True, False, True, False, False, True]}
-                self.assertFalse(fonti.pulisci_clip(clip, "k"))
+                self.assertIsNone(fonti.pulisci_clip(clip, "k"))
             finally:
                 scrittore.gemini = vecchio
             self.assertEqual([f for f in os.listdir(d) if f.endswith(".jpg")], [])
@@ -180,6 +181,7 @@ class FotoNasa(unittest.TestCase):
                                 "-frames:v", "1", img], check=True)
                 self.assertEqual(fonti.foto_in_clip(img, out, secondi=2), atteso)
             self.assertAlmostEqual(editor.durata(os.path.join(d, "c2000.mp4")), 2.0, delta=0.2)
+            self.assertTrue(fonti.orizzontale(os.path.join(d, "c2000.mp4")))  # la foto larga resta larga
 
 
 if __name__ == "__main__":

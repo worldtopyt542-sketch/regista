@@ -15,6 +15,7 @@ Aggiornato: 27 novembre 2026
 | Brand kit in config.json, niente nome del canale nel codice | ✅ | PR #4 |
 | Template 9:16: gancio, karaoke, logo, barra, credito, CTA tradotta | ✅ | anteprima locale |
 | Avatar per lingua dalla stessa matrice | ✅ | assets/avatar_*.png |
+| Scritte e logo centrati, clip tagliate in 9:16 intorno al soggetto | ✅ | editor + fonti.pulisci_clip |
 | Giro vero su Actions dopo il merge, video controllati a occhio | ⬜ | |
 | Anteprima con un video CC vero nella CI | ⬜ | |
 

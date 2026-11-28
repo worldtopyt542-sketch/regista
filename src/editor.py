@@ -88,14 +88,14 @@ def logo_path():
     return os.path.join(os.path.dirname(ASSETS), _brand()["logo_video"])
 
 
-def filtro_marchio(d, ingresso, logo, uscita, y_logo=548):
-    """Pezzo di filtergraph: logo 'bug' + barra di avanzamento nel colore del brand (Y della barra: 1150)."""
+def filtro_marchio(d, ingresso, logo, uscita, y_logo=1450):
+    """Pezzo di filtergraph: logo centrato fra sottotitoli e credito + barra di avanzamento (Y: 1150)."""
     col = "0x" + _brand()["colore"].lstrip("#")
     return (f"{logo}scale=260:-1,format=rgba,colorchannelmixer=aa=0.9[logo];"
             f"{ingresso}drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[mb];"
             f"color=c={col}:s=1080x14:d={d:.2f}[bar];"
             f"[mb][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[mc];"
-            f"[mc][logo]overlay=x=24:y={y_logo}{uscita}")
+            f"[mc][logo]overlay=x=(main_w-overlay_w)/2:y={y_logo}{uscita}")
 
 
 def marchia(video, out):
@@ -119,14 +119,14 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
         "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, "
         "Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-        # zone sicure: niente testo nel 10% alto, 15% basso, 12% destro (pulsanti di YouTube)
-        f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,150,540,1",
-        f"Style: Rank,{font},190,{acc},&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
-        f"Style: Hook,{font},70,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
-        f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
+        # tutto centrato (margini uguali a destra e a sinistra); niente testo nel 10% alto e nel 15% basso
+        f"Style: Cap,{font},{cap},&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,7,3,2,100,100,540,1",
+        f"Style: Rank,{font},190,{acc},&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,100,100,330,1",
+        f"Style: Hook,{font},70,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,100,100,200,1",
+        f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,100,100,310,1",
         # testata fissa per tutto il video (come gli Shorts di riferimento): chi scorre senza audio capisce subito
-        f"Style: Testa,{font},54,&H00FFFFFF,&H000000FF,&H40000000,&H00000000,-1,0,0,0,100,100,0,0,3,16,0,8,90,180,215,1",
-        f"Style: Cta,{font},54,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,14,0,2,80,170,400,1",
+        f"Style: Testa,{font},54,&H00FFFFFF,&H000000FF,&H40000000,&H00000000,-1,0,0,0,100,100,0,0,3,16,0,8,100,100,215,1",
+        f"Style: Cta,{font},54,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,14,0,2,100,100,400,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     if testata:
@@ -151,13 +151,14 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
 
 
 def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None, cta="",
-                   testata="", stacco=False):
+                   testata="", stacco=False, centro=0.5):
     """stacco=True: lampo bianco + whoosh all'inizio del segmento (cambio scena dei format di riferimento)."""
     dur = durata(audio) + 0.25
     ass = os.path.join(WORK, f"seg{n}.ass")
     scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font, cta=cta, testata=testata)
     z = f"(1+0.08*t/{dur:.2f})"  # zoom lento da 1.00 a 1.08
-    vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
+    c = min(max(float(centro or 0.5), 0.0), 1.0)  # dove sta il soggetto (0 = sinistra, 1 = destra)
+    vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}:x='(iw-ow)*{c:.3f}':y='(ih-oh)/2',"
           f"scale=w='trunc({W}*{z}/2)*2':h='trunc({H}*{z}/2)*2':eval=frame,crop={W}:{H},"
           f"fps={FPS},setsar=1,{'fade=t=in:st=0:d=0.18:color=white,' if stacco else ''}{ass_filtro(ass)}")
     if stacco:  # whoosh sintetico (rumore rosa filtrato): nessun file audio di terzi
