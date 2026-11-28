@@ -195,6 +195,8 @@ class FontiEsa(unittest.TestCase):
         self.assertEqual(fonti.esa_mp4(pagina), [
             "https://cdn.esahubble.org/archives/videos/hd_1080p25_screen/heic1509a.mp4",
             "https://cdn.esahubble.org/archives/videos/medium_podcast/heic1509a.mp4"])
+        altro = '<a href="https://cdn.eso.org/videos/small_flash/eso1907b.mp4">'
+        self.assertEqual(fonti.esa_mp4(altro), ["https://cdn.eso.org/videos/small_flash/eso1907b.mp4"])
 
 
 if __name__ == "__main__":
