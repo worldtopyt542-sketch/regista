@@ -181,13 +181,23 @@ to a vertical 9:16 window around it.
 Reply JSON only: {{"pulito": [true, false, ...], "centro_x": [0.5, ...]}} with exactly {n} values each."""
 
 
-def pulisci_clip(path, chiave, quadri=6, tema=""):
+FINESTRA = 40
+
+
+def pulisci_clip(path, chiave, quadri=10, tema=""):
     """Gemini guarda {quadri} fotogrammi: la clip si accorcia al tratto pulito piu' lungo, o si scarta.
     Ritorna None se va scartata, altrimenti la posizione orizzontale del soggetto (0-1) per il taglio 9:16."""
     import editor, scrittore
     dur = editor.durata(path)
     if dur < 1.5:
         return None
+    if dur > FINESTRA + 5:  # clip lunghe (pacchetti NASA di minuti): si guarda fitto una finestra di 40 s
+        inizio = dur * 0.15
+        tmp = path + ".finestra.mp4"
+        editor.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{inizio:.2f}", "-t", str(FINESTRA), "-i", path, "-an",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", tmp])
+        os.replace(tmp, path)
+        dur = editor.durata(path)
     tempi = [dur * (k + 0.5) / quadri for k in range(quadri)]
     foto = []
     for k, t in enumerate(tempi):
@@ -227,8 +237,13 @@ def pulisci_clip(path, chiave, quadri=6, tema=""):
             pass
     centro = round(sum(validi) / len(validi), 3) if validi else 0.5
     print(f"   soggetto a {centro:.2f} della larghezza")
-    passo = dur / quadri
-    a, b = primo * passo, (primo + lung) * passo
+    if quadri > 2:  # si tiene solo cio' che sta FRA fotogrammi controllati, mai i bordi non visti
+        a, b = tempi[primo], tempi[primo + lung - 1]
+        if b - a < 2.5:
+            print("   tratto pulito troppo corto")
+            return None
+    else:
+        a, b = 0, dur
     if a > 0.5 or b < dur - 0.5:  # tiene solo il tratto pulito
         tmp = path + ".taglio.mp4"
         editor.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.2f}", "-to", f"{b:.2f}", "-i", path, "-an",
@@ -293,7 +308,7 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
                 continue
             centro = 0.5
             if chiavi.get("gemini") and (f == "nasa" or orizzontale(dest)):
-                centro = pulisci_clip(dest, chiavi["gemini"], 6 if f == "nasa" else 2 if info.get("foto") else 3, query)
+                centro = pulisci_clip(dest, chiavi["gemini"], 10 if f == "nasa" else 2 if info.get("foto") else 5, query)
                 if centro is None:
                     print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
                     continue

@@ -162,10 +162,10 @@ class ClipPulite(unittest.TestCase):
             try:
                 scrittore.gemini = lambda *a, **k: {"pulito": [False, True, True, True, False, False],
                                                     "centro_x": [0.9, 0.2, 0.3, 0.4, 0.9, 0.9]}
-                self.assertAlmostEqual(fonti.pulisci_clip(clip, "k"), 0.3, places=2)
-                self.assertAlmostEqual(editor.durata(clip), 6.0, delta=0.6)
+                self.assertAlmostEqual(fonti.pulisci_clip(clip, "k", quadri=6), 0.3, places=2)
+                self.assertAlmostEqual(editor.durata(clip), 4.0, delta=0.6)  # da t=3 a t=7: solo fra fotogrammi visti
                 scrittore.gemini = lambda *a, **k: {"pulito": [True, False, True, False, False, True]}
-                self.assertIsNone(fonti.pulisci_clip(clip, "k"))
+                self.assertIsNone(fonti.pulisci_clip(clip, "k", quadri=6))
             finally:
                 scrittore.gemini = vecchio
             self.assertEqual([f for f in os.listdir(d) if f.endswith(".jpg")], [])
