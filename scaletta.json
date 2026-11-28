@@ -1,0 +1,1405 @@
+{
+ "_come": "Scaletta di Off Scale Facts: il bot prende in ordine le voci non ancora fatte (archivio.json -> scaletta_fatte). Si puo' modificare a mano: aggiungere, togliere, riordinare. formato: top5 (classifica #5-#1), storia (un solo soggetto in 5 battute, stile 'Did you know'), suoni (payoff con un suono NASA vero: format da costruire, per ora fatto come storia).",
+ "video": [
+  {
+   "n": 1,
+   "categoria": "Black holes",
+   "titolo": "5 Biggest Black Holes Ever Found",
+   "gancio": "If number one doesn't scare you, nothing will.",
+   "voci": [
+    "Sagittarius A*",
+    "M87*",
+    "Holmberg 15A",
+    "TON 618",
+    "Phoenix A"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 2,
+   "categoria": "Black holes",
+   "titolo": "5 Things That Happen If You Fall Into a Black Hole",
+   "gancio": "Have you ever wondered what falling into a black hole feels like?",
+   "voci": [
+    "time slowing down",
+    "spaghettification",
+    "the photon sphere",
+    "the event horizon",
+    "the singularity"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 3,
+   "categoria": "Black holes",
+   "titolo": "The Black Hole Closest to Earth",
+   "gancio": "Did you know a black hole is hiding only 1,560 light years away?",
+   "voci": [
+    "Gaia BH1",
+    "Gaia BH2",
+    "Gaia BH3",
+    "V616 Monocerotis",
+    "Cygnus X-1"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 4,
+   "categoria": "Black holes",
+   "titolo": "5 Black Holes Doing Impossible Things",
+   "gancio": "These black holes break the rules of physics.",
+   "voci": [
+    "a runaway black hole",
+    "a black hole that burped twice",
+    "a black hole eating a star",
+    "two black holes merging",
+    "a black hole firing a jet across a galaxy"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 5,
+   "categoria": "Black holes",
+   "titolo": "The First Photo of a Black Hole",
+   "gancio": "Did you know this blurry ring took a telescope the size of Earth?",
+   "voci": [
+    "Event Horizon Telescope",
+    "M87* image 2019",
+    "Sagittarius A* image 2022",
+    "the shadow",
+    "the glowing ring"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 6,
+   "categoria": "Extreme",
+   "titolo": "5 Scariest Things Detected in Space",
+   "gancio": "These are the 5 scariest things ever detected in space.",
+   "voci": [
+    "rogue planets",
+    "the Bootes Void",
+    "a magnetar starquake",
+    "gamma-ray bursts",
+    "the Great Attractor"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 7,
+   "categoria": "Extreme",
+   "titolo": "5 Deadliest Places in the Universe",
+   "gancio": "You would die in seconds in every one of these places.",
+   "voci": [
+    "Venus surface",
+    "a neutron star",
+    "a quasar jet",
+    "a magnetar",
+    "the edge of a black hole"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 8,
+   "categoria": "Extreme",
+   "titolo": "What a Neutron Star Really Is",
+   "gancio": "A teaspoon of this star weighs as much as a mountain.",
+   "voci": [
+    "the collapse",
+    "the density",
+    "the spin",
+    "the magnetic field",
+    "the kilonova"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 9,
+   "categoria": "Extreme",
+   "titolo": "5 Fastest Things in the Universe",
+   "gancio": "Nothing on Earth comes close to number one.",
+   "voci": [
+    "Parker Solar Probe",
+    "hypervelocity stars",
+    "pulsar spin",
+    "relativistic jets",
+    "light itself"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 10,
+   "categoria": "Extreme",
+   "titolo": "5 Hottest Places in the Universe",
+   "gancio": "The Sun's surface is cold compared to number one.",
+   "voci": [
+    "Venus",
+    "the Sun's corona",
+    "a supernova",
+    "a quark-gluon plasma",
+    "the Big Bang"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 11,
+   "categoria": "Extreme",
+   "titolo": "5 Coldest Places in the Universe",
+   "gancio": "The coldest place we know is right here on Earth.",
+   "voci": [
+    "Pluto",
+    "Triton",
+    "the Boomerang Nebula",
+    "deep space",
+    "Cold Atom Lab on the ISS"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 12,
+   "categoria": "Extreme",
+   "titolo": "5 Loudest Events in the Universe",
+   "gancio": "Space is silent, but these events are not.",
+   "voci": [
+    "Krakatoa from orbit",
+    "a supernova shockwave",
+    "the Perseus cluster black hole note",
+    "colliding neutron stars",
+    "merging black holes"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 13,
+   "categoria": "Stars",
+   "titolo": "5 Largest Stars in the Universe",
+   "gancio": "Our Sun is a speck next to number one.",
+   "voci": [
+    "Betelgeuse",
+    "Antares",
+    "VY Canis Majoris",
+    "UY Scuti",
+    "Stephenson 2-18"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 14,
+   "categoria": "Stars",
+   "titolo": "What Will Happen When Betelgeuse Explodes",
+   "gancio": "One day this star will shine like a second Moon.",
+   "voci": [
+    "the red supergiant",
+    "the Great Dimming",
+    "the supernova",
+    "daytime visibility",
+    "the neutron star left behind"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 15,
+   "categoria": "Stars",
+   "titolo": "5 Strangest Stars Ever Found",
+   "gancio": "Number one might not even be natural.",
+   "voci": [
+    "Tabby's Star",
+    "Przybylski's Star",
+    "the Diamond Star",
+    "a star orbiting a black hole in 11 minutes",
+    "Methuselah star"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 16,
+   "categoria": "Sun",
+   "titolo": "5 Terrifying Facts About the Sun",
+   "gancio": "The Sun is not as calm as it looks.",
+   "voci": [
+    "solar flares",
+    "coronal mass ejections",
+    "the Carrington Event",
+    "sunquakes",
+    "the Sun's future red giant phase"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 17,
+   "categoria": "Sun",
+   "titolo": "What If the Sun Disappeared",
+   "gancio": "For 8 minutes you wouldn't even notice.",
+   "voci": [
+    "the 8 minute delay",
+    "darkness",
+    "Earth flying away",
+    "oceans freezing",
+    "life near volcanic vents"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 18,
+   "categoria": "Sun",
+   "titolo": "The Closest Photos Ever Taken of the Sun",
+   "gancio": "Did you know the Sun's surface looks like boiling popcorn?",
+   "voci": [
+    "Solar Orbiter campfires",
+    "Inouye telescope granules",
+    "sunspots",
+    "solar prominences",
+    "Parker Solar Probe inside the corona"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 19,
+   "categoria": "Sun",
+   "titolo": "How Big the Sun Really Is",
+   "gancio": "You could fit 1.3 million Earths inside the Sun.",
+   "voci": [
+    "Earth vs Sun",
+    "Jupiter vs Sun",
+    "sunspots bigger than Earth",
+    "solar loops",
+    "the Sun vs other stars"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 20,
+   "categoria": "Sun",
+   "titolo": "Northern Lights Seen From Space",
+   "gancio": "This is what auroras look like from the ISS.",
+   "voci": [
+    "the solar wind",
+    "Earth's magnetic field",
+    "green oxygen glow",
+    "red auroras",
+    "auroras on Jupiter"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 21,
+   "categoria": "Planets",
+   "titolo": "5 Most Hostile Planets in Our Solar System",
+   "gancio": "You wouldn't survive one second on number one.",
+   "voci": [
+    "Mars",
+    "Mercury",
+    "Neptune",
+    "Jupiter",
+    "Venus"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 22,
+   "categoria": "Planets",
+   "titolo": "Jupiter's Great Red Spot Is Dying",
+   "gancio": "This storm is bigger than Earth, and it's shrinking.",
+   "voci": [
+    "the size of the storm",
+    "its 300-year history",
+    "wind speeds",
+    "the shrinking",
+    "Juno's close-ups"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 23,
+   "categoria": "Planets",
+   "titolo": "5 Insane Facts About Jupiter",
+   "gancio": "Jupiter is not really a planet you could stand on.",
+   "voci": [
+    "no surface",
+    "95 moons",
+    "the strongest auroras",
+    "Jupiter's lightning",
+    "Juno spacecraft"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 24,
+   "categoria": "Planets",
+   "titolo": "5 Insane Facts About Saturn",
+   "gancio": "Saturn could float in a giant bathtub.",
+   "voci": [
+    "density",
+    "the rings",
+    "the hexagon storm",
+    "Enceladus geysers",
+    "the rings are disappearing"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 25,
+   "categoria": "Planets",
+   "titolo": "It Rains Diamonds on These Planets",
+   "gancio": "On these worlds, the rain is made of diamonds.",
+   "voci": [
+    "Neptune",
+    "Uranus",
+    "Saturn",
+    "Jupiter",
+    "55 Cancri e"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 26,
+   "categoria": "Planets",
+   "titolo": "5 Weird Facts About Uranus",
+   "gancio": "This planet rolls around the Sun on its side.",
+   "voci": [
+    "the tilt",
+    "42 years of night",
+    "the faint rings",
+    "the coldest atmosphere",
+    "Voyager 2 flyby"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 27,
+   "categoria": "Planets",
+   "titolo": "The Day on Venus Is Longer Than Its Year",
+   "gancio": "On Venus, the Sun rises in the west.",
+   "voci": [
+    "backward spin",
+    "243-day day",
+    "surface pressure",
+    "sulfuric acid clouds",
+    "Soviet Venera landers"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 28,
+   "categoria": "Planets",
+   "titolo": "5 Shocking Facts About Mercury",
+   "gancio": "The planet closest to the Sun has ice.",
+   "voci": [
+    "ice in polar craters",
+    "a shrinking planet",
+    "temperature extremes",
+    "a giant iron core",
+    "MESSENGER mission"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 29,
+   "categoria": "Mars",
+   "titolo": "5 Things NASA Found on Mars",
+   "gancio": "These discoveries changed what we know about Mars.",
+   "voci": [
+    "ancient riverbeds",
+    "organic molecules",
+    "methane spikes",
+    "underground ice",
+    "Jezero lake delta"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 30,
+   "categoria": "Mars",
+   "titolo": "The Tallest Volcano in the Solar System",
+   "gancio": "This volcano is almost three times taller than Everest.",
+   "voci": [
+    "Olympus Mons",
+    "Tharsis volcanoes",
+    "Valles Marineris",
+    "the Martian dust storms",
+    "Mars from orbit"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 31,
+   "categoria": "Mars",
+   "titolo": "What You Would See on Mars",
+   "gancio": "This is a real sunset on Mars, and it's blue.",
+   "voci": [
+    "blue sunset",
+    "dust devils",
+    "Perseverance landing",
+    "Ingenuity helicopter",
+    "Curiosity's view of Mount Sharp"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 32,
+   "categoria": "Mars",
+   "titolo": "How Long It Would Take to Reach Mars",
+   "gancio": "Getting to Mars is harder than you think.",
+   "voci": [
+    "7 months of travel",
+    "radiation",
+    "the launch window",
+    "landing in 7 minutes of terror",
+    "life on Mars base"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 33,
+   "categoria": "Moons",
+   "titolo": "5 Moons That Could Have Life",
+   "gancio": "Life might be hiding under the ice of number one.",
+   "voci": [
+    "Titan",
+    "Ganymede",
+    "Callisto",
+    "Enceladus",
+    "Europa"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 34,
+   "categoria": "Moons",
+   "titolo": "5 Strangest Moons in the Solar System",
+   "gancio": "Number one is basically a giant cracked egg.",
+   "voci": [
+    "Hyperion",
+    "Iapetus",
+    "Mimas",
+    "Io",
+    "Miranda"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 35,
+   "categoria": "Moons",
+   "titolo": "Io, the Most Volcanic World",
+   "gancio": "This moon has over 400 active volcanoes.",
+   "voci": [
+    "tidal heating",
+    "lava lakes",
+    "plumes 400 km high",
+    "Juno's close flyby",
+    "Io vs Earth volcanoes"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 36,
+   "categoria": "Moons",
+   "titolo": "Titan Has Lakes, Rain and Rivers",
+   "gancio": "This moon has rain, but it's not water.",
+   "voci": [
+    "methane lakes",
+    "thick atmosphere",
+    "Huygens landing",
+    "Dragonfly mission",
+    "Titan's sand dunes"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 37,
+   "categoria": "Moon",
+   "titolo": "5 Things You Didn't Know About the Moon",
+   "gancio": "The Moon is slowly running away from us.",
+   "voci": [
+    "3.8 cm per year",
+    "moonquakes",
+    "the far side",
+    "water ice at the poles",
+    "the Moon's origin collision"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 38,
+   "categoria": "Moon",
+   "titolo": "What Apollo Astronauts Left on the Moon",
+   "gancio": "There are 96 bags of human waste on the Moon.",
+   "voci": [
+    "flags bleached white",
+    "footprints that last millions of years",
+    "the retroreflectors",
+    "a family photo",
+    "golf balls"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 39,
+   "categoria": "Moon",
+   "titolo": "Why We Always See the Same Side of the Moon",
+   "gancio": "There's a side of the Moon you will never see from Earth.",
+   "voci": [
+    "tidal locking",
+    "the far side",
+    "Chang'e 4 landing",
+    "Earthrise",
+    "libration"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 40,
+   "categoria": "Moon",
+   "titolo": "The Next Humans on the Moon",
+   "gancio": "Humans are going back to the Moon, and this time to stay.",
+   "voci": [
+    "Artemis I",
+    "Artemis II crew",
+    "the SLS rocket",
+    "the lunar south pole",
+    "Gateway station"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 41,
+   "categoria": "Earth",
+   "titolo": "How Small Earth Really Is",
+   "gancio": "Did you know Earth is just a pale blue dot?",
+   "voci": [
+    "Earth vs Jupiter",
+    "Earth vs the Sun",
+    "Pale Blue Dot photo",
+    "the Milky Way",
+    "the observable universe"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 42,
+   "categoria": "Earth",
+   "titolo": "5 Shocking Views of Earth From Space",
+   "gancio": "Astronauts say these views changed them forever.",
+   "voci": [
+    "city lights at night",
+    "hurricanes from orbit",
+    "the Sahara",
+    "the Himalayas",
+    "the thin atmosphere"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 43,
+   "categoria": "Earth",
+   "titolo": "Hurricanes Seen From Space",
+   "gancio": "This is what a Category 5 hurricane looks like from orbit.",
+   "voci": [
+    "the eye",
+    "the spiral",
+    "lightning inside",
+    "the size",
+    "storm surge"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 44,
+   "categoria": "Earth",
+   "titolo": "Earth's Atmosphere Is Thinner Than You Think",
+   "gancio": "If Earth were an apple, the atmosphere would be its skin.",
+   "voci": [
+    "the thin blue line",
+    "the Kármán line",
+    "airglow",
+    "noctilucent clouds",
+    "the ozone layer"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 45,
+   "categoria": "Earth",
+   "titolo": "What Earth Looked Like Billions of Years Ago",
+   "gancio": "Earth once had no oxygen and a purple sky.",
+   "voci": [
+    "the Hadean",
+    "the Moon forming",
+    "the first oceans",
+    "Snowball Earth",
+    "the oxygen revolution"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 46,
+   "categoria": "Earth",
+   "titolo": "Volcanic Eruptions Seen From Space",
+   "gancio": "Some eruptions can be seen from the International Space Station.",
+   "voci": [
+    "Hunga Tonga",
+    "Sarychev Peak",
+    "Etna",
+    "Kilauea",
+    "the volcanic winter risk"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 47,
+   "categoria": "Earth",
+   "titolo": "Lightning You Can Only See From Space",
+   "gancio": "There's lightning that shoots up into space.",
+   "voci": [
+    "red sprites",
+    "blue jets",
+    "elves",
+    "gigantic jets",
+    "lightning from the ISS"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 48,
+   "categoria": "ISS",
+   "titolo": "5 Weird Things About Living on the ISS",
+   "gancio": "Astronauts drink their own recycled sweat.",
+   "voci": [
+    "recycled water",
+    "sleeping in bags",
+    "16 sunrises a day",
+    "growing taller",
+    "the space toilet"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 49,
+   "categoria": "ISS",
+   "titolo": "How Fast the ISS Really Moves",
+   "gancio": "The ISS crosses an ocean in about 15 minutes.",
+   "voci": [
+    "28,000 km per hour",
+    "90-minute orbit",
+    "constant free fall",
+    "seeing the ISS from Earth",
+    "reboosts"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 50,
+   "categoria": "ISS",
+   "titolo": "What Happens to Your Body in Space",
+   "gancio": "Space changes your body in ways you wouldn't expect.",
+   "voci": [
+    "bone loss",
+    "puffy face",
+    "weaker eyesight",
+    "muscle loss",
+    "the Scott Kelly twin study"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 51,
+   "categoria": "Astronauts",
+   "titolo": "5 Most Dangerous Spacewalks Ever",
+   "gancio": "Number one almost drowned an astronaut in space.",
+   "voci": [
+    "Alexei Leonov stuck",
+    "Ed White",
+    "Hubble repairs",
+    "untethered MMU flight",
+    "Luca Parmitano's helmet flooding"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 52,
+   "categoria": "Astronauts",
+   "titolo": "How Astronauts Train Underwater",
+   "gancio": "Before space, astronauts train in a giant pool.",
+   "voci": [
+    "Neutral Buoyancy Lab",
+    "full-size ISS mockup",
+    "6-hour sessions",
+    "vomit comet",
+    "survival training"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 53,
+   "categoria": "Astronauts",
+   "titolo": "The Overview Effect",
+   "gancio": "Almost every astronaut comes back changed.",
+   "voci": [
+    "Earth without borders",
+    "the thin atmosphere",
+    "Apollo 8 Earthrise",
+    "astronaut quotes",
+    "the silence"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 54,
+   "categoria": "Rockets",
+   "titolo": "5 Most Powerful Rockets Ever Launched",
+   "gancio": "Number one is louder than almost anything humans have built.",
+   "voci": [
+    "Falcon Heavy",
+    "Space Shuttle",
+    "Saturn V",
+    "SLS",
+    "Starship"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 55,
+   "categoria": "Rockets",
+   "titolo": "Saturn V by the Numbers",
+   "gancio": "This rocket burned 20 tons of fuel every second.",
+   "voci": [
+    "the height",
+    "the fuel",
+    "the sound",
+    "the speed",
+    "the Apollo 11 launch"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 56,
+   "categoria": "Rockets",
+   "titolo": "Rockets That Land Themselves",
+   "gancio": "Rockets used to be thrown away after every launch.",
+   "voci": [
+    "Falcon 9 landing",
+    "the drone ship",
+    "the double booster landing",
+    "the tower catch",
+    "reused boosters"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 57,
+   "categoria": "Rockets",
+   "titolo": "What a Rocket Launch Looks Like Up Close",
+   "gancio": "These cameras melted to capture this footage.",
+   "voci": [
+    "engine ignition",
+    "shock diamonds",
+    "max Q",
+    "stage separation",
+    "the view from the rocket"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 58,
+   "categoria": "Rockets",
+   "titolo": "The Space Shuttle by the Numbers",
+   "gancio": "The Space Shuttle flew 135 missions.",
+   "voci": [
+    "the orbiter",
+    "the external tank",
+    "solid rocket boosters",
+    "the heat tiles",
+    "the landing glide"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 59,
+   "categoria": "Rockets",
+   "titolo": "Night Launches From Space",
+   "gancio": "This is what a rocket launch looks like from the ISS.",
+   "voci": [
+    "the trail",
+    "the jellyfish effect",
+    "the second stage",
+    "the reentry",
+    "the plume"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 60,
+   "categoria": "Missions",
+   "titolo": "Voyager 1, the Farthest Human Object",
+   "gancio": "This probe is 24 billion km away and still talking to us.",
+   "voci": [
+    "the Golden Record",
+    "the Pale Blue Dot",
+    "leaving the heliosphere",
+    "the 1977 computer",
+    "when it will go silent"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 61,
+   "categoria": "Missions",
+   "titolo": "5 Missions That Crashed on Purpose",
+   "gancio": "NASA destroyed these spacecraft on purpose.",
+   "voci": [
+    "Deep Impact",
+    "LCROSS",
+    "Cassini's Grand Finale",
+    "Juno's future plunge",
+    "DART hitting an asteroid"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 62,
+   "categoria": "Missions",
+   "titolo": "DART: Humanity Moved an Asteroid",
+   "gancio": "Humans changed the orbit of an asteroid for the first time.",
+   "voci": [
+    "Dimorphos",
+    "the impact",
+    "the change of orbit",
+    "the debris tail",
+    "Hera mission"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 63,
+   "categoria": "Missions",
+   "titolo": "New Horizons and the Heart of Pluto",
+   "gancio": "Pluto has a giant heart made of ice.",
+   "voci": [
+    "the 9-year journey",
+    "Tombaugh Regio",
+    "ice mountains",
+    "the blue haze",
+    "Arrokoth"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 64,
+   "categoria": "Missions",
+   "titolo": "Cassini's Final Dive Into Saturn",
+   "gancio": "After 13 years, Cassini sacrificed itself on purpose.",
+   "voci": [
+    "the rings",
+    "Enceladus discovery",
+    "Titan flybys",
+    "the Grand Finale dives",
+    "the last signal"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 65,
+   "categoria": "Missions",
+   "titolo": "Perseverance's Most Incredible Moments",
+   "gancio": "This rover is collecting rocks to bring back to Earth.",
+   "voci": [
+    "the landing",
+    "Ingenuity's first flight",
+    "the sample tubes",
+    "the microphone sounds of Mars",
+    "oxygen from MOXIE"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 66,
+   "categoria": "Missions",
+   "titolo": "5 Spacecraft Still Flying Out There",
+   "gancio": "These machines are still working billions of kilometres away.",
+   "voci": [
+    "Juno",
+    "New Horizons",
+    "Parker Solar Probe",
+    "Voyager 2",
+    "Voyager 1"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 67,
+   "categoria": "Telescopes",
+   "titolo": "5 Most Mind-Blowing James Webb Images",
+   "gancio": "Every dot in this image is a galaxy.",
+   "voci": [
+    "Southern Ring Nebula",
+    "Carina Nebula cliffs",
+    "Stephan's Quintet",
+    "Pillars of Creation",
+    "Webb's First Deep Field"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 68,
+   "categoria": "Telescopes",
+   "titolo": "Hubble's Most Famous Photos",
+   "gancio": "This photo shows 10,000 galaxies in a tiny patch of sky.",
+   "voci": [
+    "Eagle Nebula",
+    "Crab Nebula",
+    "Sombrero Galaxy",
+    "Hubble Ultra Deep Field",
+    "Hubble Deep Field"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 69,
+   "categoria": "Telescopes",
+   "titolo": "How James Webb Sees the Invisible",
+   "gancio": "This telescope sees heat from the first galaxies.",
+   "voci": [
+    "the gold mirror",
+    "the sunshield",
+    "infrared",
+    "1.5 million km from Earth",
+    "the oldest galaxies"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 70,
+   "categoria": "Telescopes",
+   "titolo": "The Pillars of Creation",
+   "gancio": "These pillars are 5 light years tall.",
+   "voci": [
+    "the Eagle Nebula",
+    "star nurseries",
+    "Hubble 1995 vs 2014",
+    "Webb's view",
+    "they may already be gone"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 71,
+   "categoria": "Galaxies",
+   "titolo": "Andromeda Will Crash Into Our Galaxy",
+   "gancio": "Something is pulling our galaxy toward another one right now.",
+   "voci": [
+    "Andromeda's size",
+    "110 km per second",
+    "4.5 billion years",
+    "Milkomeda",
+    "the night sky during the merger"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 72,
+   "categoria": "Galaxies",
+   "titolo": "5 Strangest Galaxies Ever Found",
+   "gancio": "Number one has almost no dark matter.",
+   "voci": [
+    "Hoag's Object",
+    "the Sombrero Galaxy",
+    "the Cartwheel Galaxy",
+    "the Antennae Galaxies",
+    "NGC 1052-DF2"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 73,
+   "categoria": "Galaxies",
+   "titolo": "How Big the Milky Way Really Is",
+   "gancio": "Light needs 100,000 years to cross our galaxy.",
+   "voci": [
+    "the spiral arms",
+    "the central bar",
+    "Sagittarius A*",
+    "our place in the galaxy",
+    "the galactic year"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 74,
+   "categoria": "Scale",
+   "titolo": "The Scale of the Universe in 50 Seconds",
+   "gancio": "How small are we, really?",
+   "voci": [
+    "Earth",
+    "the Solar System",
+    "the Milky Way",
+    "the Local Group",
+    "the observable universe"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 75,
+   "categoria": "Scale",
+   "titolo": "How Far Is the Nearest Star",
+   "gancio": "Our fastest probe would need 70,000 years to get there.",
+   "voci": [
+    "Proxima Centauri",
+    "light years",
+    "Voyager's speed",
+    "Breakthrough Starshot",
+    "Proxima b"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 76,
+   "categoria": "Scale",
+   "titolo": "How Many Stars Are in the Universe",
+   "gancio": "There are more stars than grains of sand on all of Earth's beaches.",
+   "voci": [
+    "stars in the Milky Way",
+    "galaxies in the universe",
+    "the Deep Field",
+    "grains of sand",
+    "stars you can see with your eyes"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 77,
+   "categoria": "Scale",
+   "titolo": "Looking Back in Time",
+   "gancio": "Every time you look at the night sky, you're looking at the past.",
+   "voci": [
+    "the Moon 1 second ago",
+    "the Sun 8 minutes ago",
+    "Proxima 4 years ago",
+    "Andromeda 2.5 million years ago",
+    "the cosmic microwave background"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 78,
+   "categoria": "Asteroids",
+   "titolo": "5 Asteroids That Almost Hit Earth",
+   "gancio": "Number one passed closer than our satellites.",
+   "voci": [
+    "Apophis",
+    "2019 OK",
+    "Chelyabinsk",
+    "2020 QG",
+    "2004 MN4"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 79,
+   "categoria": "Asteroids",
+   "titolo": "Apophis Will Pass Earth in 2029",
+   "gancio": "On Friday the 13th, 2029, an asteroid will fly past Earth.",
+   "voci": [
+    "340 meters wide",
+    "closer than GPS satellites",
+    "visible to the naked eye",
+    "OSIRIS-APEX",
+    "no impact"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 80,
+   "categoria": "Asteroids",
+   "titolo": "The Asteroid That Killed the Dinosaurs",
+   "gancio": "This impact was like billions of atomic bombs at once.",
+   "voci": [
+    "Chicxulub",
+    "the impact",
+    "the global fire",
+    "the impact winter",
+    "the 75 percent extinction"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 81,
+   "categoria": "Asteroids",
+   "titolo": "NASA Brought an Asteroid Back to Earth",
+   "gancio": "This capsule carried a piece of an asteroid back to Earth.",
+   "voci": [
+    "Bennu",
+    "OSIRIS-REx touch and go",
+    "the capsule landing",
+    "the sample",
+    "the building blocks of life"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 82,
+   "categoria": "Comets",
+   "titolo": "5 Most Spectacular Comets Ever Seen",
+   "gancio": "Number one was visible during the day.",
+   "voci": [
+    "Comet NEOWISE",
+    "Halley's Comet",
+    "Hale-Bopp",
+    "Comet Lovejoy from the ISS",
+    "Comet McNaught"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 83,
+   "categoria": "Comets",
+   "titolo": "Shooting Stars Seen From Space",
+   "gancio": "This is what a meteor shower looks like from above.",
+   "voci": [
+    "the Perseids",
+    "meteors from the ISS",
+    "fireballs",
+    "the Leonid storm",
+    "dust from comets"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 84,
+   "categoria": "Exoplanets",
+   "titolo": "5 Most Extreme Exoplanets Ever Found",
+   "gancio": "On number one it rains molten glass sideways.",
+   "voci": [
+    "WASP-76b iron rain",
+    "Kepler-16b two suns",
+    "55 Cancri e lava ocean",
+    "TrES-2b darker than coal",
+    "HD 189733b glass rain"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 85,
+   "categoria": "Exoplanets",
+   "titolo": "5 Planets That Could Be Like Earth",
+   "gancio": "One of these might have life right now.",
+   "voci": [
+    "Kepler-452b",
+    "Proxima Centauri b",
+    "TRAPPIST-1e",
+    "Kepler-186f",
+    "K2-18b"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 86,
+   "categoria": "Exoplanets",
+   "titolo": "How We Find Planets Around Other Stars",
+   "gancio": "We find planets we will never see.",
+   "voci": [
+    "the transit method",
+    "the wobble method",
+    "Kepler",
+    "TESS",
+    "Webb reading atmospheres"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 87,
+   "categoria": "Mysteries",
+   "titolo": "5 Unsolved Mysteries of Space",
+   "gancio": "Scientists still can't explain number one.",
+   "voci": [
+    "the Wow! signal",
+    "fast radio bursts",
+    "Oumuamua",
+    "dark matter",
+    "dark energy"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 88,
+   "categoria": "Mysteries",
+   "titolo": "The Wow! Signal",
+   "gancio": "In 1977 a radio telescope picked up a signal no one ever heard again.",
+   "voci": [
+    "Big Ear telescope",
+    "72 seconds",
+    "the circled word Wow",
+    "Sagittarius",
+    "still unexplained"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 89,
+   "categoria": "Mysteries",
+   "titolo": "Oumuamua, the Visitor From Another Star",
+   "gancio": "In 2017 something entered our Solar System from interstellar space.",
+   "voci": [
+    "the discovery",
+    "the cigar shape",
+    "the strange acceleration",
+    "the alien theory",
+    "Comet Borisov"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 90,
+   "categoria": "Mysteries",
+   "titolo": "Dark Matter Is Everywhere",
+   "gancio": "85 percent of all matter is invisible.",
+   "voci": [
+    "galaxy rotation",
+    "Bullet Cluster",
+    "gravitational lensing",
+    "dark matter maps",
+    "Euclid telescope"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 91,
+   "categoria": "Future",
+   "titolo": "How the Universe Will End",
+   "gancio": "This is how everything ends.",
+   "voci": [
+    "the Sun dying",
+    "the last stars",
+    "black holes evaporating",
+    "the heat death",
+    "the Big Rip"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 92,
+   "categoria": "Future",
+   "titolo": "What the Sky Will Look Like in the Future",
+   "gancio": "In billions of years the night sky will be unrecognizable.",
+   "voci": [
+    "Andromeda filling the sky",
+    "the Moon farther away",
+    "Polaris no longer north",
+    "the Sun as a red giant",
+    "galaxies vanishing"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 93,
+   "categoria": "Future",
+   "titolo": "5 Space Events You Can See in Your Lifetime",
+   "gancio": "Mark these dates, some happen once in a lifetime.",
+   "voci": [
+    "total solar eclipse 2026 in Spain",
+    "Apophis 2029",
+    "Halley's Comet 2061",
+    "Artemis Moon landing",
+    "the next nova outburst"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 94,
+   "categoria": "History",
+   "titolo": "5 Firsts in Space History",
+   "gancio": "Number one changed the world in 1957.",
+   "voci": [
+    "first spacewalk 1965",
+    "first woman in space 1963",
+    "first human Yuri Gagarin 1961",
+    "first animal Laika 1957",
+    "first satellite Sputnik 1957"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 95,
+   "categoria": "History",
+   "titolo": "Apollo 11 in 50 Seconds",
+   "gancio": "They landed with only seconds of fuel left.",
+   "voci": [
+    "the Saturn V launch",
+    "the 1202 alarm",
+    "the Eagle landing",
+    "the first step",
+    "splashdown"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 96,
+   "categoria": "History",
+   "titolo": "Apollo 13: Houston, We've Had a Problem",
+   "gancio": "Three astronauts survived a broken spacecraft 300,000 km from home.",
+   "voci": [
+    "the oxygen tank explosion",
+    "the lunar module lifeboat",
+    "the CO2 filter fix",
+    "the far side of the Moon",
+    "splashdown"
+   ],
+   "formato": "storia"
+  },
+  {
+   "n": 97,
+   "categoria": "History",
+   "titolo": "The Animals That Went to Space Before Us",
+   "gancio": "Before humans, these animals went to space.",
+   "voci": [
+    "fruit flies 1947",
+    "Albert II the monkey",
+    "Laika",
+    "Belka and Strelka",
+    "Ham the chimpanzee"
+   ],
+   "formato": "top5"
+  },
+  {
+   "n": 98,
+   "categoria": "Sounds",
+   "titolo": "5 Scariest Space Sounds Recorded by NASA",
+   "gancio": "These are real sounds recorded by NASA.",
+   "voci": [
+    "Saturn's radio emissions",
+    "Jupiter's magnetosphere",
+    "the Perseus black hole",
+    "Earth's chorus waves",
+    "a pulsar's beat"
+   ],
+   "formato": "suoni"
+  },
+  {
+   "n": 99,
+   "categoria": "Sounds",
+   "titolo": "The Sound of a Black Hole",
+   "gancio": "Have you ever heard the actual sound of a black hole?",
+   "voci": [
+    "the Perseus cluster",
+    "pressure waves",
+    "57 octaves higher",
+    "M87 sonification",
+    "why space has sound"
+   ],
+   "formato": "suoni"
+  },
+  {
+   "n": 100,
+   "categoria": "Sounds",
+   "titolo": "What Mars Sounds Like",
+   "gancio": "For the first time, we can hear the wind on Mars.",
+   "voci": [
+    "Perseverance microphones",
+    "the wind",
+    "the laser zaps",
+    "Ingenuity buzzing",
+    "sound travels slower on Mars"
+   ],
+   "formato": "suoni"
+  }
+ ]
+}

@@ -8,6 +8,12 @@ on:
       quanti:
         description: "Quanti video Facts creare"
         default: "1"
+      formato:
+        description: "Solo un formato della scaletta: top5, storia, suoni (vuoto = in ordine)"
+        default: ""
+      numero:
+        description: "Un numero preciso della scaletta (vuoto = il prossimo)"
+        default: ""
 
 permissions:
   contents: write
@@ -41,6 +47,8 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           PYTHONUNBUFFERED: "1"
           QUANTI: ${{ github.event.inputs.quanti }}
+          FORMATO: ${{ github.event.inputs.formato }}
+          NUMERO: ${{ github.event.inputs.numero }}
         run: python src/fatti.py
       - name: Salva l'archivio (anti-doppioni) e i video pronti
         if: always()
