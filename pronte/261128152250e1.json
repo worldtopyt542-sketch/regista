@@ -1,0 +1,66 @@
+{
+ "id": "261128152250e1",
+ "creato": "2026-11-28T15:22:22.959811",
+ "formato": "facts",
+ "titolo": "5 Fastest Things in the Universe",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, NASA's Hubble Space Telescope Finds Dead Stars 'Polluted with Planet Debris': https://images.nasa.gov/details/GSFC_20171208_Archive_e001500\n- NASA, NASA’s SDO Captures Stunning 4K View of April 17 Solar Flare: https://images.nasa.gov/details/GSFC_20160426_SDO_m12224_SolarFlare_4K\n- NASA, Collision Between Two Spiral Galaxies: https://images.nasa.gov/details/PIA10387\n- NASA, Beacons of X-ray Light Animation: https://images.nasa.gov/details/PIA18845\n- NASA, Best-Ever Snapshot of a Black Hole's Jets: https://images.nasa.gov/details/GSFC_20171208_Archive_e001876\n- NASA, MMS Launch and Deploy - Narrated: https://images.nasa.gov/details/GSFC_20141121_MMS_m11702_launch\n- NASA, Astronomers Discover Dizzying Spin of the Milky Way Galaxy’s “Halo”: https://images.nasa.gov/details/GSFC_20171208_Archive_e000261\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://www.nasa.gov/mission_pages/parker-solar-probe/overview/index.html",
+  "https://www.nasa.gov/mission_pages/hubble/science/hypervelocity-star.html",
+  "https://www.nasa.gov/mission_pages/chandra/news/pulsar-spinning-fast.html",
+  "https://hubblesite.org/contents/news-releases/2020/news-2020-16",
+  "https://science.nasa.gov/ems/09_the_speed_of_light"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Fastest Things in the Universe",
+   "descrizione": "Nothing on Earth prepares you for the terrifying speed of number one.",
+   "hashtags": [
+    "#space",
+    "#science",
+    "#universe",
+    "#cosmos",
+    "#astronomy",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPgawrxsVP8TRhpkIGQErOZmUrpHVIAAkEfAAJmrlhQkpSAuC5ozcE9BA",
+   "msg": "5193260023:224"
+  },
+  "it": {
+   "titolo": "Le 5 cose più veloci dell'universo",
+   "descrizione": "Niente sulla Terra ti prepara alla velocità folle della numero uno.",
+   "hashtags": [
+    "#spazio",
+    "#scienza",
+    "#universo",
+    "#cosmo",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPhawrxtDkmrgjSw0gL8SEQctJbip4AAkIfAAJmrlhQC-kxMGueX3s9BA",
+   "msg": "5193260023:225"
+  },
+  "es": {
+   "titolo": "Las 5 cosas más rápidas del universo",
+   "descrizione": "Nada en la Tierra te prepara para la velocidad aterradora del número uno.",
+   "hashtags": [
+    "#espacio",
+    "#ciencia",
+    "#universo",
+    "#cosmos",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPiawrxth9mTDR_e2L-e51fmj1fjT0AAkMfAAJmrlhQq-7jIzACfFs9BA",
+   "msg": "5193260023:226"
+  }
+ },
+ "msg_bottoni": "5193260023:227"
+}
