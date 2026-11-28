@@ -173,14 +173,15 @@ CONTROLLO = """These are {n} frames, in time order, from a video clip we may use
 cinematic space/nature Short. For EACH frame decide if it is CLEAN: real or rendered imagery (space, planets, stars,
 Earth from orbit, rockets, spacecraft, nature, animals) that fills the frame. NOT clean: titles, captions, slides,
 credits or any readable text; logos or watermarks; people talking to the camera, interviews, press conferences,
-studio or office shots; charts and diagrams; black, white or blank screens; heavy blur.
+studio or office shots; factories, clean rooms, labs, hangars, control rooms; charts and diagrams; black, white or
+blank screens; heavy blur. Also NOT clean if it clearly does not show what the narration is about: {tema}
 Also give, for each frame, the horizontal position of the main subject (planet, rocket, animal, astronaut...)
 from 0.0 (left edge) to 1.0 (right edge), 0.5 if centred or if there is no single subject: the clip will be cropped
 to a vertical 9:16 window around it.
 Reply JSON only: {{"pulito": [true, false, ...], "centro_x": [0.5, ...]}} with exactly {n} values each."""
 
 
-def pulisci_clip(path, chiave, quadri=6):
+def pulisci_clip(path, chiave, quadri=6, tema=""):
     """Gemini guarda {quadri} fotogrammi: la clip si accorcia al tratto pulito piu' lungo, o si scarta.
     Ritorna None se va scartata, altrimenti la posizione orizzontale del soggetto (0-1) per il taglio 9:16."""
     import editor, scrittore
@@ -195,7 +196,7 @@ def pulisci_clip(path, chiave, quadri=6):
                     "-vf", "scale=384:-2", jpg])
         foto.append((f"Frame {k + 1} (t={t:.0f}s)", jpg))
     try:
-        risposta = scrittore.gemini(chiave, CONTROLLO.format(n=quadri), 0.1, foto)
+        risposta = scrittore.gemini(chiave, CONTROLLO.format(n=quadri, tema=tema or "space or nature"), 0.1, foto)
         esito, centri = risposta.get("pulito") or [], risposta.get("centro_x") or []
     except Exception as e:
         print(f"   controllo clip non riuscito ({str(e)[:80]}), la uso com'e'")
@@ -292,7 +293,7 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
                 continue
             centro = 0.5
             if chiavi.get("gemini") and (f == "nasa" or orizzontale(dest)):
-                centro = pulisci_clip(dest, chiavi["gemini"], 6 if f == "nasa" else 2 if info.get("foto") else 3)
+                centro = pulisci_clip(dest, chiavi["gemini"], 6 if f == "nasa" else 2 if info.get("foto") else 3, query)
                 if centro is None:
                     print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
                     continue

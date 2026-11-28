@@ -88,14 +88,14 @@ def logo_path():
     return os.path.join(os.path.dirname(ASSETS), _brand()["logo_video"])
 
 
-def filtro_marchio(d, ingresso, logo, uscita, y_logo=1450):
-    """Pezzo di filtergraph: logo centrato fra sottotitoli e credito + barra di avanzamento (Y: 1150)."""
+def filtro_marchio(d, ingresso, logo, uscita, y_logo=95):
+    """Pezzo di filtergraph: logo piccolo in alto a sinistra (filigrana, fuori dalle scritte) + barra (Y: 1150)."""
     col = "0x" + _brand()["colore"].lstrip("#")
-    return (f"{logo}scale=260:-1,format=rgba,colorchannelmixer=aa=0.9[logo];"
+    return (f"{logo}scale=210:-1,format=rgba,colorchannelmixer=aa=0.75[logo];"
             f"{ingresso}drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[mb];"
             f"color=c={col}:s=1080x14:d={d:.2f}[bar];"
             f"[mb][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[mc];"
-            f"[mc][logo]overlay=x=(main_w-overlay_w)/2:y={y_logo}{uscita}")
+            f"[mc][logo]overlay=x=36:y={y_logo}{uscita}")
 
 
 def marchia(video, out):
