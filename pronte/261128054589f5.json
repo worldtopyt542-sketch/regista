@@ -1,0 +1,65 @@
+{
+ "id": "261128054589f5",
+ "creato": "2026-11-28T05:45:25.916925",
+ "formato": "facts",
+ "titolo": "5 Extreme Scale Facts About Mars",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, How Scientists Study Wind on Mars (NASA Mars News Report June 22, 2022) : https://images.nasa.gov/details/JPL-20220622-MARSRf-0001-Mars_Report\n- NASA, NASA Science Live: Juno Spacecraft Makes Historic Flybys of Jupiter’s Moons [Episode 54]: https://images.nasa.gov/details/GSFC_20230307_NSL_Juno_Ep54\n- NASA, KSC-04-S-00203: https://images.nasa.gov/details/ksc_062504_acomet\n- NASA, 2017 Hurricanes and Aerosols Simulation: https://images.nasa.gov/details/GSFC_20171113_Hurricanes_m12772_Aerosols\n- NASA, How to Cook a Comet: https://images.nasa.gov/details/GSFC_20131121_ISON_m11384_Comet\n- NASA, What's Up: July 2021 Skywatching Tips from NASA : https://images.nasa.gov/details/JPL-20210701-WHATSUf-0001-Whats-Up-July-2021\n- NASA, New Horizons Interview with Dennis Reuter: https://images.nasa.gov/details/GSFC_20150713_Dennis_Reuter_m11950_Horizons\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://mars.nasa.gov/gallery/atlas/olympus-mons.html",
+  "https://science.nasa.gov/mars/valles-marineris/",
+  "https://www.nasa.gov/feature/goddard/2018/goddard-catches-dust-storm-mars",
+  "https://science.nasa.gov/mars/facts/",
+  "https://science.nasa.gov/resource/blue-sunset/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Extreme Scale Facts About Mars",
+   "descrizione": "5 mind-blowing facts about Mars that prove the Red Planet is far more extreme than Earth.",
+   "hashtags": [
+    "#mars",
+    "#space",
+    "#astronomy",
+    "#science",
+    "#planetoffscale",
+    "#shorts"
+   ],
+   "file_id": "BAACAgQAAxkDAAOcawpqeD8OrKMEEr2Gk7loUu31WyQAApkhAALaYlhQ7Xq2YNoZWRk9BA",
+   "msg": "5193260023:156"
+  },
+  "it": {
+   "titolo": "5 Fatti Estremi su Marte",
+   "descrizione": "5 fatti sconvolgenti su Marte che dimostrano che il Pianeta Rosso è molto più estremo della Terra.",
+   "hashtags": [
+    "#marte",
+    "#spazio",
+    "#astronomia",
+    "#scienza",
+    "#universoestremo",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOdawpqe3-8gYWFdXdOyEeFJE2yQ3cAApohAALaYlhQrS58kirEETU9BA",
+   "msg": "5193260023:157"
+  },
+  "es": {
+   "titolo": "5 Datos Extremos Sobre Marte",
+   "descrizione": "5 datos brutales sobre Marte que prueban que el Planeta Rojo es mucho más extremo que la Tierra.",
+   "hashtags": [
+    "#marte",
+    "#espacio",
+    "#astronomia",
+    "#ciencia",
+    "#planetaextremo",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOeawpqfa2NRIlXuQOIM4x5Ieq9nZgAApshAALaYlhQflAftmHpx_E9BA",
+   "msg": "5193260023:158"
+  }
+ },
+ "msg_bottoni": "5193260023:159"
+}

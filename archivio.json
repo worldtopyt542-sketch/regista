@@ -4,11 +4,16 @@
   "5 Most Extreme Electrical Phenomena in the Universe",
   "5 Crazy Map Secrets in GTA 6 Leonida!",
   "5 Largest Monsters in the Universe",
-  "5 Mind-Blowing Scale Comparisons of Earth to the Universe"
+  "5 Mind-Blowing Scale Comparisons of Earth to the Universe",
+  "5 Craziest Animal Superpowers in Real Life",
+  "5 Fastest Animals on Earth Ranked by Speed",
+  "5 Extreme Scale Facts About Mars"
  ],
  "clip_usate": [
+  "nasa:20250429_NASA_Citizen_Sci_Twitch_Stream",
   "nasa:311_ScienceCasts-observing-lightning-ISS",
   "nasa:ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb",
+  "nasa:GRC-2014-CM-0137.4",
   "nasa:GRC-2022-CM-0114",
   "nasa:GRC-2022-CM-0123",
   "nasa:GSFC_20080520_HST_m10217_Zoom_Out",
@@ -16,17 +21,36 @@
   "nasa:GSFC_20100722_Hubble_m10619_Exoplanets",
   "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
   "nasa:GSFC_20120614_GPM_m10999_Core_Rotates",
+  "nasa:GSFC_20131121_ISON_m11384_Comet",
+  "nasa:GSFC_20140529_HS3_m11559_Kickoff",
   "nasa:GSFC_20140911_SDO_m11651_Flare",
+  "nasa:GSFC_20150713_Dennis_Reuter_m11950_Horizons",
+  "nasa:GSFC_20150915_Greenland_m11994_SLR",
+  "nasa:GSFC_20150915_Greenland_m11994_SLR_teaser",
   "nasa:GSFC_20151214_EPIC_m12097",
+  "nasa:GSFC_20170622_m12604_UncoverSpicules",
   "nasa:GSFC_20170811_Solar_m11797_Eruption",
+  "nasa:GSFC_20171113_Hurricanes_m12772_Aerosols",
+  "nasa:GSFC_20171208_Dolphins_m12700_data",
+  "nasa:GSFC_20180808_m13032_EXPORTS",
   "nasa:GSFC_20181002_SMBH_m13043_Simulation",
   "nasa:GSFC_20181129_FERMI_m13104_Starlight",
   "nasa:GSFC_20190808_HST_m13279_Jupiter",
+  "nasa:GSFC_20210930_NSL_Ep38_Landsat",
+  "nasa:GSFC_20230307_NSL_Juno_Ep54",
+  "nasa:JPL-20210701-WHATSUf-0001-Whats-Up-July-2021",
+  "nasa:JPL-20220622-MARSRf-0001-Mars_Report",
+  "nasa:JPL-20220901-WHATSUf-0001-Whats_Up_September_2022",
+  "nasa:JPL-20241119-TECHf-0001-Underwater_Robots_for_Space_Exploration",
   "nasa:JPL-20250409-NUSTARf-0001-Hunting_Hidden_Black_Holes_2160cc",
   "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944",
   "nasa:NASAsRomanSpaceTelescopeHardwareHighlightsSpring2024_1080",
   "nasa:Space-247365",
   "nasa:iss068m262721811_Expedition_68_Tropical_Storm_Ian_Flyover_220929",
+  "nasa:jsc2021m000203_Expedition_65_9-11_Message_210907",
+  "nasa:jsc2021m000794_JSC_NBL",
+  "nasa:jsc2023m000188_OSIRIS-REx_Sample_Return_and_Reveal_B-roll",
+  "nasa:ksc_062504_acomet",
   "nasa:ksc_081105_mro_intro",
   "nasa:ksc_121304_comet_history",
   "tw:2932753534:715",
@@ -41,7 +65,10 @@
   "lightning and rare electrical phenomena",
   "GTA 6 Leonida map secrets",
   "the biggest stars and black holes",
-  "how small Earth is in the universe"
+  "how small Earth is in the universe",
+  "animal superpowers",
+  "the fastest animals on Earth",
+  "Mars, the red planet"
  ],
  "storico": [
   {
@@ -102,6 +129,51 @@
     "nasa:GSFC_20080520_HST_m10223_COS",
     "nasa:GSFC_20100722_Hubble_m10619_Exoplanets",
     "nasa:GSFC_20151214_EPIC_m12097"
+   ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "5 Craziest Animal Superpowers in Real Life",
+   "tema": "animal superpowers",
+   "critic_ok": true,
+   "clip": [
+    "nasa:GRC-2014-CM-0137.4",
+    "nasa:jsc2021m000203_Expedition_65_9-11_Message_210907",
+    "nasa:jsc2023m000188_OSIRIS-REx_Sample_Return_and_Reveal_B-roll",
+    "nasa:GSFC_20180808_m13032_EXPORTS",
+    "nasa:GSFC_20140529_HS3_m11559_Kickoff",
+    "nasa:jsc2021m000794_JSC_NBL",
+    "nasa:GSFC_20171208_Dolphins_m12700_data"
+   ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "5 Fastest Animals on Earth Ranked by Speed",
+   "tema": "the fastest animals on Earth",
+   "critic_ok": true,
+   "clip": [
+    "nasa:GSFC_20170622_m12604_UncoverSpicules",
+    "nasa:20250429_NASA_Citizen_Sci_Twitch_Stream",
+    "nasa:JPL-20220901-WHATSUf-0001-Whats_Up_September_2022",
+    "nasa:JPL-20241119-TECHf-0001-Underwater_Robots_for_Space_Exploration",
+    "nasa:GSFC_20150915_Greenland_m11994_SLR",
+    "nasa:GSFC_20150915_Greenland_m11994_SLR_teaser",
+    "nasa:GSFC_20210930_NSL_Ep38_Landsat"
+   ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "5 Extreme Scale Facts About Mars",
+   "tema": "Mars, the red planet",
+   "critic_ok": true,
+   "clip": [
+    "nasa:JPL-20220622-MARSRf-0001-Mars_Report",
+    "nasa:GSFC_20230307_NSL_Juno_Ep54",
+    "nasa:ksc_062504_acomet",
+    "nasa:GSFC_20171113_Hurricanes_m12772_Aerosols",
+    "nasa:GSFC_20131121_ISON_m11384_Comet",
+    "nasa:JPL-20210701-WHATSUf-0001-Whats-Up-July-2021",
+    "nasa:GSFC_20150713_Dennis_Reuter_m11950_Horizons"
    ]
   }
  ]
