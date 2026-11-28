@@ -1,0 +1,66 @@
+{
+ "id": "2611281406ece1",
+ "creato": "2026-11-28T14:06:48.218252",
+ "formato": "facts",
+ "titolo": "5 Biggest Storms in the Solar System",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Jupiter's Great Red Spot Shrinks and Grows: https://images.nasa.gov/details/GSFC_20180313_Jupiter_m12878_GreatRedSpot\n- NASA, HURRICANE FRANKLIN IS SEEN FROM THE INTERNATIONAL SPACE STATION: https://images.nasa.gov/details/Expedition_69_Space_Station_Flies_Over_Hurricane_Franklin_Replay\n- NASA, Recent Mars and Earth Dust Storms Compared: https://images.nasa.gov/details/PIA02807\n- NASA, Space Science: https://images.nasa.gov/details/8910708\n- NASA, Hexagon and Rings: https://images.nasa.gov/details/PIA14646\n- NASA, Dynamics of Jupiter's Great Red Spot in the Near-infrared: https://images.nasa.gov/details/PIA01083\n- NASA, Big Ozone Holes Headed For Extinction By 2040: Depleting Chemicals: https://images.nasa.gov/details/GSFC_20150506_Ozone_m11781_Depleting_Chemicals\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://www.noaa.gov",
+  "https://mars.nasa.gov",
+  "https://solarsystem.nasa.gov",
+  "https://solarsystem.nasa.gov",
+  "https://solarsystem.nasa.gov"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Biggest Storms in the Solar System",
+   "descrizione": "Discover the terrifying giants of our solar system where entire planets are swallowed by endless chaos.",
+   "hashtags": [
+    "#space",
+    "#astronomy",
+    "#science",
+    "#planets",
+    "#solarsystem",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPAawrf-vqMaUYcfZLi7YixHD9dQC0AAg8fAAJmrlhQQZrX69AnphU9BA",
+   "msg": "5193260023:192"
+  },
+  "it": {
+   "titolo": "Le 5 Tempeste Più Grandi Del Sistema Solare",
+   "descrizione": "Scopri i giganti più spaventosi del sistema solare dove interi pianeti vengono inghiottiti da un caos senza fine.",
+   "hashtags": [
+    "#spazio",
+    "#astronomia",
+    "#scienza",
+    "#pianeti",
+    "#sistemasolare",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPBawrf-9oxpXRv7tSids9dCanaYmUAAhAfAAJmrlhQI5UlqtzP4pA9BA",
+   "msg": "5193260023:193"
+  },
+  "es": {
+   "titolo": "Las 5 Tormentas Más Grandes Del Sistema Solar",
+   "descrizione": "Descubre los gigantes más terroríficos de nuestro sistema solar donde mundos enteros son tragados por el caos.",
+   "hashtags": [
+    "#espacio",
+    "#astronomia",
+    "#ciencia",
+    "#planetas",
+    "#sistemasolar",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPCawrf_WHqxpl1zpccRIYXC9YPC5UAAhEfAAJmrlhQvwcC8S_fEfk9BA",
+   "msg": "5193260023:194"
+  }
+ },
+ "msg_bottoni": "5193260023:195"
+}
