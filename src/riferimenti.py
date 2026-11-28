@@ -6,7 +6,6 @@ import json, os, re, sys, time, urllib.parse
 sys.path.insert(0, os.path.dirname(__file__))
 import scrittore
 from comune import RADICE, salva
-from scopri import id_youtube
 
 ANALISI = """You are a short-form video editor. Watch this YouTube Short carefully, second by second, and reverse-engineer
 its format so another team can replicate the STRUCTURE (not the content) with licensed footage (NASA, Pixabay, CC BY).
@@ -37,6 +36,11 @@ Return ONLY JSON:
  "differenze_dal_nostro_format": ["..."], "modifiche_al_codice": ["..."]}
 Analyses:
 {dati}"""
+
+
+def id_youtube(url):  # come scopri.id_youtube, senza dipendere da requests: il workflow installa solo Python
+    m = re.search(r"(?:v=|youtu\.be/|shorts/|live/)([\w-]{11})", url or "")
+    return m.group(1) if m else None
 
 
 def gemini_video(chiave, url, prompt):
