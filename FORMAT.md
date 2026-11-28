@@ -37,3 +37,8 @@ punteggio alto e Critic OK vanno in programma da sole. Ogni lingua esce sui **su
 - Solo **YouTube CC BY** (licenza ricontrollata via API anche per i link mandati a mano) o **NASA**.
 - Nel post: autore, link all'originale, licenza, "edited" (`comune.attribuzione`).
 - Niente loghi/scritte di altri canali, niente musica protetta in primo piano.
+
+
+## Shorts di riferimento
+
+Workflow "Analizza Shorts di riferimento" (`src/riferimenti.py`): incolli i link, Gemini guarda i video e scrive la ricetta (hook, battute, ritmo, testi, voce, finale) in `riferimenti/`, piu' una sintesi unica da applicare al format.
