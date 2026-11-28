@@ -108,7 +108,7 @@ def marchia(video, out):
     return out
 
 
-def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84, cta=""):
+def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84, cta="", testata=""):
     b = _brand()
     font = font or b.get("font") or FONT
     acc = ass_colore(b["colore"])
@@ -124,11 +124,17 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         f"Style: Rank,{font},190,{acc},&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,9,4,8,60,150,330,1",
         f"Style: Hook,{font},70,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,18,0,8,80,170,200,1",
         f"Style: Cred,{font},34,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,0,0,0,0,100,100,0,0,1,2,1,2,60,150,310,1",
+        # testata fissa per tutto il video (come gli Shorts di riferimento): chi scorre senza audio capisce subito
+        f"Style: Testa,{font},54,&H00FFFFFF,&H000000FF,&H40000000,&H00000000,-1,0,0,0,100,100,0,0,3,16,0,8,90,180,215,1",
         f"Style: Cta,{font},54,&H00000000,&H000000FF,{acc},&H00000000,-1,0,0,0,100,100,0,0,3,14,0,2,80,170,400,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
-    if etichetta:
-        righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Rank,,0,0,0,,{pulisci(etichetta)}")
+    if testata:
+        righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Testa,,0,0,0,,{pulisci(testata).upper()}")
+    if etichetta:  # "#3 BOOTES VOID": numero grande, nome sotto piu' piccolo e bianco
+        num, _, nome = pulisci(etichetta).partition(" ")
+        nome = ("\\N{\\fs72\\c&H00FFFFFF&}" + nome.upper()) if nome else ""
+        righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Rank,,0,0,{410 if testata else 330},,{num}{nome}")
     if hook:  # titolo-gancio in un box nero per i primi 3 secondi
         righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(min(3, dur))},Hook,,0,0,0,,{pulisci(hook).upper()}")
     giallo, bianco = "{\\c" + acc + "&}", r"{\c&H00FFFFFF&}"
@@ -144,27 +150,51 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
         f.write("\n".join(righe) + "\n")
 
 
-def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None, cta=""):
+def monta_segmento(clip, audio, parole, testo, etichetta, credito, out, n, hook="", font=None, cta="",
+                   testata="", stacco=False):
+    """stacco=True: lampo bianco + whoosh all'inizio del segmento (cambio scena dei format di riferimento)."""
     dur = durata(audio) + 0.25
     ass = os.path.join(WORK, f"seg{n}.ass")
-    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font, cta=cta)
+    scrivi_ass(ass, gruppi_parole(parole, testo, dur), etichetta, dur, credito, hook, font, cta=cta, testata=testata)
     z = f"(1+0.08*t/{dur:.2f})"  # zoom lento da 1.00 a 1.08
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
           f"scale=w='trunc({W}*{z}/2)*2':h='trunc({H}*{z}/2)*2':eval=frame,crop={W}:{H},"
-          f"fps={FPS},setsar=1,{ass_filtro(ass)}")
+          f"fps={FPS},setsar=1,{'fade=t=in:st=0:d=0.18:color=white,' if stacco else ''}{ass_filtro(ass)}")
+    if stacco:  # whoosh sintetico (rumore rosa filtrato): nessun file audio di terzi
+        af = ["-filter_complex", "anoisesrc=d=0.6:c=pink:a=0.6,highpass=f=500,lowpass=f=6000,"
+              "afade=t=in:d=0.08,afade=t=out:st=0.12:d=0.45,volume=0.35[w];[1:a]apad[v];"
+              "[v][w]amix=inputs=2:duration=first:normalize=0[a]", "-map", "0:v:0", "-map", "[a]"]
+    else:
+        af = ["-af", "apad", "-map", "0:v:0", "-map", "1:a:0"]
     run(["ffmpeg", "-y", "-stream_loop", "-1", "-i", clip, "-i", audio,
-         "-t", f"{dur:.2f}", "-vf", vf, "-af", "apad", "-map", "0:v:0", "-map", "1:a:0",
+         "-t", f"{dur:.2f}", "-vf", vf, *af,
          "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
          "-c:a", "aac", "-ar", "44100", "-ac", "2", out])
 
 
-def unisci(segmenti, out):
+def tappeto(dur, out):
+    """Tappeto 'dark ambient' generato da ffmpeg (due sinusoidi basse + rumore scuro): libero da diritti."""
+    run(["ffmpeg", "-y", "-f", "lavfi", "-i", f"sine=f=55:d={dur:.1f}", "-f", "lavfi", "-i", f"sine=f=82.4:d={dur:.1f}",
+         "-f", "lavfi", "-i", f"anoisesrc=d={dur:.1f}:c=brown:a=0.4",
+         "-filter_complex", "[0:a][1:a][2:a]amix=inputs=3:normalize=0,lowpass=f=420,tremolo=f=0.15:d=0.5,"
+         f"afade=t=in:d=1.5,afade=t=out:st={max(0, dur - 2):.1f}:d=2,volume=0.22",
+         "-ac", "2", "-ar", "44100", out])
+    return out
+
+
+def unisci(segmenti, out, musica=False):
     lista = os.path.join(WORK, "lista.txt")
     with open(lista, "w") as f:
         for s in segmenti:
             f.write(f"file '{os.path.abspath(s)}'\n")
     tmp = os.path.join(WORK, "unito.mp4")
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", lista, "-c", "copy", tmp])
+    if musica:  # la voce resta sopra: il tappeto sta circa 18 dB sotto
+        letto = tappeto(durata(tmp), os.path.join(WORK, "tappeto.wav"))
+        con = os.path.join(WORK, "unito_musica.mp4")
+        run(["ffmpeg", "-y", "-i", tmp, "-i", letto, "-filter_complex", "[0:a][1:a]amix=inputs=2:duration=first:normalize=0[a]",
+             "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "44100", con])
+        tmp = con
     # volume standard dei social: -14 LUFS
     run(["ffmpeg", "-y", "-i", tmp, "-c:v", "copy", "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
          "-c:a", "aac", "-ar", "44100", "-b:a", "192k", "-movflags", "+faststart", out])

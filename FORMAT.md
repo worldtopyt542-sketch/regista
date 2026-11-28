@@ -42,3 +42,10 @@ punteggio alto e Critic OK vanno in programma da sole. Ogni lingua esce sui **su
 ## Shorts di riferimento
 
 Workflow "Analizza Shorts di riferimento" (`src/riferimenti.py`): incolli i link, Gemini guarda i video e scrive la ricetta (hook, battute, ritmo, testi, voce, finale) in `riferimenti/`, piu' una sintesi unica da applicare al format.
+
+**Ricetta ricavata (4 Shorts di Fra, 28/11), applicata a Off Scale Facts:** 45-55 s, tono cupo e misterioso;
+gancio con domanda retorica o "These are the 5 ..." + sfida; testata fissa in alto per tutto il video; per ogni
+voce numero grande + nome (`"nome"` nel copione); karaoke 3 parole bianco/giallo; lampo bianco + whoosh a ogni
+cambio scena; tappeto dark ambient generato da ffmpeg; finale aperto che rimanda al gancio (loop), niente CTA
+(`fatti.cta_finale`, `fatti.musica` in config.json). Prova locale: `python src/anteprima.py facts`.
+Prossimo format suggerito dai riferimenti: **Space Sounds** (sonificazioni NASA vere come payoff finale).

@@ -119,5 +119,17 @@ class Fonti(unittest.TestCase):
         self.assertEqual(chiamate, ["jupiter"])  # Pixabay non si riprova dopo la chiave rifiutata
 
 
+class FormatRiferimenti(unittest.TestCase):
+    def test_testata_fissa_e_numero_con_nome(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            ass = os.path.join(d, "s.ass")
+            editor.scrivi_ass(ass, [[(0, 1, "ciao")]], "#3 Bootes void", 4.0, "Footage: NASA", testata="5 scary things")
+            testo = open(ass, encoding="utf-8").read()
+        self.assertIn("Testa,,0,0,0,,5 SCARY THINGS", testo)
+        self.assertIn("Rank,,0,0,410,,#3", testo)
+        self.assertIn("BOOTES VOID", testo)
+
+
 if __name__ == "__main__":
     unittest.main()

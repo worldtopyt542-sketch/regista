@@ -3,6 +3,7 @@
 # Serve a ritoccare grafica/brand dal proprio PC senza aspettare il giro notturno su GitHub Actions.
 #   python src/anteprima.py                      -> sorgente sintetica, output in anteprima/
 #   python src/anteprima.py mio_video.mp4 12     -> 12 s del tuo video
+#   python src/anteprima.py facts                -> prova del format Off Scale Facts
 import os, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -24,10 +25,39 @@ def sorgente(dest, dur):
     return dest
 
 
+FACTS = [("", "THESE ARE THE 5 SCARIEST THINGS EVER FOUND IN SPACE"),
+         ("#3 BOOTES VOID", "A HOLE 330 MILLION LIGHT YEARS WIDE WITH ALMOST NOTHING INSIDE"),
+         ("#1 TON 618", "A BLACK HOLE WITH THE MASS OF 66 BILLION SUNS")]
+
+
+def facts(out_dir):
+    """Prova del format Facts (testata fissa, numero + nome, karaoke, lampo + whoosh, tappeto): voce muta."""
+    pezzi = []
+    for n, (etichetta, frase) in enumerate(FACTS):
+        dur = 4.0
+        mp3 = os.path.join(out_dir, f"muto{n}.m4a")
+        editor.run(["ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", str(dur), mp3])
+        w = frase.split()
+        passo = (dur - 0.3) / len(w)
+        parole = [(i * passo, (i + 1) * passo, x) for i, x in enumerate(w)]
+        pz = os.path.join(out_dir, f"facts_seg{n}.mp4")
+        editor.monta_segmento(sorgente(os.path.join(out_dir, "sorgente.mp4"), 6), mp3, parole, frase, etichetta,
+                              "Footage: NASA", pz, n, testata="5 Scariest Things Found in Space", stacco=n > 0)
+        pezzi.append(pz)
+    out = os.path.join(out_dir, "anteprima_facts.mp4")
+    editor.unisci(pezzi, out, musica=True)
+    for nome, t in (("gancio", 2.0), ("voce", 6.5), ("numero1", 10.5)):
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(t), "-i", out, "-frames:v", "1",
+                        "-vf", "scale=540:-2", os.path.join(out_dir, f"anteprima_facts_{nome}.png")], check=True)
+    print("->", out)
+
+
 def main():
     out_dir = os.path.join(comune.RADICE, "anteprima")
     os.makedirs(out_dir, exist_ok=True)
     editor.WORK = out_dir
+    if sys.argv[1:2] == ["facts"]:
+        return facts(out_dir)
     dur = float(sys.argv[2]) if len(sys.argv) > 2 else 10.0
     src = sys.argv[1] if len(sys.argv) > 1 else sorgente(os.path.join(out_dir, "sorgente.mp4"), dur)
     cfg = comune.carica(comune.CONFIG, {})
