@@ -184,5 +184,18 @@ class FotoNasa(unittest.TestCase):
             self.assertTrue(fonti.orizzontale(os.path.join(d, "c2000.mp4")))  # la foto larga resta larga
 
 
+class FontiEsa(unittest.TestCase):
+    def test_id_e_mp4(self):
+        import fonti
+        ricerca = '<a href="/videos/heic1509a/">x</a><a href="/videos/heic1509a/">y</a><a href="/public/videos/eso1907b/">z</a>'
+        self.assertEqual(fonti.esa_video_ids(ricerca), ["heic1509a", "eso1907b"])
+        pagina = ('<a href="https://cdn.esahubble.org/archives/videos/fulldome_4kmaster/heic1509a.mp4">'
+                  '<a href="https://cdn.esahubble.org/archives/videos/medium_podcast/heic1509a.mp4">'
+                  '<a href="http://cdn.esahubble.org/archives/videos/hd_1080p25_screen/heic1509a.mp4">')
+        self.assertEqual(fonti.esa_mp4(pagina), [
+            "https://cdn.esahubble.org/archives/videos/hd_1080p25_screen/heic1509a.mp4",
+            "https://cdn.esahubble.org/archives/videos/medium_podcast/heic1509a.mp4"])
+
+
 if __name__ == "__main__":
     unittest.main()
