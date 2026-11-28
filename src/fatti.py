@@ -26,7 +26,8 @@ def produci(s, cfg, usati, chiavi, cartella, nome):
     segs, clip, crediti = segmenti(s), [], []
     for n, seg in enumerate(segs):
         print(f"  [{n + 1}/{len(segs)}] {seg['label'] or 'gancio/finale'}: {seg['query']}")
-        c, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n, riserva=s.get("hook_query"))
+        c, info = fonti.trova_clip(seg["query"], seg["fonte"], usati, chiavi, cartella, n,
+                                   riserva=s.get("hook_query"), testo=f"{seg['label']} {seg['testo']}".strip())
         usati.add(info["id"])
         clip.append(c)
         crediti.append(info)

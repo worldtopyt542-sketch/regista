@@ -155,12 +155,15 @@ def varianti(query, riserva=None):
 RISERVE = ("galaxy", "stars night sky", "earth from space", "nature")
 
 
-def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None):
+def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None, testo=""):
     """Prova la query e le sue varianti piu' semplici su tutte le fonti, poi ricerche generiche:
-    un segmento senza clip non deve far perdere l'intero video."""
-    for q in varianti(query, riserva) + [r for r in RISERVE if r not in (query, riserva)]:
+    un segmento senza clip non deve far perdere l'intero video. 'testo' = cio' che dice la voce: Gemini scarta le
+    clip che non lo mostrano (solo per la query e le sue varianti; le ricerche generiche di riserva no)."""
+    mirate = varianti(query, riserva)
+    for q in mirate + [r for r in RISERVE if r not in (query, riserva)]:
+        tema = f"{query} ({testo})" if testo and q in mirate else ""
         try:
-            return _trova_clip(q, fonte_preferita, usati, chiavi, cartella, n)
+            return _trova_clip(q, fonte_preferita, usati, chiavi, cartella, n, tema)
         except RuntimeError as e:
             print(f"   nessuna clip per '{q}' ({str(e)[:150]}), provo una ricerca piu' semplice")
     raise RuntimeError(f"Nessuna clip trovata per '{query}' (anche con ricerche semplificate)")
@@ -174,7 +177,8 @@ cinematic space/nature Short. For EACH frame decide if it is CLEAN: real or rend
 Earth from orbit, rockets, spacecraft, nature, animals) that fills the frame. NOT clean: titles, captions, slides,
 credits or any readable text; logos or watermarks; people talking to the camera, interviews, press conferences,
 studio or office shots; factories, clean rooms, labs, hangars, control rooms; charts and diagrams; black, white or
-blank screens; heavy blur. Also NOT clean if it clearly does not show what the narration is about: {tema}
+blank screens; heavy blur. Also NOT clean if it shows a DIFFERENT subject than the one the narration is about
+(e.g. the Moon when the narration talks about Venus, a rocket when it talks about a quasar). Narration: {tema}
 Also give, for each frame, the horizontal position of the main subject (planet, rocket, animal, astronaut...)
 from 0.0 (left edge) to 1.0 (right edge), 0.5 if centred or if there is no single subject: the clip will be cropped
 to a vertical 9:16 window around it.
@@ -262,7 +266,7 @@ def orizzontale(path):
         return False
 
 
-def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
+def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, tema=""):
     """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito).
     Le clip NASA (spesso con titoli, loghi, conferenze stampa) passano dal controllo di Gemini: fino a 4 candidate."""
     stock = ["pexels", "pixabay"]
@@ -308,7 +312,8 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
                 continue
             centro = 0.5
             if chiavi.get("gemini") and (f == "nasa" or orizzontale(dest)):
-                centro = pulisci_clip(dest, chiavi["gemini"], 10 if f == "nasa" else 2 if info.get("foto") else 5, query)
+                centro = pulisci_clip(dest, chiavi["gemini"], 10 if f == "nasa" else 2 if info.get("foto") else 5,
+                                      tema or "space, Earth or nature")
                 if centro is None:
                     print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
                     continue
