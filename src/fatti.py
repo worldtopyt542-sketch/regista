@@ -136,7 +136,7 @@ def main():
             s = scrittore.scrivi(chiavi["gemini"], tema, arch["titoli"], cfg.get("modello_gemini", "auto"),
                                  spunti=spunti.get(tema), brand=brand)
             print("  Titolo:", s["titolo"])
-            versioni, crediti = produci(s, cfg, usati, chiavi, cartella, f"{oggi}_facts{i + 1}.mp4")
+            versioni, crediti = produci(s, cfg, usati, chiavi, cartella, f"{oggi}_" + (f"n{voce['n']:03d}" if voce else f"facts{i + 1}") + ".mp4")
             credito = ", ".join(dict.fromkeys(c["credito"] for c in crediti))[:200]
             tutti_ok = all(v[2] for v in versioni.values())
             gruppo = {"id": comune.nuovo_gruppo(), "creato": datetime.datetime.utcnow().isoformat(), "formato": "facts",

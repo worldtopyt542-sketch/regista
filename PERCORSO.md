@@ -34,7 +34,7 @@ Aggiornato: 27 novembre 2026
 | Scale Check (confronti di grandezza) | ⬜ | FORMAT.md |
 | Long cut 60-90 s | ⬜ | per i programmi che pagano solo > 1 min |
 
-## Target 3 — Senza rischi · **86%**
+## Target 3 — Senza rischi · **88%**
 
 | Task | Stato | Nota |
 |---|---|---|
@@ -44,6 +44,7 @@ Aggiornato: 27 novembre 2026
 | Errori temporanei non bruciano i video | ✅ | 3 tentativi |
 | Stato salvato con retry, niente push silenziosi | ✅ | salva-stato.sh |
 | Una clip mancante o troppo pesante non fa perdere il video | ✅ | fonti.trova_clip |
+| Clip NASA senza titoli, loghi o conferenze stampa (controllo Gemini) | ✅ | fonti.pulisci_clip |
 | Repository privato o media su un repo separato | ⬜ | oggi e' pubblico |
 
 ## Target 4 — Tante pagine, tante lingue · **40%**
