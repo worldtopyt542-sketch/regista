@@ -125,14 +125,16 @@ def nasa_foto(query, usati):
 
 
 def foto_in_clip(img, dest, secondi=10, minimo=1000):
-    """Foto -> clip 1080x1920 (lo zoom lento lo aggiunge il montaggio). Scarta le foto troppo piccole."""
+    """Foto -> clip alta 1920 (o larga 1080) senza tagliarla: il taglio 9:16 lo fa il montaggio intorno al
+    soggetto, e anche lo zoom lento. Scarta le foto troppo piccole."""
     import editor
     dim = editor.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
                       "-of", "csv=p=0:s=x", img]).strip().split("x")
     if len(dim) != 2 or max(int(dim[0]), int(dim[1])) < minimo:
         return False
     editor.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", img, "-t", str(secondi), "-r", "30",
-                "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p",
+                "-vf", "scale='if(gt(a,9/16),-2,1080)':'if(gt(a,9/16),1920,-2)',crop='trunc(iw/2)*2':'trunc(ih/2)*2',"
+                "format=yuv420p",
                 "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", dest])
     return True
 
@@ -172,16 +174,19 @@ cinematic space/nature Short. For EACH frame decide if it is CLEAN: real or rend
 Earth from orbit, rockets, spacecraft, nature, animals) that fills the frame. NOT clean: titles, captions, slides,
 credits or any readable text; logos or watermarks; people talking to the camera, interviews, press conferences,
 studio or office shots; charts and diagrams; black, white or blank screens; heavy blur.
-Reply JSON only: {{"pulito": [true, false, ...]}} with exactly {n} booleans."""
+Also give, for each frame, the horizontal position of the main subject (planet, rocket, animal, astronaut...)
+from 0.0 (left edge) to 1.0 (right edge), 0.5 if centred or if there is no single subject: the clip will be cropped
+to a vertical 9:16 window around it.
+Reply JSON only: {{"pulito": [true, false, ...], "centro_x": [0.5, ...]}} with exactly {n} values each."""
 
 
 def pulisci_clip(path, chiave, quadri=6):
     """Gemini guarda {quadri} fotogrammi: la clip si accorcia al tratto pulito piu' lungo, o si scarta.
-    Ritorna True se resta un tratto utilizzabile (>= 2 fotogrammi puliti di fila)."""
+    Ritorna None se va scartata, altrimenti la posizione orizzontale del soggetto (0-1) per il taglio 9:16."""
     import editor, scrittore
     dur = editor.durata(path)
-    if dur < 3:
-        return False
+    if dur < 1.5:
+        return None
     tempi = [dur * (k + 0.5) / quadri for k in range(quadri)]
     foto = []
     for k, t in enumerate(tempi):
@@ -190,10 +195,11 @@ def pulisci_clip(path, chiave, quadri=6):
                     "-vf", "scale=384:-2", jpg])
         foto.append((f"Frame {k + 1} (t={t:.0f}s)", jpg))
     try:
-        esito = scrittore.gemini(chiave, CONTROLLO.format(n=quadri), 0.1, foto).get("pulito") or []
+        risposta = scrittore.gemini(chiave, CONTROLLO.format(n=quadri), 0.1, foto)
+        esito, centri = risposta.get("pulito") or [], risposta.get("centro_x") or []
     except Exception as e:
         print(f"   controllo clip non riuscito ({str(e)[:80]}), la uso com'e'")
-        return True
+        return 0.5
     finally:
         for _, jpg in foto:
             try:
@@ -210,8 +216,16 @@ def pulisci_clip(path, chiave, quadri=6):
             inizio = None
     lung, primo = migliore
     print(f"   controllo clip: {''.join('v' if x else 'x' for x in esito)}")
-    if lung < 2:
-        return False
+    if lung < min(2, quadri):
+        return None
+    validi = []
+    for x in centri[primo:primo + lung]:
+        try:
+            validi.append(min(max(float(x), 0.0), 1.0))
+        except (TypeError, ValueError):
+            pass
+    centro = round(sum(validi) / len(validi), 3) if validi else 0.5
+    print(f"   soggetto a {centro:.2f} della larghezza")
     passo = dur / quadri
     a, b = primo * passo, (primo + lung) * passo
     if a > 0.5 or b < dur - 0.5:  # tiene solo il tratto pulito
@@ -219,7 +233,17 @@ def pulisci_clip(path, chiave, quadri=6):
         editor.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.2f}", "-to", f"{b:.2f}", "-i", path, "-an",
                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", tmp])
         os.replace(tmp, path)
-    return True
+    return centro
+
+
+def orizzontale(path):
+    import editor
+    try:
+        w, h = editor.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                           "-of", "csv=p=0:s=x", path]).strip().split("x")[:2]
+        return int(w) > int(h)
+    except Exception:
+        return False
 
 
 def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
@@ -228,7 +252,7 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
     stock = ["pexels", "pixabay"]
     ordine = ["nasa", "nasafoto"] + stock if fonte_preferita == "nasa" else stock + ["nasa", "nasafoto"]
     for f in ordine:
-        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 2 if f == "nasafoto" else 1):
+        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 3 if f == "nasafoto" else 1):
             if f in SPENTE:
                 break
             try:
@@ -266,8 +290,11 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
             usati.add(info["id"])
             if not scaricata:
                 continue
-            if f == "nasa" and chiavi.get("gemini") and not pulisci_clip(dest, chiavi["gemini"]):
-                print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
-                continue
-            return dest, {**info, "src": scaricata}
+            centro = 0.5
+            if chiavi.get("gemini") and (f == "nasa" or orizzontale(dest)):
+                centro = pulisci_clip(dest, chiavi["gemini"], 6 if f == "nasa" else 2 if info.get("foto") else 3)
+                if centro is None:
+                    print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
+                    continue
+            return dest, {**info, "src": scaricata, "centro_x": centro}
     raise RuntimeError(f"Nessuna clip trovata per '{query}'")
