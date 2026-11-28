@@ -9,10 +9,12 @@
   "5 Fastest Animals on Earth Ranked by Speed",
   "5 Extreme Scale Facts About Mars",
   "5 Terrifying Facts About Jupiter and Saturn's Moons",
-  "5 Biggest Black Holes Ever Found"
+  "5 Biggest Black Holes Ever Found",
+  "The Black Hole Closest to Earth"
  ],
  "clip_usate": [
   "nasa:20250429_NASA_Citizen_Sci_Twitch_Stream",
+  "nasa:301_BlackHoles",
   "nasa:311_ScienceCasts-observing-lightning-ISS",
   "nasa:ARC-20191025-AAV3233-VIPERShareable-NASAWeb",
   "nasa:ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb",
@@ -46,6 +48,8 @@
   "nasa:GSFC_20190424_HST_m13189_Hubble29",
   "nasa:GSFC_20190808_HST_m13279_Jupiter",
   "nasa:GSFC_20191031_M13415_NSLep10",
+  "nasa:GSFC_20191120_M13480_NSL11",
+  "nasa:GSFC_20200302_M13568_OIRISRExBH",
   "nasa:GSFC_20210930_NSL_Ep38_Landsat",
   "nasa:GSFC_20230307_NSL_Juno_Ep54",
   "nasa:JPL-20190618-TECHf-0001-Deep_Space_Atomic_Clock_Videofile",
@@ -58,16 +62,20 @@
   "nasa:JPL-20250409-NUSTARf-0001-Hunting_Hidden_Black_Holes_2160cc",
   "nasa:JPL-20250529-WHATSUf-0001-Whats_Up_June_2025cc",
   "nasa:KSC-20220808-MH-FMX02-Artemis1_Rollout_VAB_360-TIMELAPSE-WON_3311944",
+  "nasa:MSFC_SLS_01142021_SLS_Orion_Animation_0034",
   "nasa:NASAsRomanSpaceTelescopeHardwareHighlightsSpring2024_1080",
   "nasa:Space-247365",
   "nasa:iss068m262721811_Expedition_68_Tropical_Storm_Ian_Flyover_220929",
   "nasa:jsc2021m000203_Expedition_65_9-11_Message_210907",
   "nasa:jsc2021m000794_JSC_NBL",
   "nasa:jsc2023m000188_OSIRIS-REx_Sample_Return_and_Reveal_B-roll",
+  "nasa:ksc_030409_kepler_webcast1",
   "nasa:ksc_042507_chandra_2",
   "nasa:ksc_062504_acomet",
   "nasa:ksc_081105_mro_intro",
   "nasa:ksc_081505_goesn_onguard",
+  "nasa:ksc_082604_chandra",
+  "nasa:ksc_092804_gammaray_burst",
   "nasa:ksc_121304_comet_history",
   "tw:2932753534:715",
   "tw:2934276428:137",
@@ -223,9 +231,26 @@
     "nasa:ksc_042507_chandra_2",
     "nasa:Evolution_of_Galaxies_H264"
    ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "The Black Hole Closest to Earth",
+   "tema": "The Black Hole Closest to Earth",
+   "scaletta": 3,
+   "critic_ok": true,
+   "clip": [
+    "nasa:GSFC_20200302_M13568_OIRISRExBH",
+    "nasa:MSFC_SLS_01142021_SLS_Orion_Animation_0034",
+    "nasa:301_BlackHoles",
+    "nasa:ksc_082604_chandra",
+    "nasa:ksc_092804_gammaray_burst",
+    "nasa:GSFC_20191120_M13480_NSL11",
+    "nasa:ksc_030409_kepler_webcast1"
+   ]
   }
  ],
  "scaletta_fatte": [
-  1
+  1,
+  3
  ]
 }

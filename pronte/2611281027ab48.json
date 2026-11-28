@@ -1,0 +1,66 @@
+{
+ "id": "2611281027ab48",
+ "creato": "2026-11-28T10:27:18.378739",
+ "formato": "facts",
+ "titolo": "The Black Hole Closest to Earth",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, OSIRIS-REx Observes a Black Hole: https://images.nasa.gov/details/GSFC_20200302_M13568_OIRISRExBH\n- NASA, Artemis I – SLS Launch and Mission Animation – Jan 2021: https://images.nasa.gov/details/MSFC_SLS_01142021_SLS_Orion_Animation_0034\n- NASA, NASA ScienceCasts: Shedding Light on Black Holes: https://images.nasa.gov/details/301_BlackHoles\n- NASA, KSC-04-S-00307: https://images.nasa.gov/details/ksc_082604_chandra\n- NASA, KSC-04-S-00325: https://images.nasa.gov/details/ksc_092804_gammaray_burst\n- NASA, NASA Science Live: Black Hole 101 [Episode 11]: https://images.nasa.gov/details/GSFC_20191120_M13480_NSL11\n- NASA, KSC-09-S-00022: https://images.nasa.gov/details/ksc_030409_kepler_webcast1\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://www.esa.int/Science_Exploration/Space_Science/Gaia/Gaia_discovers_closest_black_hole",
+  "https://www.esa.int/Science_Exploration/Space_Science/Gaia/Gaia_finds_new_black_hole_family",
+  "https://www.esa.int/Science_Exploration/Space_Science/Gaia/Gaia_finds_most_massive_stellar_black_hole_in_our_galaxy",
+  "https://www.nasa.gov/",
+  "https://www.nasa.gov/mission_pages/chandra/multimedia/cygnusx1.html"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "The Black Hole Closest to Earth",
+   "descrizione": "Discover the terrifying black holes lurking right in our cosmic backyard.",
+   "hashtags": [
+    "#space",
+    "#blackhole",
+    "#astronomy",
+    "#gaiabh1",
+    "#universe",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOoawqsiO-2mvVQD1GDSFQTPnpEGrEAAu0hAALaYlhQIAXt7Ue9JzQ9BA",
+   "msg": "5193260023:168"
+  },
+  "it": {
+   "titolo": "Il buco nero più vicino alla Terra",
+   "descrizione": "Scopri i terrificanti buchi neri che si nascondono nel nostro cortile cosmico.",
+   "hashtags": [
+    "#spazio",
+    "#buconero",
+    "#astronomia",
+    "#gaiabh1",
+    "#universo",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOpawqsiT-98mZaSsVIrPmqgxTy85QAAu4hAALaYlhQptf7vinsqU49BA",
+   "msg": "5193260023:169"
+  },
+  "es": {
+   "titolo": "El agujero negro más cercano a la Tierra",
+   "descrizione": "Descubre los aterradores agujeros negros que acechan en nuestro propio vecindario cósmico.",
+   "hashtags": [
+    "#espacio",
+    "#agujeronegro",
+    "#astronomia",
+    "#gaiabh1",
+    "#universo",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOqawqsi9AEWOFcwWs1Ry0b1gKhehQAAu8hAALaYlhQc_f6jPtlU8U9BA",
+   "msg": "5193260023:170"
+  }
+ },
+ "msg_bottoni": "5193260023:171"
+}
