@@ -88,14 +88,25 @@ def logo_path():
     return os.path.join(os.path.dirname(ASSETS), _brand()["logo_video"])
 
 
+CORNICE = 12  # spessore della barra-cornice
+
+
 def filtro_marchio(d, ingresso, logo, uscita, y_logo=95):
-    """Pezzo di filtergraph: logo piccolo in alto a sinistra (filigrana, fuori dalle scritte) + barra (Y: 1150)."""
+    """Pezzo di filtergraph: logo piccolo in alto a sinistra (filigrana) + barra di avanzamento a cornice.
+    La cornice si colora col tempo partendo dall'angolo in alto a sinistra: giu' a sinistra, a destra in basso,
+    su a destra, a sinistra in alto, fino a chiudersi alla fine del video."""
     col = "0x" + _brand()["colore"].lstrip("#")
+    T, per = CORNICE, 2 * (W + H)
+    p = f"(t/{d:.2f}*{per})"  # pixel di cornice gia' colorati
     return (f"{logo}scale=210:-1,format=rgba,colorchannelmixer=aa=0.75[logo];"
-            f"{ingresso}drawbox=x=0:y=1150:w=1080:h=14:color=white@0.25:t=fill[mb];"
-            f"color=c={col}:s=1080x14:d={d:.2f}[bar];"
-            f"[mb][bar]overlay=x='-w+w*t/{d:.2f}':y=1150:shortest=1[mc];"
-            f"[mc][logo]overlay=x=36:y={y_logo}{uscita}")
+            f"{ingresso}drawbox=x=0:y=0:w={W}:h={H}:color=white@0.25:t={T}[m0];"
+            f"color=c={col}:s={T}x{H}:d={d:.2f},split[sx][dx];"
+            f"color=c={col}:s={W}x{T}:d={d:.2f},split[gi][su];"
+            f"[m0][sx]overlay=x=0:y='min(0,{p}-{H})':shortest=1[m1];"
+            f"[m1][gi]overlay=x='min(0,{p}-{H}-{W})':y={H - T}:shortest=1[m2];"
+            f"[m2][dx]overlay=x={W - T}:y='max(0,{2 * H + W}-{p})':shortest=1[m3];"
+            f"[m3][su]overlay=x='max(0,{per}-{p})':y=0:shortest=1[m4];"
+            f"[m4][logo]overlay=x=36:y={y_logo}{uscita}")
 
 
 def marchia(video, out):
