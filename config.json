@@ -110,7 +110,8 @@
    "migrations across the planet"
   ],
   "musica": true,
-  "cta_finale": false
+  "cta_finale": false,
+    "credito_a_schermo": false
  },
  "pubblica": {
   "servizio": "buffer",

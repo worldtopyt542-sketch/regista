@@ -154,7 +154,8 @@ def scrivi_ass(path, gruppi, etichetta, dur, credito, hook="", font=None, cap=84
             txt = " ".join((giallo + pulisci(w).upper() + bianco) if j == i else pulisci(w).upper()
                            for j, (_, _, w) in enumerate(g))
             righe.append(f"Dialogue: 0,{t_ass(a)},{t_ass(b)},Cap,,0,0,0,,{txt}")
-    righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Cred,,0,0,0,,{pulisci(credito)}")
+    if credito:  # vuoto = credito solo nella descrizione del post
+        righe.append(f"Dialogue: 0,{t_ass(0)},{t_ass(dur)},Cred,,0,0,0,,{pulisci(credito)}")
     if cta and dur > 6:  # invito a seguire negli ultimi 2.5 s, con dissolvenza
         righe.append(f"Dialogue: 1,{t_ass(dur - 2.5)},{t_ass(dur)},Cta,,0,0,0,,{{\\fad(250,0)}}{pulisci(cta).upper()}")
     with open(path, "w", encoding="utf-8") as f:
