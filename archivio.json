@@ -12,12 +12,14 @@
   "5 Biggest Black Holes Ever Found",
   "The Black Hole Closest to Earth",
   "5 Most Gargantuan Black Holes in the Universe",
-  "5 Black Holes Hiding Near Earth"
+  "5 Black Holes Hiding Near Earth",
+  "5 Biggest Black Holes in the Universe Ranked"
  ],
  "clip_usate": [
   "nasa:20250429_NASA_Citizen_Sci_Twitch_Stream",
   "nasa:301_BlackHoles",
   "nasa:311_ScienceCasts-observing-lightning-ISS",
+  "nasa:312_ISS_business-in-space",
   "nasa:325_SS101-Astrophysics-4k",
   "nasa:ARC-20190417-AAV3192-SOFIA-HeHMolecule-ResourceReel-NASAWeb",
   "nasa:ARC-20191025-AAV3233-VIPERShareable-NASAWeb",
@@ -35,6 +37,7 @@
   "nasa:GSFC_20101216_Titan_m10705_Anderson",
   "nasa:GSFC_20120614_GPM_m10999_Core_Rotates",
   "nasa:GSFC_20120703_GPM_m11067_Snow_Hercules",
+  "nasa:GSFC_20120723_Landsat_m11041_Phoenix_timelapse",
   "nasa:GSFC_20131121_ISON_m11384_Comet",
   "nasa:GSFC_20131203_Atmos_m11428",
   "nasa:GSFC_20140529_HS3_m11559_Kickoff",
@@ -104,6 +107,7 @@
   "nasa:ksc_062504_acomet",
   "nasa:ksc_070207_dawn_mim5",
   "nasa:ksc_070607_dawn_processing",
+  "nasa:ksc_072507_phoenix_mim1",
   "nasa:ksc_081105_mro_intro",
   "nasa:ksc_081505_goesn_onguard",
   "nasa:ksc_082604_chandra",
@@ -111,6 +115,17 @@
   "nasa:ksc_110104_swiftexplained",
   "nasa:ksc_111604_swift_three_theories",
   "nasa:ksc_121304_comet_history",
+  "nasafoto:0700065",
+  "nasafoto:PIA04250",
+  "nasafoto:PIA05423",
+  "nasafoto:PIA10091",
+  "nasafoto:PIA17009",
+  "nasafoto:PIA17881",
+  "nasafoto:PIA18471",
+  "nasafoto:PIA22085",
+  "nasafoto:PIA23122",
+  "nasafoto:behemoth-black-hole-found-in-an-unlikely-place_26209716511_o",
+  "nasafoto:international-space-station-mockup-training_52233924879_o",
   "tw:2932753534:715",
   "tw:2934276428:137",
   "tw:2935383720:277",
@@ -312,6 +327,22 @@
     "nasa:GSFC_20131203_Atmos_m11428",
     "nasa:KSC-20211209-MH-AJW01-0001-IXPE_Isolated_Launch_Views_4K_WON_3292315",
     "nasa:GSFC_20120703_GPM_m11067_Snow_Hercules"
+   ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "5 Biggest Black Holes in the Universe Ranked",
+   "tema": "5 Biggest Black Holes Ever Found",
+   "scaletta": 1,
+   "critic_ok": true,
+   "clip": [
+    "nasafoto:PIA10091",
+    "nasafoto:0700065",
+    "nasafoto:behemoth-black-hole-found-in-an-unlikely-place_26209716511_o",
+    "nasafoto:PIA18471",
+    "nasafoto:PIA22085",
+    "nasa:ksc_072507_phoenix_mim1",
+    "nasafoto:PIA17881"
    ]
   }
  ],
