@@ -7,7 +7,7 @@
   "logo_video": "assets/logo_video.png",
   "font": "Inter Display Black",
   "nicchia": "Planet Off Scale: jaw-dropping real videos of space and rocket launches, wild animals and nature, and incredible moments caught on camera",
-  "tono": "awe-struck documentary narrator: short, vivid, factual sentences, numbers and scale comparisons",
+  "tono": "dramatic, mysterious narrator: short punchy sentences, a striking number in every fact, an eerie twist",
   "hashtag_fissi": [
    "#shorts",
    "#planetoffscale"
@@ -21,7 +21,7 @@
   }
  },
  "modello_gemini": "auto",
- "durata_max": 45,
+ "durata_max": 62,
  "lingue": {
   "en": {
    "nome": "English",
@@ -108,7 +108,9 @@
    "comets, asteroids and meteors",
    "Earth's most extreme places",
    "migrations across the planet"
-  ]
+  ],
+  "musica": true,
+  "cta_finale": false
  },
  "pubblica": {
   "servizio": "buffer",

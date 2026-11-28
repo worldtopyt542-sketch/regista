@@ -15,9 +15,15 @@ Do NOT repeat any of these already-published titles: {gia_fatti}
 Rules:
 - Only well-established facts (NASA, ESA, NOAA, National Geographic, peer-reviewed science). No myths, no rumours.
   Prefer facts with a striking NUMBER or COMPARISON of scale ("big enough to fit 1,300 Earths").
-- Total spoken text 55-65 words, NEVER more than 70 (25-30 seconds). Short, punchy sentences.
-- Hook: max 14 words, a surprising statement or question about scale.
-- Each item: max 12 words. Finale: max 10 words, a twist or a question that makes people comment.
+- Style of the reference Shorts that work: dark, mysterious, a little scary. Every fact must feel unsettling or
+  unbelievable ("the scariest", "nothing can stop it", "no one will be alive to see it"), but stay TRUE.
+- Total spoken text 110-135 words, NEVER more than 145 (45-55 seconds). Short, punchy sentences.
+- Hook: max 18 words. Either a rhetorical question ("Have you ever heard...?", "Did you know...?") or
+  "These are the 5 ... in the universe." plus a dare ("If number one doesn't scare you, nothing will.").
+- Each item: "nome" = its on-screen title, 1-4 words (e.g. "BOOTES VOID", "TON 618"), and "testo" of 15-22 words
+  that names it, gives ONE striking number or scale comparison, and ends on an eerie detail.
+- Finale: max 14 words, an unresolved eerie line that flows back into the hook so the video loops.
+  NEVER ask to like, subscribe, follow or comment.
 - For each item one footage search query (2-4 plain English words) that a stock/NASA library can match,
   e.g. "solar flare", "humpback whale", "rocket launch night". No brand names.
 - "fonte": "nasa" for space/Earth-from-orbit footage, "stock" for animals, nature, weather, oceans.
@@ -26,7 +32,7 @@ Rules:
 
 Reply with JSON only, no markdown:
 {{"titolo": "...", "descrizione": "...", "hook": "...", "hook_query": "...", "hook_fonte": "nasa",
- "items": [{{"label": "#5", "testo": "...", "query": "...", "fonte": "stock", "verifica": "..."}},
+ "items": [{{"label": "#5", "nome": "...", "testo": "...", "query": "...", "fonte": "stock", "verifica": "..."}},
            ... down to "#1"],
  "finale": "...", "finale_query": "...", "finale_fonte": "nasa",
  "hashtags": ["#space", "..."]}}
@@ -91,8 +97,8 @@ def valida(s):
             errori.append("voce senza testo o query")
     parole = len(s.get("hook", "").split()) + len(s.get("finale", "").split()) + \
         sum(len(it.get("testo", "").split()) for it in items)
-    if not 45 <= parole <= 72:
-        errori.append(f"{parole} parole (obiettivo 55-65)")
+    if not 95 <= parole <= 150:
+        errori.append(f"{parole} parole (obiettivo 110-135)")
     return errori
 
 

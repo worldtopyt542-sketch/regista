@@ -26,6 +26,8 @@ Aggiornato: 27 novembre 2026
 | Top 5 con voce narrante | ✅ | solo EN |
 | Off Scale Facts con filmati NASA | ✅ | primo giro su Actions 27/11: EN/IT/ES ok |
 | Top 5 in IT ed ES (voce tradotta per segmento) | ⬜ | |
+| Facts rifatto sugli Shorts di riferimento di Fra | ✅ | testata, numero + nome, whoosh, tappeto, loop |
+| Space Sounds (sonificazioni NASA come payoff) | ⬜ | dai riferimenti |
 | Scale Check (confronti di grandezza) | ⬜ | FORMAT.md |
 | Long cut 60-90 s | ⬜ | per i programmi che pagano solo > 1 min |
 

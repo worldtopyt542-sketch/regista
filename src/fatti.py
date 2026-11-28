@@ -12,7 +12,7 @@ def segmenti(s):
     def f(x):  # vecchi valori "pexels"/"gameplay" -> stock
         return "nasa" if x == "nasa" else "stock"
     out = [{"label": "", "testo": s["hook"], "query": s["hook_query"], "fonte": f(s.get("hook_fonte"))}]
-    out += [{"label": it.get("label", ""), "testo": it["testo"], "query": it["query"],
+    out += [{"label": (it.get("label", "") + " " + it.get("nome", "")).strip(), "testo": it["testo"], "query": it["query"],
              "fonte": f(it.get("fonte"))} for it in s["items"]]
     out.append({"label": "", "testo": s["finale"], "query": s.get("finale_query") or s["hook_query"],
                 "fonte": f(s.get("finale_fonte") or s.get("hook_fonte"))})
@@ -31,8 +31,9 @@ def produci(s, cfg, usati, chiavi, cartella, nome):
         clip.append(c)
         crediti.append(info)
     base = {"titolo": s["titolo"], "descrizione": s.get("descrizione", ""), "hashtags": s.get("hashtags") or [],
-            "frasi": [seg["testo"] for seg in segs]}
+            "frasi": [seg["testo"] for seg in segs], "etichette": [seg["label"] for seg in segs]}
     L = lingue(cfg)
+    fcfg = cfg.get("fatti") or {}
     trad = scrittore.traduci(chiavi["gemini"], base, {k: v["nome"] for k, v in L.items() if k != "en"})
     trad["en"] = base
     out = {}
@@ -43,13 +44,16 @@ def produci(s, cfg, usati, chiavi, cartella, nome):
             mp3 = os.path.join(cartella, f"voce{n}.mp3")
             parole = editor.voce_ai(t["frasi"][n], lg["voce"], mp3)
             pz = os.path.join(cartella, f"seg{n}.mp4")
-            editor.monta_segmento(c, mp3, parole, t["frasi"][n], seg["label"], "Footage: " + info["credito"],
-                                  pz, n, hook=t["titolo"] if n == 0 else "", font=lg.get("font"),
-                                  cta=comune.cta(cod, cfg) if n == len(segs) - 1 else "")
+            etich = (t.get("etichette") or [])[n:n + 1] or [seg["label"]]
+            if seg["label"].split(" ")[0] != etich[0].split(" ")[0]:  # il numero "#3" non si traduce
+                etich = [seg["label"]]
+            editor.monta_segmento(c, mp3, parole, t["frasi"][n], etich[0], "Footage: " + info["credito"],
+                                  pz, n, font=lg.get("font"), testata=t["titolo"], stacco=n > 0,
+                                  cta=comune.cta(cod, cfg) if n == len(segs) - 1 and fcfg.get("cta_finale") else "")
             pezzi.append(pz)
         video = os.path.join(RADICE, "output", nome.replace(".mp4", f"_{cod}.mp4"))
         os.makedirs(os.path.dirname(video), exist_ok=True)
-        editor.unisci(pezzi, video)
+        editor.unisci(pezzi, video, musica=fcfg.get("musica", True))
         editor.marchia(video, video + ".m.mp4"); os.replace(video + ".m.mp4", video)
         out[cod] = (t, video, editor.critic(video, max_sec=cfg.get("durata_max", 45)))
     return out, crediti
