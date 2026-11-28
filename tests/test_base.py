@@ -170,5 +170,17 @@ class ClipPulite(unittest.TestCase):
             self.assertEqual([f for f in os.listdir(d) if f.endswith(".jpg")], [])
 
 
+class FotoNasa(unittest.TestCase):
+    def test_foto_diventa_clip_verticale_e_le_piccole_si_scartano(self):
+        import subprocess, tempfile, fonti
+        with tempfile.TemporaryDirectory() as d:
+            for lato, atteso in ((2000, True), (600, False)):
+                img, out = os.path.join(d, f"f{lato}.jpg"), os.path.join(d, f"c{lato}.mp4")
+                subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", f"testsrc=s={lato}x{lato // 2}",
+                                "-frames:v", "1", img], check=True)
+                self.assertEqual(fonti.foto_in_clip(img, out, secondi=2), atteso)
+            self.assertAlmostEqual(editor.durata(os.path.join(d, "c2000.mp4")), 2.0, delta=0.2)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -95,6 +95,48 @@ def nasa(query, usati):
     return None
 
 
+NO_FOTO = ("infographic", "chart", "diagram", "graph", "logo", "portrait", "conference", "briefing", "poster",
+           "patch", "insignia", "headshot", "award", "ceremony", "meeting", "illustration of text")
+
+
+def nasa_foto(query, usati):
+    """Foto NASA ad alta risoluzione (Hubble, Webb, sonde): pubblico dominio. Diventano clip con zoom lento."""
+    url = "https://images-api.nasa.gov/search?" + urllib.parse.urlencode({"q": query, "media_type": "image"})
+    items = _get_json(url).get("collection", {}).get("items", [])
+    for it in items[:30]:
+        d = it["data"][0]
+        nid = "nasafoto:" + d["nasa_id"]
+        testo = " ".join(str(d.get(k, "")) for k in
+                         ("title", "description", "secondary_creator", "photographer", "keywords")).lower()
+        if nid in usati or any(p in testo for p in SOSPETTI + NO_FOTO):
+            continue
+        try:
+            assets = _get_json(it["href"])
+        except Exception:
+            continue
+        jpg = [a for a in assets if isinstance(a, str) and a.lower().endswith((".jpg", ".jpeg", ".png", ".tif"))]
+        alt = [a.replace("http://", "https://") for pref in ("~large.jpg", "~orig.jpg", "~orig.png", "~medium.jpg")
+               for a in jpg if a.lower().endswith(pref)]
+        if alt:
+            return {"id": nid, "src": alt[0], "alt": alt, "credito": "NASA", "foto": True,
+                    "fonte": f"NASA, {d.get('title', '')}: https://images.nasa.gov/details/"
+                             + urllib.parse.quote(d["nasa_id"])}
+    return None
+
+
+def foto_in_clip(img, dest, secondi=10, minimo=1000):
+    """Foto -> clip 1080x1920 (lo zoom lento lo aggiunge il montaggio). Scarta le foto troppo piccole."""
+    import editor
+    dim = editor.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=width,height",
+                      "-of", "csv=p=0:s=x", img]).strip().split("x")
+    if len(dim) != 2 or max(int(dim[0]), int(dim[1])) < minimo:
+        return False
+    editor.run(["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", img, "-t", str(secondi), "-r", "30",
+                "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,format=yuv420p",
+                "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", dest])
+    return True
+
+
 def varianti(query, riserva=None):
     """La query originale, poi versioni piu' semplici, poi una ricerca generica di riserva."""
     parole = [p for p in query.replace("'", "").split() if len(p) > 2]
@@ -184,14 +226,16 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
     """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito).
     Le clip NASA (spesso con titoli, loghi, conferenze stampa) passano dal controllo di Gemini: fino a 4 candidate."""
     stock = ["pexels", "pixabay"]
-    ordine = ["nasa"] + stock if fonte_preferita == "nasa" else stock + ["nasa"]
+    ordine = ["nasa", "nasafoto"] + stock if fonte_preferita == "nasa" else stock + ["nasa", "nasafoto"]
     for f in ordine:
-        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 1):
+        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 2 if f == "nasafoto" else 1):
             if f in SPENTE:
                 break
             try:
                 if f == "nasa":
                     info = nasa(query, usati)
+                elif f == "nasafoto":
+                    info = nasa_foto(query, usati)
                 elif f == "pexels":
                     info = pexels(query, usati, chiavi.get("pexels"))
                 else:
@@ -208,7 +252,13 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
             scaricata = None
             for src in info.get("alt") or [info["src"]]:
                 try:
-                    scarica(src, dest)
+                    if info.get("foto"):
+                        img = os.path.join(cartella, f"foto{n}" + os.path.splitext(src)[1].lower())
+                        scarica(src, img, max_mb=60)
+                        if not foto_in_clip(img, dest):
+                            raise RuntimeError("foto troppo piccola")
+                    else:
+                        scarica(src, dest)
                     scaricata = src
                     break
                 except Exception as e:

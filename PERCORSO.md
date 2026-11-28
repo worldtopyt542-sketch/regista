@@ -45,6 +45,7 @@ Aggiornato: 27 novembre 2026
 | Stato salvato con retry, niente push silenziosi | ✅ | salva-stato.sh |
 | Una clip mancante o troppo pesante non fa perdere il video | ✅ | fonti.trova_clip |
 | Clip NASA senza titoli, loghi o conferenze stampa (controllo Gemini) | ✅ | fonti.pulisci_clip |
+| Foto NASA ad alta risoluzione (Hubble, Webb) come clip con zoom | ✅ | fonti.nasa_foto |
 | Repository privato o media su un repo separato | ⬜ | oggi e' pubblico |
 
 ## Target 4 — Tante pagine, tante lingue · **40%**

@@ -1,5 +1,6 @@
 # ==== COPERTURA: la scaletta ha filmati veri e di qualita' per ogni voce? ====
-# Per ogni voce cerca video NASA (pubblico dominio) e, se servono, Pexels verticali. Nessun download.
+# Per ogni voce cerca video NASA, foto NASA (pubblico dominio) e, se servono, Pexels verticali 4K. Nessun download.
+# Nel log: (video NASA / foto NASA / Pexels 4K) per ogni voce debole.
 # Uso: python src/copertura.py   -> tabella nel log + copertura.json (artefatto del workflow)
 import json, os, re, sys, time, urllib.parse
 
@@ -16,8 +17,8 @@ def query(voce):
     return " ".join(q.split()[:4]) or voce
 
 
-def nasa(q):
-    url = "https://images-api.nasa.gov/search?" + urllib.parse.urlencode({"q": q, "media_type": "video"})
+def nasa(q, tipo="video"):
+    url = "https://images-api.nasa.gov/search?" + urllib.parse.urlencode({"q": q, "media_type": tipo})
     items = _get_json(url).get("collection", {}).get("items", [])
     buoni = []
     for it in items:
@@ -49,19 +50,23 @@ def main():
             except Exception as e:
                 n = []
                 print("   nasa errore:", e)
+            try:
+                fo = nasa(q, "image") if len(n) < 3 else []
+            except Exception:
+                fo = []
             p = []
-            if len(n) < 3 and chiave and usate_pexels < PEXELS_MAX:
+            if len(n) < 3 and len(fo) < 3 and chiave and usate_pexels < PEXELS_MAX:
                 try:
                     p = pexels(q, chiave)
                 except Exception as e:
                     print("   pexels errore:", e)
                 usate_pexels += 1
-            righe.append({"voce": s, "query": q, "nasa": len(n), "pexels_4k": len(p), "esempio": (n or p or [""])[0],
-                          "ok": len(n) >= 3 or len(p) >= 2})
+            righe.append({"voce": s, "query": q, "nasa": len(n), "foto_nasa": len(fo), "pexels_4k": len(p),
+                          "esempio": (n or fo or p or [""])[0], "ok": len(n) >= 3 or len(fo) >= 3 or len(p) >= 2})
             time.sleep(0.3)
         ok = sum(r["ok"] for r in righe)
         report.append({"n": v["n"], "titolo": v["titolo"], "voci_ok": ok, "dettaglio": righe})
-        deboli = ", ".join(f"{r['voce']} ({r['nasa']}/{r['pexels_4k']})" for r in righe if not r["ok"])
+        deboli = ", ".join(f"{r['voce']} ({r['nasa']}/{r['foto_nasa']}/{r['pexels_4k']})" for r in righe if not r["ok"])
         print(f"#{v['n']:>3} {ok}/5 {v['titolo']}" + (f"  -> deboli: {deboli}" if deboli else ""), flush=True)
     salva(os.path.join(RADICE, "copertura", "copertura.json"), report)
     deboli = [r for r in report if r["voci_ok"] < 4]
