@@ -53,6 +53,15 @@ jobs:
       - name: Salva l'archivio (anti-doppioni) e i video pronti
         if: always()
         run: .github/salva-stato.sh "Archivio Facts $(date -u +%F)" archivio.json pronte
+      - name: Anteprime nella Release "anteprime" (per vederle in chat)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls output/*.mp4 >/dev/null 2>&1 || exit 0
+          gh release view anteprime >/dev/null 2>&1 || \
+            gh release create anteprime --prerelease --title "Anteprime" --notes "Video di prova, non pubblicati. Si sovrascrivono."
+          gh release upload anteprime --clobber output/*.mp4
       - name: Conserva i video anche su GitHub (7 giorni)
         if: always()
         uses: actions/upload-artifact@v4
