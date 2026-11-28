@@ -9,7 +9,7 @@ template grafico. Per un canale nuovo si cambiano solo brand, ricerche, temi e `
 - 9:16 1080x1920, video al centro con sfondo sfocato dello stesso video.
 - **Gancio** nel box giallo in alto per i primi 3 s (max 6 parole, maiuscolo).
 - **Sottotitoli karaoke** (parola pronunciata nel colore del brand), zona sicura sopra i pulsanti dei social.
-- **Logo** in alto a sinistra del video + **barra di avanzamento** gialla sotto il video.
+- **Logo** in alto a sinistra del video + **barra di avanzamento a cornice**: il bordo del video si colora col tempo, dall'angolo in alto a sinistra in senso antiorario (giu', destra, su, sinistra) fino a chiudersi alla fine.
 - **Credito** sempre visibile ("Clip: Autore (CC BY)" / "Footage: NASA").
 - **Invito a seguire** negli ultimi 2,5 s, tradotto per lingua (`brand.cta`).
 - Volume a -14 LUFS, controllato dal Critic.
