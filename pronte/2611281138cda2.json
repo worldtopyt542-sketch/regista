@@ -1,0 +1,66 @@
+{
+ "id": "2611281138cda2",
+ "creato": "2026-11-28T11:38:08.170843",
+ "formato": "facts",
+ "titolo": "Earth at Night From Space",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Earth Observations taken by the Expedition 35 Crew: https://images.nasa.gov/details/iss035e017673\n- NASA, The city lights of Kuwait City, the capital of Kuwait: https://images.nasa.gov/details/iss072e519889\n- NASA, iss053e023915: https://images.nasa.gov/details/iss053e023915\n- NASA, Time-lapse Thunderstorm: https://images.nasa.gov/details/iss071e170351\n- NASA, STS-43 Earth observation of a colorful sunrise: https://images.nasa.gov/details/s43-22-011\n- NASA, Earth Observation: https://images.nasa.gov/details/iss040e124606\n- NASA, \"Night\" scene of the STS-5 Columbia in orbit over the earth: https://images.nasa.gov/details/s82-39796\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://www.nasa.gov/mission_pages/station/research/news/earth_at_night",
+  "https://earthobservatory.nasa.gov/images/145318/aurora-australis-and-the-milky-way",
+  "https://www.nasa.gov/mission_pages/station/research/experiments/explorer-1793.html",
+  "https://eol.jsc.nasa.gov/",
+  "https://www.nasa.gov/mission_pages/station/main/index.html"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "Earth at Night From Space",
+   "descrizione": "Witness our glowing planet from the dark void of orbit.",
+   "hashtags": [
+    "#earthatnight",
+    "#space",
+    "#iss",
+    "#earthfromspace",
+    "#nightlights",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAO4awq9IZHJObzkAu3T2C2w-qGmTyUAAggiAALaYlhQk5DOsySSBD49BA",
+   "msg": "5193260023:184"
+  },
+  "it": {
+   "titolo": "La Terra di Notte nello Spazio",
+   "descrizione": "Guarda il nostro pianeta luminoso dal buio dello spazio.",
+   "hashtags": [
+    "#laterradinotte",
+    "#spazio",
+    "#iss",
+    "#terradallospazio",
+    "#luccinotturne",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAO5awq9I6L28PegA4YdBL12YeFI0p0AAgkiAALaYlhQxiDaYStZuwo9BA",
+   "msg": "5193260023:185"
+  },
+  "es": {
+   "titolo": "La Tierra de Noche desde el Espacio",
+   "descrizione": "Alucina con nuestro planeta brillante desde el vacío de la órbita.",
+   "hashtags": [
+    "#tierradenoche",
+    "#espacio",
+    "#iss",
+    "#tierradesdeelespacio",
+    "#lucesnocturnas",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAO6awq9JMQJLjJf4z86RHI7Xu0J8xgAAgoiAALaYlhQTiX0NO5WiB89BA",
+   "msg": "5193260023:186"
+  }
+ },
+ "msg_bottoni": "5193260023:187"
+}
