@@ -1,0 +1,66 @@
+{
+ "id": "26112815492f0c",
+ "creato": "2026-11-28T15:49:00.575945",
+ "formato": "facts",
+ "titolo": "5 Loudest Events in the Universe",
+ "punteggio": 0,
+ "critic_ok": false,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- ESA/Webb (weic2619b), CC BY 4.0, modified: https://esawebb.org/videos/weic2619b/\n- NASA, Tracking Volcanic Ash With Satellites: https://images.nasa.gov/details/GSFC_20160512_Volcanic_m12221_Ash\n- ESA/Webb (weic2601a), CC BY 4.0, modified: https://esawebb.org/videos/weic2601a/\n- NASA, KSC-04-S-00174: https://images.nasa.gov/details/ksc_052004_chandra\n- ESA/Webb (weic2420a), CC BY 4.0, modified: https://esawebb.org/videos/weic2420a/\n- ESA/Webb (potm2310a), CC BY 4.0, modified: https://esawebb.org/videos/potm2310a/\n- NASA, Large Hubble Survey Confirms Link between Mergers and Supermassive Black Holes with Relativistic Jets: https://images.nasa.gov/details/GSFC_20171208_Archive_e000719\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://www.britannica.com/place/Krakatoa",
+  "https://www.nasa.gov/mission_pages/chandra/news/supernova-remnant-g292-0-1-0.html",
+  "https://www.nasa.gov/mission_pages/chandra/news/new-nasa-black-hole-sound-lets-you-hear-perseus-galaxy-cluster-waves.html",
+  "https://www.nasa.gov/feature/goddard/2017/nasa-missions-catch-first-light-from-gravitational-wave-event",
+  "https://www.nasa.gov/mission_pages/chandra/news/gravitational-waves-detected-from-merging-black-holes.html"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Loudest Events in the Universe",
+   "descrizione": "Space is supposed to be completely silent, but these cosmic events scream across the void.",
+   "hashtags": [
+    "#space",
+    "#blackhole",
+    "#science",
+    "#cosmos",
+    "#astronomy",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPoawr37vj2y4AKECySc4W35ocHLsMAAk8fAAJmrlhQJDY3ygoDbEA9BA",
+   "msg": "5193260023:232"
+  },
+  "it": {
+   "titolo": "I 5 eventi più rumorosi dell'Universo",
+   "descrizione": "Lo spazio dovrebbe essere completamente silenzioso, ma questi eventi cosmici urlano nel vuoto.",
+   "hashtags": [
+    "#spazio",
+    "#buononero",
+    "#scienza",
+    "#cosmo",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPpawr38RyXLiGWN-Ch6kQAAd5RC0ZDAAJQHwACZq5YUIrYUN8dlUNlPQQ",
+   "msg": "5193260023:233"
+  },
+  "es": {
+   "titolo": "Los 5 eventos más ruidosos del Universo",
+   "descrizione": "Se supone que el espacio es totalmente silencioso, pero estos eventos cósmicos gritan en el vacío.",
+   "hashtags": [
+    "#espacio",
+    "#agujeronegro",
+    "#ciencia",
+    "#universo",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPqawr3802Zm-y6G8j6r_1WK-WK5A8AAlEfAAJmrlhQiol6mxvvBQE9BA",
+   "msg": "5193260023:234"
+  }
+ },
+ "msg_bottoni": "5193260023:235"
+}

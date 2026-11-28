@@ -1,0 +1,66 @@
+{
+ "id": "26112815572d3b",
+ "creato": "2026-11-28T15:57:38.470434",
+ "formato": "facts",
+ "titolo": "5 Largest Stars in the Universe",
+ "punteggio": 0,
+ "critic_ok": false,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, NASA’s SDO Captures Stunning View of April 17 Solar Flare: https://images.nasa.gov/details/GSFC_20160426_SDO_m12224_SolarFlare\n- ESO (eso2612a), CC BY 4.0, modified: https://www.eso.org/public/videos/eso2612a/\n- NASA, KSC-04-S-00101: https://images.nasa.gov/details/ksc_041504_spitzer\n- NASA, NASA Unveils Celestial Fireworks as Official Image for Hubble 25th Anniversary: https://images.nasa.gov/details/GSFC_20171208_Archive_e000743\n- NASA, Dust Rings in the Wolf-Rayet 140 System: https://images.nasa.gov/details/PIA25432\n- NASA, Galaxy Evolution Explorer Spies Band of Stars: https://images.nasa.gov/details/PIA09653\n- NASA, What's Up: June 2022 Skywatching Tips from NASA: https://images.nasa.gov/details/JPL-20220601-WHATSUf-0001-Whats_Up_June_2022\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://science.nasa.gov/universe/stars/",
+  "https://science.nasa.gov/universe/stars/",
+  "https://science.nasa.gov/universe/stars/",
+  "https://science.nasa.gov/universe/stars/",
+  "https://science.nasa.gov/universe/stars/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Largest Stars in the Universe",
+   "descrizione": "Our Sun is nothing compared to these cosmic titans.",
+   "hashtags": [
+    "#space",
+    "#astronomy",
+    "#universe",
+    "#stars",
+    "#science",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPsawr59CdtQPx2BEcoWPG6hAodDugAAlYfAAJmrlhQFVjv20JIWc89BA",
+   "msg": "5193260023:236"
+  },
+  "it": {
+   "titolo": "Le 5 Stelle Più Grandi dell'Universo",
+   "descrizione": "Il nostro Sole è un granello di polvere in confronto a questi titani cosmici.",
+   "hashtags": [
+    "#spazio",
+    "#astronomia",
+    "#universo",
+    "#stelle",
+    "#scienza",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPtawr59jXmCnqLwzcgm_NR4M0QsuwAAlcfAAJmrlhQgb2_Ix3VdMY9BA",
+   "msg": "5193260023:237"
+  },
+  "es": {
+   "titolo": "Las 5 Estrellas Más Grandes del Universo",
+   "descrizione": "Nuestro Sol no es nada comparado con estos titanes cósmicos.",
+   "hashtags": [
+    "#espacio",
+    "#astronomia",
+    "#universo",
+    "#estrellas",
+    "#ciencia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPuawr5-d9kYypMlGkWdQoTFHeV-SEAAlgfAAJmrlhQ0LVKojKbw1M9BA",
+   "msg": "5193260023:238"
+  }
+ },
+ "msg_bottoni": "5193260023:239"
+}
