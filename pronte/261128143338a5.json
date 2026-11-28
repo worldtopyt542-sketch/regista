@@ -1,0 +1,65 @@
+{
+ "id": "261128143338a5",
+ "creato": "2026-11-28T14:33:24.554776",
+ "formato": "facts",
+ "titolo": "5 Deadliest Places in the Universe",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Weighing in on the Dumbbell Nebula: https://images.nasa.gov/details/PIA14417\n- NASA, Planetary Scientist Profile: Lynn Carter: https://images.nasa.gov/details/GSFC_20121017_LynnCarter_m11113_Profile\n- NASA, Simulations Create New Insights Into Pulsars: https://images.nasa.gov/details/GSFC_20181010_FERMI_m13058_Pulsar4K\n- NASA, NISAR Mission Animation Reel: https://images.nasa.gov/details/JPL-20250318-NISARf-0001-NISAR_Animation_Reel\n- NASA, SDO: Year 5: https://images.nasa.gov/details/GSFC_20150211_SDO_m11742_Year5\n- NASA, Hubble Helps Find Smallest Known Galaxy Containing a Supermassive Black Hole: https://images.nasa.gov/details/GSFC_20171208_Archive_e000984\n- NASA, KSC-2012-3523: https://images.nasa.gov/details/KSC-2012-3523\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://solarsystem.nasa.gov/planets/venus/overview/",
+  "https://science.nasa.gov/universe/stars/neutron-stars/",
+  "https://www.nasa.gov/missions/hubble/quasars/",
+  "https://science.nasa.gov/universe/stars/magnetars/",
+  "https://www.nasa.gov/black-holes/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Deadliest Places in the Universe",
+   "descrizione": "The universe is trying to kill you. Here are the 5 most lethal locations.",
+   "hashtags": [
+    "#space",
+    "#universe",
+    "#scary",
+    "#science",
+    "#planetoffscale",
+    "#shorts"
+   ],
+   "file_id": "BAACAgQAAxkDAAPMawrmNxH3YXBS-tQ2ii-YyFN9OZIAAhwfAAJmrlhQWL4XB8R7rtY9BA",
+   "msg": "5193260023:204"
+  },
+  "it": {
+   "titolo": "5 posti più letali dell'universo",
+   "descrizione": "L'universo vuole ucciderti. Ecco i 5 luoghi più pericolosi.",
+   "hashtags": [
+    "#spazio",
+    "#universo",
+    "#paura",
+    "#scienza",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPNawrmOZL7yeUOziBYmOBmsuiJ4AADHR8AAmauWFAhMwHDv6BoPz0E",
+   "msg": "5193260023:205"
+  },
+  "es": {
+   "titolo": "Los 5 lugares más letales del universo",
+   "descrizione": "El universo quiere matarte. Aquí están los 5 sitios más peligrosos.",
+   "hashtags": [
+    "#espacio",
+    "#universo",
+    "#miedo",
+    "#ciencia",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPOawrmPAEBGptOFEJT_Zdj5LSctMcAAh4fAAJmrlhQWcDyVnDCN_c9BA",
+   "msg": "5193260023:206"
+  }
+ },
+ "msg_bottoni": "5193260023:207"
+}

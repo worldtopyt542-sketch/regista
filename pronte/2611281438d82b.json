@@ -1,0 +1,66 @@
+{
+ "id": "2611281438d82b",
+ "creato": "2026-11-28T14:38:34.621896",
+ "formato": "facts",
+ "titolo": "The Terrifying Reality of Neutron Stars",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, U.S. Spacewalk 91 Animation - Friday, January 10, 2025: https://images.nasa.gov/details/jsc2024m000191_U.S_Spacewalk_91_Animation_241218-MP4\n- NASA, Supernova with Expanding Shell: https://images.nasa.gov/details/GSFC_20100126_Nova_m10547_SuperNova\n- NASA, SDO Lunar Transit, Prominence Eruption, and M-Class Flare: https://images.nasa.gov/details/GSFC_20140130_SDO_m11463_Eclipse-Flare\n- NASA, Neutron Stars Rip Each Other Apart to Form Black Hole: https://images.nasa.gov/details/GSFC_20171208_Archive_e001100\n- NASA, NASA Spacecraft Finds New Magnetic Process in Turbulent Space: Explosive Magnetic Reconnection: https://images.nasa.gov/details/GSFC_20180509_MMS_m12901_Turbulent\n- NASA, A Galactic Spectacle: https://images.nasa.gov/details/GSFC_20171208_Archive_e002059\n- NASA, Ant Nebula: https://images.nasa.gov/details/PIA04216\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://science.nasa.gov/universe/stars/neutron-stars/",
+  "https://www.britannica.com/science/neutron-star",
+  "https://www.esa.int/Science_Exploration/Space_Science/Neutron_stars_and_pulsars",
+  "https://imagine.gsfc.nasa.gov/science/objects/neutron_stars1.html",
+  "https://www.nasa.gov/universe/nasas-hubble-sees-a-kilonova/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "The Terrifying Reality of Neutron Stars",
+   "descrizione": "A single teaspoon of a neutron star weighs as much as a mountain. Discover the terrifying physics of the universe's most dense objects.",
+   "hashtags": [
+    "#space",
+    "#astronomy",
+    "#neutronstar",
+    "#cosmos",
+    "#scifi",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPQawrnbXNGbzVj2GeUsxckaxVBPUoAAh8fAAJmrlhQ13Y6Sivpr5I9BA",
+   "msg": "5193260023:208"
+  },
+  "it": {
+   "titolo": "La realtà terrificante delle stelle di neutroni",
+   "descrizione": "Un cucchiaino di stella di neutroni pesa quanto una montagna. Scopri la fisica estrema degli oggetti più densi dell'universo.",
+   "hashtags": [
+    "#spazio",
+    "#astronomia",
+    "#stelledineutroni",
+    "#cosmo",
+    "#scifi",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPRawrnb-R93cyzB5GgQjAeoO1fkmMAAiAfAAJmrlhQqQZyIFa0N4g9BA",
+   "msg": "5193260023:209"
+  },
+  "es": {
+   "titolo": "La aterradora realidad de las estrellas de neutrones",
+   "descrizione": "Una cucharadita de estrella de neutrones pesa como una montaña. Descubre la física extrema de los objetos más densos del universo.",
+   "hashtags": [
+    "#espacio",
+    "#astronomia",
+    "#estrellasdeneutrones",
+    "#cosmos",
+    "#scifi",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPSawrncYK2PxOQ6uV84ZyAq4Hq89QAAiEfAAJmrlhQpjgNWQUzUdk9BA",
+   "msg": "5193260023:210"
+  }
+ },
+ "msg_bottoni": "5193260023:211"
+}
