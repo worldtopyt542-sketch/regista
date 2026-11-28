@@ -175,8 +175,10 @@ SPENTE = set()  # fonti con chiave rifiutata: non si riprovano per tutta l'esecu
 CONTROLLO = """These are {n} frames, in time order, from a video clip we may use as background footage in a
 cinematic space/nature Short. For EACH frame decide if it is CLEAN: real or rendered imagery (space, planets, stars,
 Earth from orbit, rockets, spacecraft, nature, animals) that fills the frame. NOT clean: titles, captions, slides,
-credits or any readable text; logos or watermarks; people talking to the camera, interviews, press conferences,
-studio or office shots; factories, clean rooms, labs, hangars, control rooms; charts and diagrams; black, white or
+credits or any readable text; logos or watermarks; ANY person facing or talking to the camera (astronauts on the
+station included), interviews, press conferences, studio or office shots; people in protective suits; spacecraft or
+hardware on the ground; factories, clean rooms, labs, hangars, control rooms, station interiors full of cables;
+charts and diagrams; black, white or
 blank screens; heavy blur. Also NOT clean if it shows a DIFFERENT subject than the one the narration is about
 (e.g. the Moon when the narration talks about Venus, a rocket when it talks about a quasar). Narration: {tema}
 Also give, for each frame, the horizontal position of the main subject (planet, rocket, animal, astronaut...)
@@ -311,7 +313,7 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, tema=""):
             if not scaricata:
                 continue
             centro = 0.5
-            if chiavi.get("gemini") and (f == "nasa" or orizzontale(dest)):
+            if chiavi.get("gemini"):  # anche le verticali: una foto verticale di una camera bianca passava senza controllo
                 centro = pulisci_clip(dest, chiavi["gemini"], 10 if f == "nasa" else 2 if info.get("foto") else 5,
                                       tema or "space, Earth or nature")
                 if centro is None:
