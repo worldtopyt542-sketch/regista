@@ -18,7 +18,7 @@ Aggiornato: 27 novembre 2026
 | Giro vero su Actions dopo il merge, video controllati a occhio | ⬜ | |
 | Anteprima con un video CC vero nella CI | ⬜ | |
 
-## Target 2 — I format · **60%**
+## Target 2 — I format · **55%**
 
 | Task | Stato | Nota |
 |---|---|---|
@@ -28,6 +28,7 @@ Aggiornato: 27 novembre 2026
 | Top 5 in IT ed ES (voce tradotta per segmento) | ⬜ | |
 | Facts rifatto sugli Shorts di riferimento di Fra | ✅ | testata, numero + nome, whoosh, tappeto, loop |
 | Scaletta di 100 video spazio, seguita in ordine dal bot | ✅ | scaletta.json |
+| Ogni voce della scaletta con filmati in alta qualita' | ⬜ | workflow "Controlla i filmati della scaletta" |
 | Formato Storia (un soggetto in 5 battute) | ✅ | scaletta: formato storia |
 | Space Sounds (sonificazioni NASA come payoff) | ⬜ | dai riferimenti |
 | Scale Check (confronti di grandezza) | ⬜ | FORMAT.md |

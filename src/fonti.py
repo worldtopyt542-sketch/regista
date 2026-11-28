@@ -84,8 +84,9 @@ def nasa(query, usati):
         except Exception:
             continue
         mp4 = [a for a in assets if isinstance(a, str) and a.lower().endswith(".mp4")]
-        # dalla qualita' migliore alla piu' leggera: se la prima e' troppo pesante si prova la successiva
-        alt = [a.replace("http://", "https://") for pref in ("~medium.mp4", "~small.mp4", "~mobile.mp4")
+        # dalla qualita' migliore alla piu' leggera (large = 1080p, orig = master, medium = 720p): se una e'
+        # troppo pesante si prova la successiva; ~small/~mobile (360p) solo come ultima riserva
+        alt = [a.replace("http://", "https://") for pref in ("~large.mp4", "~orig.mp4", "~medium.mp4", "~small.mp4")
                for a in mp4 if a.lower().endswith(pref)]
         if alt:
             return {"id": nid, "src": alt[0], "alt": alt, "credito": "NASA",
