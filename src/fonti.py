@@ -95,6 +95,56 @@ def nasa(query, usati):
     return None
 
 
+# Archivi ESA/Hubble, ESA/Webb ed ESO: video e animazioni spaziali con licenza CC BY 4.0 (credito obbligatorio)
+ARCHIVI_ESA = (("ESA/Hubble", "https://esahubble.org"), ("ESA/Webb", "https://esawebb.org"),
+               ("ESO", "https://www.eso.org/public"))
+MP4_PREFERITI = ("hd_1080p25_screen", "hd_and_apple", "large_qt", "medium_podcast", "medium_flash")
+MP4_ESCLUSI = ("dome", "4k", "ultra_hd", "8k", "uhd")
+
+
+def _testo(url):
+    req = urllib.request.Request(url, headers=UA)
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def esa_video_ids(html):
+    """Id dei video in una pagina di ricerca degli archivi ESA/ESO (in ordine, senza doppioni)."""
+    import re
+    return list(dict.fromkeys(re.findall(r'href="(?:[^"]*?)/videos/([a-z0-9-]+)/"', html)))
+
+
+def esa_mp4(html):
+    """Link mp4 di una pagina video, dal formato 1080p al piu' leggero; niente fulldome o 4K (troppo pesanti)."""
+    import re
+    tutti = list(dict.fromkeys(re.findall(r'(https?://[^"\'\s]+?\.mp4)', html)))
+    tutti = [u for u in tutti if not any(x in u.lower() for x in MP4_ESCLUSI)]
+    return [u.replace("http://", "https://") for pref in MP4_PREFERITI for u in tutti if f"/{pref}/" in u]
+
+
+def esa(query, usati):
+    """Video ESA/Hubble, ESA/Webb ed ESO (CC BY 4.0): nebulose, galassie, buchi neri, animazioni."""
+    for nome, base in ARCHIVI_ESA:
+        try:
+            ids = esa_video_ids(_testo(f"{base}/videos/search/?" + urllib.parse.urlencode({"search": query})))
+        except Exception as e:
+            print(f"   {nome}: ricerca non riuscita ({e})")
+            continue
+        for vid in ids[:6]:
+            eid = f"esa:{vid}"
+            if eid in usati:
+                continue
+            pagina = f"{base}/videos/{vid}/"
+            try:
+                alt = esa_mp4(_testo(pagina))
+            except Exception:
+                continue
+            if alt:
+                return {"id": eid, "src": alt[0], "alt": alt, "credito": nome,
+                        "fonte": f"{nome} ({vid}), CC BY 4.0, modified: {pagina}"}
+    return None
+
+
 NO_FOTO = ("infographic", "chart", "diagram", "graph", "logo", "portrait", "conference", "briefing", "poster",
            "patch", "insignia", "headshot", "award", "ceremony", "meeting", "illustration of text")
 
@@ -272,14 +322,16 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, tema=""):
     """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito).
     Le clip NASA (spesso con titoli, loghi, conferenze stampa) passano dal controllo di Gemini: fino a 4 candidate."""
     stock = ["pexels", "pixabay"]
-    ordine = ["nasa", "nasafoto"] + stock if fonte_preferita == "nasa" else stock + ["nasa", "nasafoto"]
+    ordine = ["nasa", "esa", "nasafoto"] + stock if fonte_preferita == "nasa" else stock + ["nasa", "esa", "nasafoto"]
     for f in ordine:
-        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 3 if f == "nasafoto" else 1):
+        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 3 if f in ("nasafoto", "esa") else 1):
             if f in SPENTE:
                 break
             try:
                 if f == "nasa":
                     info = nasa(query, usati)
+                elif f == "esa":
+                    info = esa(query, usati)
                 elif f == "nasafoto":
                     info = nasa_foto(query, usati)
                 elif f == "pexels":
@@ -314,7 +366,7 @@ def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, tema=""):
                 continue
             centro = 0.5
             if chiavi.get("gemini"):  # anche le verticali: una foto verticale di una camera bianca passava senza controllo
-                centro = pulisci_clip(dest, chiavi["gemini"], 10 if f == "nasa" else 2 if info.get("foto") else 5,
+                centro = pulisci_clip(dest, chiavi["gemini"], 10 if f in ("nasa", "esa") else 2 if info.get("foto") else 5,
                                       tema or "space, Earth or nature")
                 if centro is None:
                     print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")

@@ -20,7 +20,7 @@ template grafico. Per un canale nuovo si cambiano solo brand, ricerche, temi e `
 |---|---|---|---|---|
 | **Clip** | video YouTube CC BY ≥ 1M views | 12-35 s del momento migliore, scelto da Gemini guardando audio **e fotogrammi** | 8/giorno × lingue | `src/clipper.py` |
 | **Top 5** | stesso video CC BY | countdown di 5 momenti con voce narrante | 2/giorno (EN) | `src/top5.py` |
-| **Off Scale Facts** | NASA (pubblico dominio) + Pixabay/Pexels | 5 fatti veri "fuori scala" con voce narrante e fonti da controllare | 1/giorno × lingue | `src/fatti.py` |
+| **Off Scale Facts** | NASA (pubblico dominio) + ESA/Hubble, ESA/Webb, ESO (CC BY 4.0) + Pixabay/Pexels | 5 fatti veri "fuori scala" con voce narrante e fonti da controllare | 1/giorno × lingue | `src/fatti.py` |
 
 Un ✅ su Telegram approva **tutte le lingue** del video. Con `pubblica.auto_pubblica_sopra` (es. 75) le clip con
 punteggio alto e Critic OK vanno in programma da sole. Ogni lingua esce sui **suoi** canali (`pubblica.canali`).

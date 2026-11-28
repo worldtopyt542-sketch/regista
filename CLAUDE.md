@@ -1,7 +1,7 @@
 # Regole del progetto (per Claude)
 - Rispondi in italiano. Domande all'utente: brevi, sempre a scelta multipla (A, B, C, D...).
 - Risparmia token: niente spiegazioni lunghe, agisci.
-- Tema: Planet Off Scale = spazio/lanci, animali/natura, momenti incredibili. SOLO video YouTube Creative Commons BY (licenza verificata da `scopri.verifica`, anche per i link manuali) o NASA pubblico dominio / Pixabay / Pexels. Credito con autore, link e licenza sempre (`comune.attribuzione`). GTA abbandonato: non riproporlo.
+- Tema: Planet Off Scale = spazio/lanci, animali/natura, momenti incredibili. SOLO video YouTube Creative Commons BY (licenza verificata da `scopri.verifica`, anche per i link manuali) o NASA pubblico dominio / ESA-Hubble, ESA-Webb, ESO (CC BY 4.0) / Pixabay / Pexels. Credito con autore, link e licenza sempre (`comune.attribuzione`). GTA abbandonato: non riproporlo.
 - Prodotto replicabile: brand kit in `config.json` -> `brand`, letto da `src/comune.py`. Niente nome del canale scritto nel codice. Catalogo format: `FORMAT.md`.
 - Format: Clip (`src/clipper.py`, notte), Top 5 (`src/top5.py`, dentro il clipper), Off Scale Facts (`src/fatti.py`, workflow "Off Scale Facts").
 - Ogni video prodotto = un **gruppo** (tutte le lingue) in `pronte/<id>.json` + un messaggio Telegram con un solo ✅. `auto_pubblica_sopra` programma da solo sopra quel punteggio.
