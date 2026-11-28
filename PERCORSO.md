@@ -18,7 +18,7 @@ Aggiornato: 27 novembre 2026
 | Giro vero su Actions dopo il merge, video controllati a occhio | ⬜ | |
 | Anteprima con un video CC vero nella CI | ⬜ | |
 
-## Target 2 — I format · **50%**
+## Target 2 — I format · **60%**
 
 | Task | Stato | Nota |
 |---|---|---|
@@ -27,6 +27,8 @@ Aggiornato: 27 novembre 2026
 | Off Scale Facts con filmati NASA | ✅ | primo giro su Actions 27/11: EN/IT/ES ok |
 | Top 5 in IT ed ES (voce tradotta per segmento) | ⬜ | |
 | Facts rifatto sugli Shorts di riferimento di Fra | ✅ | testata, numero + nome, whoosh, tappeto, loop |
+| Scaletta di 100 video spazio, seguita in ordine dal bot | ✅ | scaletta.json |
+| Formato Storia (un soggetto in 5 battute) | ✅ | scaletta: formato storia |
 | Space Sounds (sonificazioni NASA come payoff) | ⬜ | dai riferimenti |
 | Scale Check (confronti di grandezza) | ⬜ | FORMAT.md |
 | Long cut 60-90 s | ⬜ | per i programmi che pagano solo > 1 min |

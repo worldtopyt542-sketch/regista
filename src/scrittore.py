@@ -17,7 +17,7 @@ Rules:
   Prefer facts with a striking NUMBER or COMPARISON of scale ("big enough to fit 1,300 Earths").
 - Style of the reference Shorts that work: dark, mysterious, a little scary. Every fact must feel unsettling or
   unbelievable ("the scariest", "nothing can stop it", "no one will be alive to see it"), but stay TRUE.
-- Total spoken text 110-135 words, NEVER more than 145 (45-55 seconds). Short, punchy sentences.
+- Total spoken text 100-120 words, NEVER more than 130 (40-50 seconds: translations get longer). Short, punchy sentences.
 - Hook: max 18 words. Either a rhetorical question ("Have you ever heard...?", "Did you know...?") or
   "These are the 5 ... in the universe." plus a dare ("If number one doesn't scare you, nothing will.").
 - Each item: "nome" = its on-screen title, 1-4 words (e.g. "BOOTES VOID", "TON 618"), and "testo" of 15-22 words
@@ -97,8 +97,8 @@ def valida(s):
             errori.append("voce senza testo o query")
     parole = len(s.get("hook", "").split()) + len(s.get("finale", "").split()) + \
         sum(len(it.get("testo", "").split()) for it in items)
-    if not 95 <= parole <= 150:
-        errori.append(f"{parole} parole (obiettivo 110-135)")
+    if not 90 <= parole <= 135:
+        errori.append(f"{parole} parole (obiettivo 100-120)")
     return errori
 
 

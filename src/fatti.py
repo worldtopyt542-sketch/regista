@@ -12,7 +12,7 @@ def segmenti(s):
     def f(x):  # vecchi valori "pexels"/"gameplay" -> stock
         return "nasa" if x == "nasa" else "stock"
     out = [{"label": "", "testo": s["hook"], "query": s["hook_query"], "fonte": f(s.get("hook_fonte"))}]
-    out += [{"label": (it.get("label", "") + " " + it.get("nome", "")).strip(), "testo": it["testo"], "query": it["query"],
+    out += [{"label": (it["label"] + " " + it.get("nome", "")).strip() if it.get("label") else "", "testo": it["testo"], "query": it["query"],
              "fonte": f(it.get("fonte"))} for it in s["items"]]
     out.append({"label": "", "testo": s["finale"], "query": s.get("finale_query") or s["hook_query"],
                 "fonte": f(s.get("finale_fonte") or s.get("hook_fonte"))})
@@ -66,6 +66,28 @@ def crediti_testo(crediti):
     return "\n".join(righe)
 
 
+SCALETTA = os.path.join(RADICE, "scaletta.json")
+
+
+def tema_scaletta(v):
+    """La voce della scaletta diventa la consegna per lo sceneggiatore, secondo il suo formato."""
+    if v.get("formato", "top5") == "top5":
+        return (f"{v['titolo']}. Use exactly these 5 subjects, from #5 to #1: {'; '.join(v['voci'])}. "
+                f"Hook idea: {v['gancio']}")
+    return (f"{v['titolo']}. FORMAT STORY (not a countdown): ONE single subject told as a story in exactly 5 beats, "
+            f"in this order: {'; '.join(v['voci'])}. For every item set \"label\" to \"\" and \"nome\" to a 1-3 word "
+            f"on-screen keyword of that beat. Hook idea: {v['gancio']}")
+
+
+def prossime(arch, quanti, formato=None, numero=None):
+    """Le prossime voci della scaletta non ancora fatte (facoltativo: solo un formato, o un numero preciso)."""
+    voci = carica(SCALETTA, {}).get("video") or []
+    if numero:
+        return [v for v in voci if str(v["n"]) == str(numero)]
+    fatte = set(arch.get("scaletta_fatte") or [])
+    return [v for v in voci if v["n"] not in fatte and (not formato or v.get("formato") == formato)][:quanti]
+
+
 def main():
     cfg = carica(CONFIG, {})
     fcfg = cfg.get("fatti", {})
@@ -91,7 +113,11 @@ def main():
     temi = [t for t in temi_tutti if t not in arch["temi_recenti"][-len(temi_tutti) // 2:]] or temi_tutti
     random.shuffle(temi)
     spunti = {}
-    if chiavi["youtube"] and fcfg.get("trend_scout", True):
+    scaletta = prossime(arch, quanti, os.environ.get("FORMATO") or None, os.environ.get("NUMERO") or None)
+    if scaletta:  # la scaletta ha la precedenza sui temi a caso
+        print("Scaletta:", ", ".join(f"#{v['n']} {v['titolo']} ({v.get('formato', 'top5')})" for v in scaletta))
+        quanti = len(scaletta)
+    elif chiavi["youtube"] and fcfg.get("trend_scout", True):
         print("Trend Scout: cerco i temi piu' caldi delle ultime 48 ore...")
         classifica = tendenze.classifica(chiavi["youtube"], temi)
         temi = [c["tema"] for c in classifica]
@@ -102,7 +128,8 @@ def main():
     soglia_auto = fcfg.get("auto_se_critic_ok", False)
 
     for i in range(quanti):
-        tema = temi[i % len(temi)]
+        voce = scaletta[i] if scaletta else None
+        tema = tema_scaletta(voce) if voce else temi[i % len(temi)]
         print(f"\n=== Facts {i + 1}/{quanti} - tema: {tema}")
         cartella = os.path.join(RADICE, "lavoro", str(i))
         try:
@@ -125,9 +152,12 @@ def main():
                                   "🔎 Fonti da controllare prima di approvare:\n" + controlli)
             comune.salva_gruppo(gruppo)
             arch["titoli"] = (arch["titoli"] + [s["titolo"]])[-300:]
-            arch["temi_recenti"] = (arch["temi_recenti"] + [tema])[-50:]
+            if voce:
+                arch["scaletta_fatte"] = sorted(set(arch.get("scaletta_fatte") or []) | {voce["n"]})
+            else:
+                arch["temi_recenti"] = (arch["temi_recenti"] + [tema])[-50:]
             arch["clip_usate"] = sorted(usati)[-3000:]
-            arch["storico"] = (arch["storico"] + [{"data": oggi, "titolo": s["titolo"], "tema": tema,
+            arch["storico"] = (arch["storico"] + [{"data": oggi, "titolo": s["titolo"], "tema": voce["titolo"] if voce else tema, "scaletta": voce and voce["n"],
                                                    "critic_ok": tutti_ok, "clip": [c["id"] for c in crediti]}])[-300:]
             fatti += 1
         except Exception as e:

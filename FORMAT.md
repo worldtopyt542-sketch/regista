@@ -49,3 +49,9 @@ voce numero grande + nome (`"nome"` nel copione); karaoke 3 parole bianco/giallo
 cambio scena; tappeto dark ambient generato da ffmpeg; finale aperto che rimanda al gancio (loop), niente CTA
 (`fatti.cta_finale`, `fatti.musica` in config.json). Prova locale: `python src/anteprima.py facts`.
 Prossimo format suggerito dai riferimenti: **Space Sounds** (sonificazioni NASA vere come payoff finale).
+
+## Scaletta (100 video spazio)
+
+`scaletta.json`: 100 idee in ordine (categoria, titolo, gancio, 5 voci, formato `top5` / `storia` / `suoni`).
+Off Scale Facts la segue prima dei temi a caso e segna le fatte in `archivio.json -> scaletta_fatte`.
+Per provare un formato: workflow "Off Scale Facts" con `formato` (es. `storia`) o `numero` (es. `42`).

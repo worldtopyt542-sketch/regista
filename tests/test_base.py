@@ -131,5 +131,25 @@ class FormatRiferimenti(unittest.TestCase):
         self.assertIn("BOOTES VOID", testo)
 
 
+class Scaletta(unittest.TestCase):
+    def test_cento_voci_e_ordine(self):
+        import fatti
+        voci = comune.carica(fatti.SCALETTA, {})["video"]
+        self.assertEqual(len(voci), 100)
+        self.assertTrue(all(len(v["voci"]) == 5 and v["formato"] in ("top5", "storia", "suoni") for v in voci))
+        self.assertEqual([v["n"] for v in fatti.prossime({"scaletta_fatte": [1, 2]}, 2)], [3, 4])
+        self.assertTrue(all(v["formato"] == "storia" for v in fatti.prossime({}, 3, "storia")))
+        self.assertEqual(fatti.prossime({}, 1, numero=42)[0]["n"], 42)
+
+    def test_storia_senza_numero_a_schermo(self):
+        import fatti
+        s = {"hook": "h", "hook_query": "q", "finale": "f",
+             "items": [{"label": "", "nome": "ANDROMEDA", "testo": "t", "query": "q"},
+                       {"label": "#1", "nome": "TON 618", "testo": "t", "query": "q"}]}
+        self.assertEqual([x["label"] for x in fatti.segmenti(s)], ["", "", "#1 TON 618", ""])
+        self.assertIn("FORMAT STORY", fatti.tema_scaletta({"titolo": "x", "voci": ["a"] * 5, "gancio": "g",
+                                                           "formato": "storia"}))
+
+
 if __name__ == "__main__":
     unittest.main()
