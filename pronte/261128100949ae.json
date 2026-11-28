@@ -1,0 +1,66 @@
+{
+ "id": "261128100949ae",
+ "creato": "2026-11-28T10:09:38.709789",
+ "formato": "facts",
+ "titolo": "5 Terrifying Facts About Jupiter and Saturn's Moons",
+ "punteggio": 0,
+ "critic_ok": false,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, What's Up: August 2021 Skywatching Tips from NASA: https://images.nasa.gov/details/JPL-20210801-WHATSUf-0001-Whats-Up-August-2021\n- NASA, The Aurora Named STEVE: https://images.nasa.gov/details/GSFC_20180314_Aurora_m12865_Steve\n- NASA, How Do Active Volcanoes Change Clouds: Volcanoes Degassing: https://images.nasa.gov/details/GSFC_20141113_Volcanoes_m10183_Degassing\n- NASA, What's Up: April 2021 Skywatching Tips from NASA: https://images.nasa.gov/details/JPL-20210401-WHATSUf-0001-Whats_Up_April_2021\n- NASA, Taking on Titan: An Interview With Carrie Anderson: https://images.nasa.gov/details/GSFC_20101216_Titan_m10705_Anderson\n- NASA, NASA is sending a rover to hunt for water on the Moon: https://images.nasa.gov/details/ARC-20191025-AAV3233-VIPERShareable-NASAWeb\n- NASA, NASA Science Live: Galaxy of Horrors [Episode 10]: https://images.nasa.gov/details/GSFC_20191031_M13415_NSLep10\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://science.nasa.gov/jupiter/ganymede/",
+  "https://science.nasa.gov/jupiter/io/",
+  "https://science.nasa.gov/saturn/enceladus/",
+  "https://science.nasa.gov/saturn/titan/",
+  "https://science.nasa.gov/jupiter/europa/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Terrifying Facts About Jupiter and Saturn's Moons",
+   "descrizione": "Explore the pitch-black oceans and fiery infernos hiding on the deadly moons of Jupiter and Saturn.",
+   "hashtags": [
+    "#space",
+    "#astronomy",
+    "#jupiter",
+    "#saturn",
+    "#alienlife",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOgawqoZZRhgaA2YmqW0699ynAwd0UAAuMhAALaYlhQL8m9Kinr9YU9BA",
+   "msg": "5193260023:160"
+  },
+  "it": {
+   "titolo": "5 Fatti Terrificanti sulle Lune di Giove e Saturno",
+   "descrizione": "Esplora oceani bui e inferni di fuoco nascosti sulle lune letali di Giove e Saturno.",
+   "hashtags": [
+    "#spazio",
+    "#astronomia",
+    "#giove",
+    "#saturno",
+    "#vitaaliena",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOhawqoZzYO3blocBaC0Qfo6DBZcVQAAuQhAALaYlhQ6PgBhs6kJ1k9BA",
+   "msg": "5193260023:161"
+  },
+  "es": {
+   "titolo": "5 Datos Aterradores sobre las Lunas de Júpiter y Saturno",
+   "descrizione": "Explora océanos oscuros e infiernos ardientes ocultos en las letales lunas de Júpiter y Saturno.",
+   "hashtags": [
+    "#espacio",
+    "#astronomia",
+    "#júpiter",
+    "#saturno",
+    "#vidaextraterrestre",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAOiawqoatl2cDO8IB7i7vOWOyXode4AAuUhAALaYlhQMqUjfSzGMpc9BA",
+   "msg": "5193260023:162"
+  }
+ },
+ "msg_bottoni": "5193260023:163"
+}

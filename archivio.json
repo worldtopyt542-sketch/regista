@@ -7,11 +7,13 @@
   "5 Mind-Blowing Scale Comparisons of Earth to the Universe",
   "5 Craziest Animal Superpowers in Real Life",
   "5 Fastest Animals on Earth Ranked by Speed",
-  "5 Extreme Scale Facts About Mars"
+  "5 Extreme Scale Facts About Mars",
+  "5 Terrifying Facts About Jupiter and Saturn's Moons"
  ],
  "clip_usate": [
   "nasa:20250429_NASA_Citizen_Sci_Twitch_Stream",
   "nasa:311_ScienceCasts-observing-lightning-ISS",
+  "nasa:ARC-20191025-AAV3233-VIPERShareable-NASAWeb",
   "nasa:ARC-20200103-AAV3244-SOFIA-GalacticCenter-RptrPkg-NASAWeb",
   "nasa:GRC-2014-CM-0137.4",
   "nasa:GRC-2022-CM-0114",
@@ -20,10 +22,12 @@
   "nasa:GSFC_20080520_HST_m10223_COS",
   "nasa:GSFC_20100722_Hubble_m10619_Exoplanets",
   "nasa:GSFC_20100917_Firefly_m10647_Beauty_Pass",
+  "nasa:GSFC_20101216_Titan_m10705_Anderson",
   "nasa:GSFC_20120614_GPM_m10999_Core_Rotates",
   "nasa:GSFC_20131121_ISON_m11384_Comet",
   "nasa:GSFC_20140529_HS3_m11559_Kickoff",
   "nasa:GSFC_20140911_SDO_m11651_Flare",
+  "nasa:GSFC_20141113_Volcanoes_m10183_Degassing",
   "nasa:GSFC_20150713_Dennis_Reuter_m11950_Horizons",
   "nasa:GSFC_20150915_Greenland_m11994_SLR",
   "nasa:GSFC_20150915_Greenland_m11994_SLR_teaser",
@@ -32,13 +36,17 @@
   "nasa:GSFC_20170811_Solar_m11797_Eruption",
   "nasa:GSFC_20171113_Hurricanes_m12772_Aerosols",
   "nasa:GSFC_20171208_Dolphins_m12700_data",
+  "nasa:GSFC_20180314_Aurora_m12865_Steve",
   "nasa:GSFC_20180808_m13032_EXPORTS",
   "nasa:GSFC_20181002_SMBH_m13043_Simulation",
   "nasa:GSFC_20181129_FERMI_m13104_Starlight",
   "nasa:GSFC_20190808_HST_m13279_Jupiter",
+  "nasa:GSFC_20191031_M13415_NSLep10",
   "nasa:GSFC_20210930_NSL_Ep38_Landsat",
   "nasa:GSFC_20230307_NSL_Juno_Ep54",
+  "nasa:JPL-20210401-WHATSUf-0001-Whats_Up_April_2021",
   "nasa:JPL-20210701-WHATSUf-0001-Whats-Up-July-2021",
+  "nasa:JPL-20210801-WHATSUf-0001-Whats-Up-August-2021",
   "nasa:JPL-20220622-MARSRf-0001-Mars_Report",
   "nasa:JPL-20220901-WHATSUf-0001-Whats_Up_September_2022",
   "nasa:JPL-20241119-TECHf-0001-Underwater_Robots_for_Space_Exploration",
@@ -68,7 +76,8 @@
   "how small Earth is in the universe",
   "animal superpowers",
   "the fastest animals on Earth",
-  "Mars, the red planet"
+  "Mars, the red planet",
+  "the moons of Jupiter and Saturn"
  ],
  "storico": [
   {
@@ -174,6 +183,21 @@
     "nasa:GSFC_20131121_ISON_m11384_Comet",
     "nasa:JPL-20210701-WHATSUf-0001-Whats-Up-July-2021",
     "nasa:GSFC_20150713_Dennis_Reuter_m11950_Horizons"
+   ]
+  },
+  {
+   "data": "2026-11-28",
+   "titolo": "5 Terrifying Facts About Jupiter and Saturn's Moons",
+   "tema": "the moons of Jupiter and Saturn",
+   "critic_ok": false,
+   "clip": [
+    "nasa:JPL-20210801-WHATSUf-0001-Whats-Up-August-2021",
+    "nasa:GSFC_20180314_Aurora_m12865_Steve",
+    "nasa:GSFC_20141113_Volcanoes_m10183_Degassing",
+    "nasa:JPL-20210401-WHATSUf-0001-Whats_Up_April_2021",
+    "nasa:GSFC_20101216_Titan_m10705_Anderson",
+    "nasa:ARC-20191025-AAV3233-VIPERShareable-NASAWeb",
+    "nasa:GSFC_20191031_M13415_NSLep10"
    ]
   }
  ]
