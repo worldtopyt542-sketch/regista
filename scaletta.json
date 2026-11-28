@@ -31,29 +31,29 @@
   },
   {
    "n": 3,
-   "categoria": "Black holes",
-   "titolo": "The Black Hole Closest to Earth",
-   "gancio": "Did you know a black hole is hiding only 1,560 light years away?",
+   "categoria": "Earth",
+   "titolo": "Earth at Night Seen From Space",
+   "gancio": "This is what your city looks like from 400 km up at night.",
    "voci": [
-    "Gaia BH1",
-    "Gaia BH2",
-    "Gaia BH3",
-    "V616 Monocerotis",
-    "Cygnus X-1"
+    "city lights",
+    "auroras over Earth",
+    "lightning storms from orbit",
+    "the day-night terminator",
+    "the ISS night pass"
    ],
    "formato": "storia"
   },
   {
    "n": 4,
-   "categoria": "Black holes",
-   "titolo": "5 Black Holes Doing Impossible Things",
-   "gancio": "These black holes break the rules of physics.",
+   "categoria": "Planets",
+   "titolo": "5 Biggest Storms in the Solar System",
+   "gancio": "Number one has been raging for over 300 years.",
    "voci": [
-    "a runaway black hole",
-    "a black hole that burped twice",
-    "a black hole eating a star",
-    "two black holes merging",
-    "a black hole firing a jet across a galaxy"
+    "hurricanes on Earth",
+    "the Martian global dust storm",
+    "Neptune's dark spot",
+    "Saturn's hexagon",
+    "Jupiter's Great Red Spot"
    ],
    "formato": "top5"
   },
@@ -73,15 +73,15 @@
   },
   {
    "n": 6,
-   "categoria": "Extreme",
-   "titolo": "5 Scariest Things Detected in Space",
-   "gancio": "These are the 5 scariest things ever detected in space.",
+   "categoria": "Nebulae",
+   "titolo": "5 Most Beautiful Nebulae Ever Photographed",
+   "gancio": "These clouds are where stars are born, and where they die.",
    "voci": [
-    "rogue planets",
-    "the Bootes Void",
-    "a magnetar starquake",
-    "gamma-ray bursts",
-    "the Great Attractor"
+    "Orion Nebula",
+    "Ring Nebula",
+    "Helix Nebula",
+    "Carina Nebula",
+    "Eagle Nebula"
    ],
    "formato": "top5"
   },
@@ -256,14 +256,14 @@
   {
    "n": 19,
    "categoria": "Sun",
-   "titolo": "How Big the Sun Really Is",
-   "gancio": "You could fit 1.3 million Earths inside the Sun.",
+   "titolo": "A Solar Eclipse Seen From Space",
+   "gancio": "From space, a solar eclipse is a dark shadow racing across Earth.",
    "voci": [
-    "Earth vs Sun",
-    "Jupiter vs Sun",
-    "sunspots bigger than Earth",
-    "solar loops",
-    "the Sun vs other stars"
+    "the Moon's shadow on Earth",
+    "the view from the ISS",
+    "totality",
+    "the solar corona",
+    "the 2024 eclipse"
    ],
    "formato": "storia"
   },
@@ -1039,15 +1039,15 @@
   },
   {
    "n": 75,
-   "categoria": "Scale",
-   "titolo": "How Far Is the Nearest Star",
-   "gancio": "Our fastest probe would need 70,000 years to get there.",
+   "categoria": "Planets",
+   "titolo": "Saturn's Rings Up Close",
+   "gancio": "Saturn's rings are 280,000 km wide but only 10 meters thick.",
    "voci": [
-    "Proxima Centauri",
-    "light years",
-    "Voyager's speed",
-    "Breakthrough Starshot",
-    "Proxima b"
+    "Cassini ring images",
+    "ring particles of ice",
+    "moons hidden in the rings",
+    "the gaps in the rings",
+    "the rings are disappearing"
    ],
    "formato": "storia"
   },
@@ -1165,15 +1165,15 @@
   },
   {
    "n": 84,
-   "categoria": "Exoplanets",
-   "titolo": "5 Most Extreme Exoplanets Ever Found",
-   "gancio": "On number one it rains molten glass sideways.",
+   "categoria": "Rockets",
+   "titolo": "5 Most Iconic Rocket Launches Ever",
+   "gancio": "Number one changed history forever.",
    "voci": [
-    "WASP-76b iron rain",
-    "Kepler-16b two suns",
-    "55 Cancri e lava ocean",
-    "TrES-2b darker than coal",
-    "HD 189733b glass rain"
+    "Artemis I",
+    "Falcon Heavy demo",
+    "STS-1 first Space Shuttle",
+    "John Glenn Friendship 7",
+    "Apollo 11 Saturn V"
    ],
    "formato": "top5"
   },
@@ -1235,17 +1235,17 @@
   },
   {
    "n": 89,
-   "categoria": "Mysteries",
-   "titolo": "Oumuamua, the Visitor From Another Star",
-   "gancio": "In 2017 something entered our Solar System from interstellar space.",
+   "categoria": "Earth",
+   "titolo": "5 Most Amazing Places on Earth Seen From Space",
+   "gancio": "Astronauts say these places look unreal from orbit.",
    "voci": [
-    "the discovery",
-    "the cigar shape",
-    "the strange acceleration",
-    "the alien theory",
-    "Comet Borisov"
+    "the Grand Canyon",
+    "the Great Barrier Reef",
+    "the Sahara dunes",
+    "the Himalayas",
+    "the Amazon River"
    ],
-   "formato": "storia"
+   "formato": "top5"
   },
   {
    "n": 90,
