@@ -125,34 +125,99 @@ def trova_clip(query, fonte_preferita, usati, chiavi, cartella, n, riserva=None)
 SPENTE = set()  # fonti con chiave rifiutata: non si riprovano per tutta l'esecuzione
 
 
+CONTROLLO = """These are {n} frames, in time order, from a video clip we may use as background footage in a
+cinematic space/nature Short. For EACH frame decide if it is CLEAN: real or rendered imagery (space, planets, stars,
+Earth from orbit, rockets, spacecraft, nature, animals) that fills the frame. NOT clean: titles, captions, slides,
+credits or any readable text; logos or watermarks; people talking to the camera, interviews, press conferences,
+studio or office shots; charts and diagrams; black, white or blank screens; heavy blur.
+Reply JSON only: {{"pulito": [true, false, ...]}} with exactly {n} booleans."""
+
+
+def pulisci_clip(path, chiave, quadri=6):
+    """Gemini guarda {quadri} fotogrammi: la clip si accorcia al tratto pulito piu' lungo, o si scarta.
+    Ritorna True se resta un tratto utilizzabile (>= 2 fotogrammi puliti di fila)."""
+    import editor, scrittore
+    dur = editor.durata(path)
+    if dur < 3:
+        return False
+    tempi = [dur * (k + 0.5) / quadri for k in range(quadri)]
+    foto = []
+    for k, t in enumerate(tempi):
+        jpg = path + f".{k}.jpg"
+        editor.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{t:.2f}", "-i", path, "-frames:v", "1",
+                    "-vf", "scale=384:-2", jpg])
+        foto.append((f"Frame {k + 1} (t={t:.0f}s)", jpg))
+    try:
+        esito = scrittore.gemini(chiave, CONTROLLO.format(n=quadri), 0.1, foto).get("pulito") or []
+    except Exception as e:
+        print(f"   controllo clip non riuscito ({str(e)[:80]}), la uso com'e'")
+        return True
+    finally:
+        for _, jpg in foto:
+            try:
+                os.remove(jpg)
+            except OSError:
+                pass
+    esito = [bool(x) for x in esito][:quadri] + [False] * (quadri - len(esito))
+    migliore, inizio = (0, 0), None  # (lunghezza, primo indice) del tratto pulito piu' lungo
+    for k, ok in enumerate(esito + [False]):
+        if ok and inizio is None:
+            inizio = k
+        elif not ok and inizio is not None:
+            migliore = max(migliore, (k - inizio, inizio))
+            inizio = None
+    lung, primo = migliore
+    print(f"   controllo clip: {''.join('v' if x else 'x' for x in esito)}")
+    if lung < 2:
+        return False
+    passo = dur / quadri
+    a, b = primo * passo, (primo + lung) * passo
+    if a > 0.5 or b < dur - 0.5:  # tiene solo il tratto pulito
+        tmp = path + ".taglio.mp4"
+        editor.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a:.2f}", "-to", f"{b:.2f}", "-i", path, "-an",
+                    "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", tmp])
+        os.replace(tmp, path)
+    return True
+
+
 def _trova_clip(query, fonte_preferita, usati, chiavi, cartella, n):
-    """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito)."""
+    """'nasa' = spazio (pubblico dominio); altrimenti stock (Pixabay/Pexels: licenze d'uso gratuito).
+    Le clip NASA (spesso con titoli, loghi, conferenze stampa) passano dal controllo di Gemini: fino a 4 candidate."""
     stock = ["pexels", "pixabay"]
     ordine = ["nasa"] + stock if fonte_preferita == "nasa" else stock + ["nasa"]
     for f in ordine:
-        if f in SPENTE:
-            continue
-        try:
-            if f == "nasa":
-                info = nasa(query, usati)
-            elif f == "pexels":
-                info = pexels(query, usati, chiavi.get("pexels"))
-            else:
-                info = pixabay(query, usati, chiavi.get("pixabay"))
-        except Exception as e:
-            print(f"   {f}: errore ricerca ({e})")
-            if "api key" in str(e).lower() or "HTTP 401" in str(e) or "HTTP 403" in str(e):
-                SPENTE.add(f)
-                print(f"   {f}: chiave rifiutata, la salto fino alla fine (controlla il secret)")
-            continue
-        if not info:
-            continue
-        dest = os.path.join(cartella, f"clip{n}.mp4")
-        for src in info.get("alt") or [info["src"]]:
+        for _ in range(4 if f == "nasa" and chiavi.get("gemini") else 1):
+            if f in SPENTE:
+                break
             try:
-                scarica(src, dest)
-                return dest, {**info, "src": src}
+                if f == "nasa":
+                    info = nasa(query, usati)
+                elif f == "pexels":
+                    info = pexels(query, usati, chiavi.get("pexels"))
+                else:
+                    info = pixabay(query, usati, chiavi.get("pixabay"))
             except Exception as e:
-                print(f"   {f}: download fallito ({e})")
-        usati.add(info["id"])
+                print(f"   {f}: errore ricerca ({e})")
+                if "api key" in str(e).lower() or "HTTP 401" in str(e) or "HTTP 403" in str(e):
+                    SPENTE.add(f)
+                    print(f"   {f}: chiave rifiutata, la salto fino alla fine (controlla il secret)")
+                break
+            if not info:
+                break
+            dest = os.path.join(cartella, f"clip{n}.mp4")
+            scaricata = None
+            for src in info.get("alt") or [info["src"]]:
+                try:
+                    scarica(src, dest)
+                    scaricata = src
+                    break
+                except Exception as e:
+                    print(f"   {f}: download fallito ({e})")
+            usati.add(info["id"])
+            if not scaricata:
+                continue
+            if f == "nasa" and chiavi.get("gemini") and not pulisci_clip(dest, chiavi["gemini"]):
+                print(f"   {f}: clip scartata (testo, loghi o persone che parlano): {info['id']}")
+                continue
+            return dest, {**info, "src": scaricata}
     raise RuntimeError(f"Nessuna clip trovata per '{query}'")

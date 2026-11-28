@@ -151,5 +151,24 @@ class Scaletta(unittest.TestCase):
                                                            "formato": "storia"}))
 
 
+class ClipPulite(unittest.TestCase):
+    def test_tiene_solo_il_tratto_pulito_o_scarta(self):
+        import subprocess, tempfile, fonti, scrittore
+        vecchio = scrittore.gemini
+        with tempfile.TemporaryDirectory() as d:
+            clip = os.path.join(d, "c.mp4")
+            subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "testsrc=s=320x240:d=12",
+                            "-pix_fmt", "yuv420p", clip], check=True)
+            try:
+                scrittore.gemini = lambda *a, **k: {"pulito": [False, True, True, True, False, False]}
+                self.assertTrue(fonti.pulisci_clip(clip, "k"))
+                self.assertAlmostEqual(editor.durata(clip), 6.0, delta=0.6)
+                scrittore.gemini = lambda *a, **k: {"pulito": [True, False, True, False, False, True]}
+                self.assertFalse(fonti.pulisci_clip(clip, "k"))
+            finally:
+                scrittore.gemini = vecchio
+            self.assertEqual([f for f in os.listdir(d) if f.endswith(".jpg")], [])
+
+
 if __name__ == "__main__":
     unittest.main()
