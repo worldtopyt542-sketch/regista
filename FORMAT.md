@@ -56,3 +56,4 @@ Prossimo format suggerito dai riferimenti: **Space Sounds** (sonificazioni NASA 
 Off Scale Facts la segue prima dei temi a caso e segna le fatte in `archivio.json -> scaletta_fatte`.
 Per provare un formato: workflow "Off Scale Facts" con `formato` (es. `storia`) o `numero` (es. `42`).
 Filmati: il workflow "Controlla i filmati della scaletta" (`src/copertura.py`) cerca ogni voce su NASA e Pexels (4K verticale) e segnala i video con meno di 4 voci coperte. NASA si scarica in `~large` (1080p) o `~orig` prima di `~medium`.
+Foto NASA: quando i video NASA non bastano o sono sporchi, si usano le foto ad alta risoluzione della NASA Image Library (Hubble, Webb, sonde), trasformate in clip verticali con zoom lento; le foto sotto 1000 px si scartano.
