@@ -48,7 +48,7 @@ def produci(s, cfg, usati, chiavi, cartella, nome):
             etich = (t.get("etichette") or [])[n:n + 1] or [seg["label"]]
             if seg["label"].split(" ")[0] != etich[0].split(" ")[0]:  # il numero "#3" non si traduce
                 etich = [seg["label"]]
-            editor.monta_segmento(c, mp3, parole, t["frasi"][n], etich[0], "Footage: " + info["credito"],
+            editor.monta_segmento(c, mp3, parole, t["frasi"][n], etich[0], ("Footage: " + info["credito"]) if fcfg.get("credito_a_schermo") else "",
                                   pz, n, font=lg.get("font"), testata=t["titolo"], stacco=n > 0, centro=info.get("centro_x", 0.5),
                                   cta=comune.cta(cod, cfg) if n == len(segs) - 1 and fcfg.get("cta_finale") else "")
             pezzi.append(pz)
