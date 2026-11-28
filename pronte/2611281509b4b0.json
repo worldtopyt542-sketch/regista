@@ -1,0 +1,66 @@
+{
+ "id": "2611281509b4b0",
+ "creato": "2026-11-28T15:09:38.931480",
+ "formato": "facts",
+ "titolo": "5 Coldest Places in the Universe",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, The Universe’s First Molecule Is Found at Last: https://images.nasa.gov/details/ARC-20190417-AAV3194-SOFIA-HeHMolecule-NarratedAnimation-NASAWeb\n- NASA, KSC-05-S-00310: https://images.nasa.gov/details/ksc_120605_nh_overview\n- NASA, Triton Video: https://images.nasa.gov/details/PIA18669\n- NASA, Ghostly Boomerang: https://images.nasa.gov/details/PIA17551\n- NASA, Roman Space Telescope - Rotate to Vertical: https://images.nasa.gov/details/KSC-20260625-PH-SER01_0001\n- NASA, Interior views of the Mir Space Station: https://images.nasa.gov/details/sts084-305-018\n- NASA, Goldstone’s DSS-15 Antenna and the Milky Way: https://images.nasa.gov/details/PIA26718\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://solarsystem.nasa.gov/planets/dwarf-planets/pluto/in-depth/",
+  "https://solarsystem.nasa.gov/moons/neptune-moons/triton/in-depth/",
+  "https://www.nasa.gov/missions/hubble/hubs-boomerang-nebula-is-the-coolest-place-in-the-universe/",
+  "https://science.nasa.gov/universe/",
+  "https://www.nasa.gov/mission_station/station/research/experiments/explorer/Investigation.html?#id=7946"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Coldest Places in the Universe",
+   "descrizione": "Journey through the absolute depths of freezing temperatures across the cosmos.",
+   "hashtags": [
+    "#space",
+    "#cold",
+    "#science",
+    "#universe",
+    "#astronomy",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPcawrutcRgEj6_AYaZqz2r7sf5cVEAAjcfAAJmrlhQbANEwRknb4o9BA",
+   "msg": "5193260023:220"
+  },
+  "it": {
+   "titolo": "I 5 luoghi più freddi dell'Universo",
+   "descrizione": "Un viaggio tra le profondità glaciali del cosmo.",
+   "hashtags": [
+    "#spazio",
+    "#freddo",
+    "#scienza",
+    "#universo",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPdawruuIg6T34t8Rzwct_P8pY_JUMAAjgfAAJmrlhQgCObOilGzGc9BA",
+   "msg": "5193260023:221"
+  },
+  "es": {
+   "titolo": "Los 5 lugares más fríos del Universo",
+   "descrizione": "Un viaje por las profundidades heladas de todo el cosmos.",
+   "hashtags": [
+    "#espacio",
+    "#frio",
+    "#ciencia",
+    "#universo",
+    "#astronomia",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPeawruuoRa6MROMYukvydRBSHrMucAAjofAAJmrlhQrJzRmhkv1Xk9BA",
+   "msg": "5193260023:222"
+  }
+ },
+ "msg_bottoni": "5193260023:223"
+}

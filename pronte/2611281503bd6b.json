@@ -1,0 +1,66 @@
+{
+ "id": "2611281503bd6b",
+ "creato": "2026-11-28T15:03:13.541546",
+ "formato": "facts",
+ "titolo": "5 Hottest Places in the Universe",
+ "punteggio": 0,
+ "critic_ok": true,
+ "auto": false,
+ "fonte": null,
+ "crediti": "🎥 Footage:\n- NASA, Holiday Lights on the Sun: https://images.nasa.gov/details/GSFC_20141222_SDO_m11721_Lights\n- NASA, Venus - Simple Cylindrical Map of Surface Western Half: https://images.nasa.gov/details/PIA00255\n- NASA, 2024 Total Solar Eclipse: Through the Eyes of NASA Official Trailer: https://images.nasa.gov/details/14520_TSEBroadcastTrailer_YT\n- NASA, A Supernova Shockwaves: https://images.nasa.gov/details/PIA09604\n- NASA, Algerian Abstract: https://images.nasa.gov/details/GSFC_20171208_Archive_e001942\n- NASA, Hubble confirms cosmic acceleration with weak lensing: https://images.nasa.gov/details/GSFC_20171208_Archive_e002077\n- NASA, Highway to the Danger Zone  Artist Concept: https://images.nasa.gov/details/PIA09266\nNASA footage is public domain. NASA does not endorse this channel.",
+ "verifica": [
+  "https://solarsystem.nasa.gov/planets/venus/in-depth/",
+  "https://science.nasa.gov/sun/facts/",
+  "https://science.nasa.gov/universe/stars/",
+  "https://home.cern/science/physics/heavy-ions-and-quark-gluon-plasma",
+  "https://science.nasa.gov/universe/the-big-bang/"
+ ],
+ "versioni": {
+  "en": {
+   "titolo": "5 Hottest Places in the Universe",
+   "descrizione": "Discover the 5 hottest places in the universe, from scorching planets to the absolute fury of the Big Bang.",
+   "hashtags": [
+    "#space",
+    "#science",
+    "#universe",
+    "#astronomy",
+    "#cosmos",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPYawrtNLVQslmGccTZUIRjEGdmw5EAAjEfAAJmrlhQTqZnCQ_Yn4c9BA",
+   "msg": "5193260023:216"
+  },
+  "it": {
+   "titolo": "I 5 luoghi più caldi dell'universo",
+   "descrizione": "Scopri i 5 luoghi più caldi dell'universo, dai pianeti infernali alla furia assoluta del Big Bang.",
+   "hashtags": [
+    "#spazio",
+    "#scienza",
+    "#universo",
+    "#astronomia",
+    "#cosmo",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPZawrtNw8O3SWm73VNqJ40xyaIPWIAAjIfAAJmrlhQbCt3TYFR7ik9BA",
+   "msg": "5193260023:217"
+  },
+  "es": {
+   "titolo": "Los 5 lugares más calientes del universo",
+   "descrizione": "Descubre los 5 lugares más calientes del universo, desde planetas abrasadores hasta la furia absoluta del Big Bang.",
+   "hashtags": [
+    "#espacio",
+    "#ciencia",
+    "#universo",
+    "#astronomia",
+    "#cosmos",
+    "#shorts",
+    "#planetoffscale"
+   ],
+   "file_id": "BAACAgQAAxkDAAPaawrtOb0X_M67SYtYv0ZSXZPuvQcAAjMfAAJmrlhQufzmxu_wtmM9BA",
+   "msg": "5193260023:218"
+  }
+ },
+ "msg_bottoni": "5193260023:219"
+}
